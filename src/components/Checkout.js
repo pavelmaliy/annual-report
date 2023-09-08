@@ -13,7 +13,6 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import AddressForm from './AddressForm';
 import TransactionForm from './TransactionForm';
-import Review from './Review';
 
 function Copyright() {
   return (
@@ -56,21 +55,6 @@ export default function Checkout({model, setModel}) {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Smart Report
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>

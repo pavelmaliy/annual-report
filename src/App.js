@@ -8,7 +8,9 @@ import Checkout from "./components/Checkout";
 
 export default function LabTabs() {
     const [value, setValue] = React.useState('1');
-    const [model, setModel] = React.useState({});
+    const [model, setModel] = React.useState({
+        "transactions": []
+    });
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
