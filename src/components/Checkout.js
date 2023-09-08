@@ -28,7 +28,7 @@ function Copyright() {
   );
 }
 
-const steps = ['Personal Details', 'Stock Transactions', 'Review'];
+const steps = ['Personal Details', 'Stock Transactions'];
 
 function getStepContent(step, model, setModel) {
     console.log("model:" + model)
@@ -37,8 +37,6 @@ function getStepContent(step, model, setModel) {
       return <AddressForm model={model} setModel={setModel}/>;
     case 1:
       return <TransactionForm model={model} setModel={setModel}/>;
-    case 2:
-      return <Review model={model}/>;
     default:
       throw new Error('Unknown step');
   }
@@ -75,9 +73,6 @@ export default function Checkout({model, setModel}) {
       </AppBar>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-          <Typography component="h1" variant="h4" align="center">
-            Annual Report
-          </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
               <Step key={label}>
@@ -88,13 +83,17 @@ export default function Checkout({model, setModel}) {
           {activeStep === steps.length ? (
             <React.Fragment>
               <Typography variant="h5" gutterBottom>
-                Thank you for your order.
+                Thank You.
               </Typography>
-              <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
-              </Typography>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        setActiveStep(0);
+                    }}
+                    sx={{ mt: 3, ml: 1 }}
+                >
+                    New
+                </Button>
             </React.Fragment>
           ) : (
             <React.Fragment>
@@ -110,7 +109,7 @@ export default function Checkout({model, setModel}) {
                   onClick={handleNext}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  {activeStep === steps.length - 1 ? 'Save' : 'Next'}
                 </Button>
               </Box>
             </React.Fragment>

@@ -44,7 +44,7 @@ export default function TransactionForm({model, setModel}) {
                             New Transaction
                         </Typography>
                         <Button autoFocus color="inherit" onClick={handleClose}>
-                            save
+                            Add
                         </Button>
                     </Toolbar>
                 </AppBar>
