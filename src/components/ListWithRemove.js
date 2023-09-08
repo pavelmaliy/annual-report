@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { TextField, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import React, {useState} from 'react';
+import {IconButton, List, ListItem, ListItemSecondaryAction, ListItemText} from '@mui/material';
+import {Delete} from '@mui/icons-material';
+import Paper from "@mui/material/Paper";
 
 function ListWithRemove(props) {
     const {transactions, removeTransaction} = props
@@ -17,22 +18,24 @@ function ListWithRemove(props) {
         setLocalTransactions(newTransactions)
     }
 
-  return (
-      <div>
-        <List>
-          {localTransactions.map((item, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={item.stockName} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
-                    <Delete />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-          ))}
-        </List>
-      </div>
-  );
+    return (
+        <div>
+            <Paper elevation={3} style={{padding: '16px'}}>
+                <List style={{maxHeight: 300, overflow: 'auto'}}>
+                    {localTransactions.map((item, index) => (
+                        <ListItem key={index}>
+                            <ListItemText primary={JSON.stringify(item)}/>
+                            <ListItemSecondaryAction>
+                                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
+                                    <Delete/>
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
+                </List>
+            </Paper>
+        </div>
+    );
 }
 
 export default ListWithRemove;

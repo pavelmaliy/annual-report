@@ -2,9 +2,10 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import Checkout from "./components/Checkout";
+import TransactionStepper from "./components/TransactionStepper";
+import {Tabs} from "@mui/material";
+import AppBar from "@mui/material/AppBar";
 
 export default function LabTabs() {
     const [value, setValue] = React.useState('1');
@@ -17,18 +18,28 @@ export default function LabTabs() {
     };
 
     return (
-        <Box sx={{ width: '100%', typography: 'body1' }}>
+        <Box sx={{width: '100%', typography: 'body1'}}>
             <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
-                        <Tab label="Home" value="1" />
-                        <Tab label="Transactions" value="2" />
-                        <Tab label="Report" value="3" />
-                    </TabList>
+                <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                    <AppBar position="static">
+                        <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            indicatorColor="secondary"
+                            textColor="inherit"
+                            centered
+                            variant="standard"
+                            aria-label="full width tabs example"
+                        >
+                            <Tab label="Overview" value="1"/>
+                            <Tab label="Transactions" value="2"/>
+                            <Tab label="Report" value="3"/>
+                        </Tabs>
+                    </AppBar>
                 </Box>
-                <TabPanel value="1">Home</TabPanel>
+                <TabPanel value="1">Overview</TabPanel>
                 <TabPanel value="2">
-                    <Checkout model={model} setModel={setModel}/>
+                    <TransactionStepper model={model} setModel={setModel}/>
                 </TabPanel>
                 <TabPanel value="3">Report</TabPanel>
             </TabContext>

@@ -1,5 +1,16 @@
 import * as React from 'react';
-import {DialogContent, FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
+import {
+    DialogContent,
+    FormControl,
+    InputLabel,
+    List,
+    ListItem,
+    ListItemSecondaryAction,
+    ListItemText,
+    MenuItem,
+    Select,
+    TextField
+} from "@mui/material";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import Grid from '@mui/material/Grid';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
@@ -11,58 +22,77 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
-import CssBaseline from "@mui/material/CssBaseline";
-import ListWithRemove from "./ListWithRemove";
 import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/material/Box";
+import InputFileUpload from "./InputFileUpload";
+import {Delete} from "@mui/icons-material";
+import Paper from "@mui/material/Paper";
 
 export default function TransactionForm({model, setModel}) {
     const [open, setOpen] = React.useState(false);
-    const [transactionType, setTransactionType] = React.useState(10)
-    const [transaction, setTransaction] = React.useState({
-        "quantity": 0,
-        "stockName": "",
-        "transactionType": 10,
-        "transactionDate": ""
-    });
+    const [transaction, setTransaction] = React.useState({})
+    const [transactionListItems, setTransactionListItems] = React.useState([])
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
-
     const handleAdd = () => {
         model.transactions.push(transaction)
-        setTransaction({
-            "quantity": 0,
-            "stockName": "",
-            "transactionType": 10,
-            "transactionDate": ""
-        })
         setModel(model)
+        transactionListItems.push(transaction)
+        setTransactionListItems(transactionListItems)
+        setTransaction({})
         setOpen(false);
+    };
+    const handleDelete = (index) => {
+        let newTransactions = model.transactions.slice()
+        newTransactions.splice(index, 1)
+        model.transactions = newTransactions
+        setModel(model)
+
+        let newItems = transactionListItems.slice()
+        newItems.splice(index, 1)
+        setTransactionListItems(newItems)
     };
 
     return (
         <div>
-            <ListWithRemove transactions={model.transactions} removeTransaction={(index) => {
-                let newTransactions = []
-                model.transactions.map((tr, i) => {
-                    if (i !== index) {
-                        newTransactions.push(tr)
-                    }
-                })
-                model.transactions = newTransactions
-                setModel(model)
-            }}/>
+            {transactionListItems.length > 0 ? (
+                <div>
+                    <Paper elevation={2} gutterBottom>
+                        <List style={{maxHeight: 300, overflow: 'auto'}}>
+                            {transactionListItems.map((item, index) => (
+                                <ListItem key={index}>
+                                    <ListItemText primary={JSON.stringify(item)}/>
+                                    <ListItemSecondaryAction>
+                                        <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
+                                            <Delete/>
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Paper>
+                    <Box mb={2}/>
+                </div>
+            ) : (
+                <div/>
+            )}
+
             <Box display="flex" justifyContent="center">
-                <IconButton tooltip="new transaction" onClick={handleClickOpen}>
-                    <AddIcon color="primary" fontSize="large"/>
-                </IconButton>
+                <Button
+                    style={{marginRight: '10px'}}
+                    component="label"
+                    variant="contained"
+                    startIcon={<AddIcon fontSize="large"/>}
+                    onClick={handleClickOpen}
+                >
+                    Add New
+                </Button>
+                <InputFileUpload/>
             </Box>
-            <CssBaseline/>
             <Dialog open={open} fullWidth>
                 <AppBar sx={{position: 'relative'}}>
                     <Toolbar>
@@ -131,11 +161,11 @@ export default function TransactionForm({model, setModel}) {
                                     <Select
                                         labelId="transaction-select-label"
                                         id="simple-select"
-                                        value={transactionType}
+                                        value={transaction.transactionType}
                                         label="Transaction Type"
                                         onChange={(e) => {
-                                            setTransactionType(e.target.value)
-                                            transaction.transactionType = transactionType
+                                            //setTransactionType(e.target.value)
+                                            transaction.transactionType = e.target.value
                                             setTransaction(transaction)
                                         }}
                                     >

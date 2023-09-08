@@ -1,4 +1,4 @@
-# Checkout template
+# TransactionStepper template
 
 ## Usage
 
@@ -6,7 +6,7 @@
 
 1. Copy the files into your project, or one of the [example projects](https://github.com/mui/material-ui/tree/master/examples).
 2. Make sure your project has the required dependencies: @mui/material, @emotion/styled, @emotion/react.
-3. Import and use the `Checkout` component.
+3. Import and use the `TransactionStepper` component.
 
 ## Demo
 
