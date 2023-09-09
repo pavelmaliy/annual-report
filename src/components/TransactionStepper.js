@@ -7,6 +7,8 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import TransactionForm from './TransactionForm';
+import GeneralInfo from "./GeneralInfo";
+import {Step, StepLabel, Stepper} from "@mui/material";
 
 function Copyright() {
     return (
@@ -21,12 +23,14 @@ function Copyright() {
     );
 }
 
-const steps = ['Stock Transactions'];
+const steps = ['General Info', 'Stock Transactions'];
 
 function getStepContent(step, model, setModel) {
     console.log("model:" + model)
     switch (step) {
         case 0:
+            return <GeneralInfo model={model} setModel={setModel}/>
+        case 1:
             return <TransactionForm model={model} setModel={setModel}/>;
         default:
             throw new Error('Unknown step');
@@ -48,6 +52,13 @@ export default function TransactionStepper({model, setModel}) {
             <CssBaseline/>
             <Container component="main" maxWidth="sm" sx={{mb: 4}}>
                 <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
+                    <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+                        {steps.map((label) => (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        ))}
+                    </Stepper>
                     {activeStep === steps.length ? (
                         <React.Fragment>
                             <Typography variant="h5" gutterBottom>

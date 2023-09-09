@@ -191,6 +191,7 @@ export default function TransactionForm({model, setModel}) {
                                 <FormControl fullWidth>
                                     <InputLabel id="transaction-select-label">Transaction Type</InputLabel>
                                     <Select
+                                        size="small"
                                         labelId="transaction-select-label"
                                         id="simple-select"
                                         value={transaction.transactionType}
