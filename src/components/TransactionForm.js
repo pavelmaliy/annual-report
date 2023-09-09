@@ -27,11 +27,24 @@ import Box from "@mui/material/Box";
 import InputFileUpload from "./InputFileUpload";
 import {Delete} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
+import './TransactionForm.css'
 
 export default function TransactionForm({model, setModel}) {
     const [open, setOpen] = React.useState(false);
     const [transaction, setTransaction] = React.useState({})
     const [transactionListItems, setTransactionListItems] = React.useState([])
+
+    const formatDateToMMDDYYYY = function (millis) {
+        if (isNaN(millis)) {
+            millis = new Date().getTime()
+        }
+        let date = new Date(millis)
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add 1 because months are zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        const year = date.getFullYear();
+
+        return `${month}/${day}/${year}`;
+    }
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -65,7 +78,10 @@ export default function TransactionForm({model, setModel}) {
                         <List style={{maxHeight: 300, overflow: 'auto'}}>
                             {transactionListItems.map((item, index) => (
                                 <ListItem key={index}>
-                                    <ListItemText primary={JSON.stringify(item)}/>
+                                    <ListItemText
+                                        primary={<Typography className="framed-text" variant="button" display="block" gutterBottom>
+                                            { formatDateToMMDDYYYY(item.transactionDate) + " " + ((item.transactionType === 10) ? "sell" : "buy") + " "  + item.stockName + " " + item.quantity}
+                                        </Typography>}/>
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
                                             <Delete/>
@@ -181,3 +197,4 @@ export default function TransactionForm({model, setModel}) {
         </div>
     );
 }
+

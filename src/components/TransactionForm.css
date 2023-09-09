@@ -1,0 +1,6 @@
+.framed-text {
+    border: 2px ; /* Border color */
+    background-color: #f0f0f0; /* Background color of the frame */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle 3D effect */
+    border-radius: 10px; /* Rounded corners for a softer look */
+}
