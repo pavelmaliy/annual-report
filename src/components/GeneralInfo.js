@@ -19,22 +19,19 @@ export default function GeneralInfoForm({model, setModel}) {
         <React.Fragment>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth>
-                        <InputLabel id="currency-label">Currency</InputLabel>
-                        <Select
-                            size="small"
-                            labelId="currency-label"
-                            id="currency-select"
-                            value={currency}
-                            onChange={handleCurrency}
-                        >
-                            {Object.keys(currencies).map((currency) => (
-                                <MenuItem key={currency} value={currency}>
-                                    {currency} - {currencies[currency].name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <TextField
+                        required
+                        id="exchange"
+                        name="exchange"
+                        label="Stock exchange"
+                        fullWidth
+                        autoComplete="exchange"
+                        variant="standard"
+                        onChange={(e) => {
+                            model["stockExchange"] = e.target.value;
+                            setModel(model)
+                        }}
+                    />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
@@ -50,6 +47,23 @@ export default function GeneralInfoForm({model, setModel}) {
                             setModel(model)
                         }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl fullWidth>
+                        <Select
+                            size="small"
+                            labelId="currency-label"
+                            id="currency-select"
+                            value={currency}
+                            onChange={handleCurrency}
+                        >
+                            {Object.keys(currencies).map((currency) => (
+                                <MenuItem key={currency} value={currency}>
+                                    {currency} - {currencies[currency].name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </Grid>
             </Grid>
         </React.Fragment>
