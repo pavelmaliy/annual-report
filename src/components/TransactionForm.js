@@ -34,6 +34,7 @@ export default function TransactionForm({model, setModel}) {
     const [transaction, setTransaction] = React.useState({})
     const [transactionListItems, setTransactionListItems] = React.useState([])
     const [stockNameError, setStockNameError] = React.useState('');
+    const [quantityError, setQuantityError] = React.useState('');
 
     const formatDateToMMDDYYYY = function (millis) {
         if (isNaN(millis)) {
@@ -54,10 +55,13 @@ export default function TransactionForm({model, setModel}) {
     };
     const handleAdd = () => {
         if (!transaction.stockName) {
-            setStockNameError('This field cannot be empty')
+            setStockNameError('Stock name cannot be empty')
             return
         }
-        setStockNameError('')
+        if (!transaction.quantity) {
+            setQuantityError('Quantity cannot be empty')
+            return
+        }
         model.transactions.push(transaction)
         setModel(model)
         transactionListItems.push(transaction)
@@ -162,7 +166,10 @@ export default function TransactionForm({model, setModel}) {
                                     fullWidth
                                     autoComplete="st-quantity"
                                     variant="standard"
+                                    error={!!quantityError}
+                                    helperText={quantityError}
                                     onChange={(e) => {
+                                        setQuantityError('')
                                         transaction.quantity = e.target.value;
                                         setTransaction(transaction)
                                     }}
