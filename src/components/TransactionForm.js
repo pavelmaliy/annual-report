@@ -80,7 +80,7 @@ export default function TransactionForm({model, setModel}) {
                                 <ListItem key={index}>
                                     <ListItemText
                                         primary={<Typography className="framed-text" variant="button" display="block" gutterBottom>
-                                            { formatDateToMMDDYYYY(item.transactionDate) + " " + ((item.transactionType === 10) ? "sell" : "buy") + " "  + item.stockName + " " + item.quantity}
+                                            { formatDateToMMDDYYYY(item.transactionDate) + " " + ((item.transactionType === 10) ? "sell" : "purchase") + " "  + item.stockName + " " + item.quantity}
                                         </Typography>}/>
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
@@ -173,20 +173,19 @@ export default function TransactionForm({model, setModel}) {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
-                                    <InputLabel id="transaction-select-label" required>Transaction Type</InputLabel>
+                                    <InputLabel id="transaction-select-label">Transaction Type</InputLabel>
                                     <Select
                                         labelId="transaction-select-label"
                                         id="simple-select"
                                         value={transaction.transactionType}
                                         label="Transaction Type"
                                         onChange={(e) => {
-                                            //setTransactionType(e.target.value)
                                             transaction.transactionType = e.target.value
                                             setTransaction(transaction)
                                         }}
                                     >
                                         <MenuItem value={10}>Sell</MenuItem>
-                                        <MenuItem value={20}>Buy</MenuItem>
+                                        <MenuItem value={20}>Purchase</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
