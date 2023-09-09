@@ -32,7 +32,6 @@ function getStepContent(step, model, setModel) {
             throw new Error('Unknown step');
     }
 }
-
 export default function TransactionStepper({model, setModel}) {
     const [activeStep, setActiveStep] = React.useState(0);
 
