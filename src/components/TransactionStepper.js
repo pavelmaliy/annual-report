@@ -38,10 +38,6 @@ function getStepContent(step, model, setModel, setActiveStep) {
 export default function TransactionStepper({model, setModel}) {
     const [activeStep, setActiveStep] = React.useState(0);
 
-    const handleBack = () => {
-        setActiveStep(activeStep - 1);
-    };
-
     return (
         <React.Fragment>
             <CssBaseline/>

@@ -9,7 +9,7 @@ export default function InputFileUpload({handleFileUpload}) {
         <Box display="flex" flexDirection="column" alignItems="center">
             <input
                 type="file"
-                accept=".csv, .xlsx"
+                accept=".xlsx"
                 onChange={handleFileUpload}
                 style={{ display: 'none' }}
                 id="file-upload-input"

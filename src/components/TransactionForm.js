@@ -28,6 +28,7 @@ import InputFileUpload from "./InputFileUpload";
 import {Delete} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
 import './TransactionForm.css'
+import xlsx from 'exceljs'
 
 export default function TransactionForm({model, setModel, setActiveStep}) {
     const [open, setOpen] = React.useState(false);
@@ -92,16 +93,25 @@ export default function TransactionForm({model, setModel, setActiveStep}) {
             // No file selected
             return;
         }
+
         const reader = new FileReader();
+        const workbook = new xlsx.Workbook();
 
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
             const fileContent = event.target.result;
+            const workbook = new xlsx.Workbook()
+            try {
+                await workbook.xlsx.load(fileContent)
+                var worksheet = workbook.getWorksheet('Sheet1');
+                worksheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
+                    console.log("Row " + rowNumber + " = " + JSON.stringify(row.values));
+                });
 
-            // Do something with the file content
-            console.log('File Content:', fileContent);
+            } catch (error) {
+                throw error
+            }
         }
-
-        reader.readAsText(selectedFile);
+        reader.readAsArrayBuffer(selectedFile);
     }
 
     return (
