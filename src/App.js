@@ -6,12 +6,10 @@ import TabPanel from '@mui/lab/TabPanel';
 import TransactionStepper from "./components/TransactionStepper";
 import {Tabs} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
+import Dashboard from "./components/Dashboard";
 
 export default function LabTabs() {
     const [value, setValue] = React.useState('1');
-    const [model, setModel] = React.useState({
-        "transactions": []
-    });
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -37,9 +35,11 @@ export default function LabTabs() {
                         </Tabs>
                     </AppBar>
                 </Box>
-                <TabPanel value="1">Overview</TabPanel>
+                <TabPanel value="1">
+                    <Dashboard/>
+                </TabPanel>
                 <TabPanel value="2">
-                    <TransactionStepper model={model} setModel={setModel}/>
+                    <TransactionStepper/>
                 </TabPanel>
                 <TabPanel value="3">Report</TabPanel>
             </TabContext>

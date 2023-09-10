@@ -24,7 +24,10 @@ function Copyright() {
 
 const steps = ['General Info', 'Stock Transactions'];
 
-export default function TransactionStepper({model, setModel}) {
+export default function TransactionStepper() {
+    const [model, setModel] = React.useState({
+        "transactions": []
+    });
     const [activeStep, setActiveStep] = React.useState(0);
 
     function getStepContent(step) {
