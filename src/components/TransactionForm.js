@@ -29,7 +29,7 @@ import {Delete} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
 import './TransactionForm.css'
 
-export default function TransactionForm({model, setModel}) {
+export default function TransactionForm({model, setModel, setActiveStep}) {
     const [open, setOpen] = React.useState(false);
     const [transaction, setTransaction] = React.useState({})
     const [transactionListItems, setTransactionListItems] = React.useState([])
@@ -86,11 +86,29 @@ export default function TransactionForm({model, setModel}) {
         setTransactionListItems(newItems)
     };
 
+    const handleFileUpload = (e) => {
+        const selectedFile = e.target.files[0];
+        if (!selectedFile) {
+            // No file selected
+            return;
+        }
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const fileContent = event.target.result;
+
+            // Do something with the file content
+            console.log('File Content:', fileContent);
+        }
+
+        reader.readAsText(selectedFile);
+    }
+
     return (
         <div>
             {transactionListItems.length > 0 ? (
                 <div>
-                    <Paper elevation={2} gutterBottom>
+                    <Paper elevation={1} gutterBottom>
                         <List style={{maxHeight: 300, overflow: 'auto'}}>
                             {transactionListItems.map((item, index) => (
                                 <ListItem key={index}>
@@ -123,7 +141,7 @@ export default function TransactionForm({model, setModel}) {
                 >
                     Add New
                 </Button>
-                <InputFileUpload/>
+                <InputFileUpload handleFileUpload={handleFileUpload}/>
             </Box>
             <Dialog open={open} fullWidth>
                 <AppBar sx={{position: 'relative'}}>
@@ -216,6 +234,27 @@ export default function TransactionForm({model, setModel}) {
                     </form>
                 </DialogContent>
             </Dialog>
+            <React.Fragment>
+                <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <Button
+                        onClick={()=> {
+                            setActiveStep(0)
+                        }}
+                        sx={{mt: 3, ml: 1}}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                        variant="contained"
+                        sx={{mt: 3, ml: 1}}
+                        onClick={()=> {
+                            setActiveStep(2)
+                        }}
+                    >
+                        Save
+                    </Button>
+                </Box>
+            </React.Fragment>
         </div>
     );
 }

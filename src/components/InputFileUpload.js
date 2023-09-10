@@ -1,30 +1,28 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Box from "@mui/material/Box";
+import {Input} from "@mui/material";
 
-const VisuallyHiddenInput = styled('input')`
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  white-space: nowrap;
-  width: 1px;
-`;
-
-export default function InputFileUpload() {
+export default function InputFileUpload({handleFileUpload}) {
     return (
-        <Button
-            component="label"
-            variant="contained"
-            startIcon={<CloudUploadIcon />}
-            href="#file-upload"
-        >
-            Upload a file
-            <VisuallyHiddenInput type="file" />
-        </Button>
+        <Box display="flex" flexDirection="column" alignItems="center">
+            <input
+                type="file"
+                accept=".csv, .xlsx"
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
+                id="file-upload-input"
+            />
+            <label htmlFor="file-upload-input">
+                <Button
+                    variant="contained"
+                    component="span"
+                    startIcon={<CloudUploadIcon />}
+                >
+                    Upload File
+                </Button>
+            </label>
+        </Box>
     );
 }

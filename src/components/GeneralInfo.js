@@ -3,15 +3,20 @@ import Grid from '@mui/material/Grid';
 import currencies from "../resources/commonCurrency.json";
 import exchanges from "../resources/stockExchange.json";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 
-export default function GeneralInfoForm({model, setModel}) {
+export default function GeneralInfoForm({model, setModel, setActiveStep}) {
     const [currency, setCurrency] = React.useState('');
     const [exchange, setExchange] = React.useState('');
+    const [currencyError, setCurrencyError] = React.useState('');
+    const [exchangeError, setExchangeError] = React.useState('');
 
     const handleCurrency = (event) => {
         const {value} = event.target;
         setCurrency(value);
+        setCurrencyError('')
         model.currency = value
         setModel(model)
     };
@@ -19,11 +24,29 @@ export default function GeneralInfoForm({model, setModel}) {
     const handleExchange = (event) => {
         const {value} = event.target;
         setExchange(value);
+        setExchangeError('')
         model.exchange = value
         setModel(model)
     };
 
+    const handleNext = () => {
+        let validationError = false
+        if (currency.length === 0) {
+            setCurrencyError('cannot be empty')
+            validationError = true
+        }
+        if (exchange.length === 0) {
+            setExchangeError('cannot be empty')
+            validationError = true
+        }
+        if (validationError) {
+            return
+        }
+        setActiveStep(1)
+    }
+
     return (
+        <>
         <React.Fragment>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
@@ -36,6 +59,7 @@ export default function GeneralInfoForm({model, setModel}) {
                             value={exchange}
                             label="Stock Exchange"
                             onChange={handleExchange}
+                            error={exchangeError}
                         >
                             {Object.keys(exchanges).map((exchange) => (
                                 <MenuItem key={exchange} value={exchange}>
@@ -55,6 +79,7 @@ export default function GeneralInfoForm({model, setModel}) {
                             value={currency}
                             label="Local Currency"
                             onChange={handleCurrency}
+                            error={currencyError}
                         >
                             {Object.keys(currencies).map((currency) => (
                                 <MenuItem key={currency} value={currency}>
@@ -66,5 +91,17 @@ export default function GeneralInfoForm({model, setModel}) {
                 </Grid>
             </Grid>
         </React.Fragment>
+    <React.Fragment>
+        <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+            <Button
+                variant="contained"
+                sx={{mt: 3, ml: 1}}
+                onClick={handleNext}
+            >
+                Next
+            </Button>
+        </Box>
+    </React.Fragment>
+    </>
     );
 }

@@ -25,23 +25,18 @@ function Copyright() {
 
 const steps = ['General Info', 'Stock Transactions'];
 
-function getStepContent(step, model, setModel) {
-    console.log("model:" + model)
+function getStepContent(step, model, setModel, setActiveStep) {
     switch (step) {
         case 0:
-            return <GeneralInfo model={model} setModel={setModel}/>
+            return <GeneralInfo model={model} setModel={setModel} setActiveStep={setActiveStep}/>
         case 1:
-            return <TransactionForm model={model} setModel={setModel}/>;
+            return <TransactionForm model={model} setModel={setModel} setActiveStep={setActiveStep}/>;
         default:
             throw new Error('Unknown step');
     }
 }
 export default function TransactionStepper({model, setModel}) {
     const [activeStep, setActiveStep] = React.useState(0);
-
-    const handleNext = () => {
-        setActiveStep(activeStep + 1);
-    };
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
@@ -50,7 +45,7 @@ export default function TransactionStepper({model, setModel}) {
     return (
         <React.Fragment>
             <CssBaseline/>
-            <Container component="main" maxWidth="sm" sx={{mb: 4}}>
+            <Container component="main" maxWidth="lg" sx={{mb: 4}}>
                 <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
                     <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                         {steps.map((label) => (
@@ -78,21 +73,7 @@ export default function TransactionStepper({model, setModel}) {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            {getStepContent(activeStep, model, setModel)}
-                            <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                                {activeStep !== 0 && (
-                                    <Button onClick={handleBack} sx={{mt: 3, ml: 1}}>
-                                        Back
-                                    </Button>
-                                )}
-                                <Button
-                                    variant="contained"
-                                    onClick={handleNext}
-                                    sx={{mt: 3, ml: 1}}
-                                >
-                                    {activeStep === steps.length - 1 ? 'Save' : 'Next'}
-                                </Button>
-                            </Box>
+                            {getStepContent(activeStep, model, setModel, setActiveStep)}
                         </React.Fragment>
                     )}
                 </Paper>
