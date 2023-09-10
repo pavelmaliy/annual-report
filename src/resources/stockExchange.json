@@ -1,0 +1,77 @@
+{
+  "NYSE": {
+    "name": "New York Stock Exchange",
+    "country": "United States",
+    "currency": "USD"
+  },
+  "NASDAQ": {
+    "name": "NASDAQ",
+    "country": "United States",
+    "currency": "USD"
+  },
+  "LSE": {
+    "name": "London Stock Exchange",
+    "country": "United Kingdom",
+    "currency": "GBP"
+  },
+  "TSE": {
+    "name": "Tokyo Stock Exchange",
+    "country": "Japan",
+    "currency": "JPY"
+  },
+  "SSE": {
+    "name": "Shanghai Stock Exchange",
+    "country": "China",
+    "currency": "CNY"
+  },
+  "HKEX": {
+    "name": "Hong Kong Stock Exchange",
+    "country": "Hong Kong",
+    "currency": "HKD"
+  },
+  "ENX": {
+    "name": "Euronext",
+    "country": "European Union",
+    "currency": "EUR"
+  },
+  "TSX": {
+    "name": "Toronto Stock Exchange",
+    "country": "Canada",
+    "currency": "CAD"
+  },
+  "FWB": {
+    "name": "Frankfurt Stock Exchange",
+    "country": "Germany",
+    "currency": "EUR"
+  },
+  "BSE": {
+    "name": "Bombay Stock Exchange",
+    "country": "India",
+    "currency": "INR"
+  },
+  "ASX": {
+    "name": "Australian Securities Exchange",
+    "country": "Australia",
+    "currency": "AUD"
+  },
+  "BMV": {
+    "name": "Mexican Stock Exchange",
+    "country": "Mexico",
+    "currency": "MXN"
+  },
+  "MOEX": {
+    "name": "Moscow Exchange",
+    "country": "Russia",
+    "currency": "RUB"
+  },
+  "JSE": {
+    "name": "Johannesburg Stock Exchange",
+    "country": "South Africa",
+    "currency": "ZAR"
+  },
+  "KRX": {
+    "name": "Korea Exchange",
+    "country": "South Korea",
+    "currency": "KRW"
+  }
+}

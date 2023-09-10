@@ -52,14 +52,20 @@ export default function TransactionForm({model, setModel}) {
     };
     const handleClose = () => {
         setOpen(false);
+        setStockNameError('')
+        setQuantityError('')
     };
     const handleAdd = () => {
+        let validationError = false
         if (!transaction.stockName) {
             setStockNameError('Stock name cannot be empty')
-            return
+            validationError = true
         }
         if (!transaction.quantity) {
             setQuantityError('Quantity cannot be empty')
+            validationError = true
+        }
+        if (validationError) {
             return
         }
         model.transactions.push(transaction)
