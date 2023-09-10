@@ -58,11 +58,11 @@ export default function TransactionForm({model, setModel}) {
     const handleAdd = () => {
         let validationError = false
         if (!transaction.stockName) {
-            setStockNameError('Stock name cannot be empty')
+            setStockNameError('cannot be empty')
             validationError = true
         }
         if (!transaction.quantity) {
-            setQuantityError('Quantity cannot be empty')
+            setQuantityError('cannot be empty')
             validationError = true
         }
         if (validationError) {
