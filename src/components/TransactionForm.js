@@ -30,10 +30,10 @@ import Paper from "@mui/material/Paper";
 import './TransactionForm.css'
 import xlsx from 'exceljs'
 
-export default function TransactionForm({model, setModel, setActiveStep}) {
+export default function TransactionForm({model, onBack, onFinish}) {
     const [open, setOpen] = React.useState(false);
     const [transaction, setTransaction] = React.useState({})
-    const [transactionListItems, setTransactionListItems] = React.useState([])
+    const [transactionListItems, setTransactionListItems] = React.useState(model.transactions)
     const [stockNameError, setStockNameError] = React.useState('');
     const [quantityError, setQuantityError] = React.useState('');
 
@@ -69,8 +69,6 @@ export default function TransactionForm({model, setModel, setActiveStep}) {
         if (validationError) {
             return
         }
-        model.transactions.push(transaction)
-        setModel(model)
         transactionListItems.push(transaction)
         setTransactionListItems(transactionListItems)
         setTransaction({})
@@ -79,9 +77,6 @@ export default function TransactionForm({model, setModel, setActiveStep}) {
     const handleDelete = (index) => {
         let newTransactions = model.transactions.slice()
         newTransactions.splice(index, 1)
-        model.transactions = newTransactions
-        setModel(model)
-
         let newItems = transactionListItems.slice()
         newItems.splice(index, 1)
         setTransactionListItems(newItems)
@@ -248,7 +243,7 @@ export default function TransactionForm({model, setModel, setActiveStep}) {
                 <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Button
                         onClick={()=> {
-                            setActiveStep(0)
+                            onBack(transactionListItems)
                         }}
                         sx={{mt: 3, ml: 1}}
                     >
@@ -258,7 +253,7 @@ export default function TransactionForm({model, setModel, setActiveStep}) {
                         variant="contained"
                         sx={{mt: 3, ml: 1}}
                         onClick={()=> {
-                            setActiveStep(2)
+                            onFinish(transactionListItems)
                         }}
                     >
                         Save

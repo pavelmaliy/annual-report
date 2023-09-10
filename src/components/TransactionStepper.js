@@ -1,6 +1,5 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
@@ -25,25 +24,41 @@ function Copyright() {
 
 const steps = ['General Info', 'Stock Transactions'];
 
-function getStepContent(step, model, setModel, setActiveStep) {
-    switch (step) {
-        case 0:
-            return <GeneralInfo model={model} setModel={setModel} setActiveStep={setActiveStep}/>
-        case 1:
-            return <TransactionForm model={model} setModel={setModel} setActiveStep={setActiveStep}/>;
-        default:
-            throw new Error('Unknown step');
-    }
-}
 export default function TransactionStepper({model, setModel}) {
     const [activeStep, setActiveStep] = React.useState(0);
+
+    function getStepContent(step) {
+        switch (step) {
+            case 0:
+                return <GeneralInfo model={model} onFinish={(props) => {
+                    model.currency = props.currency
+                    model.exchange = props.exchange
+                    setModel(model)
+                    setActiveStep(1)
+                }}/>
+            case 1:
+                return <TransactionForm model={model}
+                                        onBack={(transactions) => {
+                                            setActiveStep(0)
+                                            model.transactions = transactions
+                                            setModel(model)
+                                        }}
+                                        onFinish={(transactions) => {
+                                            setActiveStep(2)
+                                            model.transactions = transactions
+                                            setModel(model)
+                                        }}/>;
+            default:
+                throw new Error('Unknown step');
+        }
+    }
 
     return (
         <React.Fragment>
             <CssBaseline/>
             <Container component="main" maxWidth="lg" sx={{mb: 4}}>
                 <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                    <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+                    <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
                         {steps.map((label) => (
                             <Step key={label}>
                                 <StepLabel>{label}</StepLabel>
@@ -59,6 +74,8 @@ export default function TransactionStepper({model, setModel}) {
                                 variant="contained"
                                 onClick={() => {
                                     model.transactions = []
+                                    model.currency = ''
+                                    model.exchange = ''
                                     setModel(model)
                                     setActiveStep(0);
                                 }}

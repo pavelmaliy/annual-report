@@ -7,9 +7,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
 
-export default function GeneralInfoForm({model, setModel, setActiveStep}) {
-    const [currency, setCurrency] = React.useState('');
-    const [exchange, setExchange] = React.useState('');
+export default function GeneralInfoForm({model, onFinish}) {
+    const [currency, setCurrency] = React.useState(model.currency);
+    const [exchange, setExchange] = React.useState(model.exchange);
     const [currencyError, setCurrencyError] = React.useState('');
     const [exchangeError, setExchangeError] = React.useState('');
 
@@ -17,32 +17,32 @@ export default function GeneralInfoForm({model, setModel, setActiveStep}) {
         const {value} = event.target;
         setCurrency(value);
         setCurrencyError('')
-        model.currency = value
-        setModel(model)
     };
 
     const handleExchange = (event) => {
         const {value} = event.target;
         setExchange(value);
         setExchangeError('')
-        model.exchange = value
-        setModel(model)
     };
 
     const handleNext = () => {
         let validationError = false
-        if (currency.length === 0) {
+        if (!currency) {
             setCurrencyError('cannot be empty')
             validationError = true
         }
-        if (exchange.length === 0) {
+        if (!exchange) {
             setExchangeError('cannot be empty')
             validationError = true
         }
         if (validationError) {
             return
         }
-        setActiveStep(1)
+
+        onFinish({
+            currency,
+            exchange
+        })
     }
 
     return (
