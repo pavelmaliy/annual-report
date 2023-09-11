@@ -16,14 +16,14 @@ function TemplateDownloadButton() {
         anchor.click();
 
         // Cleanup: Remove the anchor element
-       anchor.remove()
+        anchor.remove()
     };
 
     return (
         <Button
             variant="contained"
             onClick={handleDownload}
-            startIcon={<CloudDownloadIcon />}
+            startIcon={<CloudDownloadIcon/>}
         >Download Template</Button>
     );
 }

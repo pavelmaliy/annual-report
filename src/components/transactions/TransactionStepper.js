@@ -47,7 +47,7 @@ export default function TransactionStepper() {
                                             model.transactions = transactions
                                             setModel(model)
                                         }}
-                                        onFinish = {async (transactions) => {
+                                        onFinish={async (transactions) => {
                                             try {
                                                 await persistTransactions(transactions)
                                             } catch (err) {

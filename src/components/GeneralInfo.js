@@ -47,61 +47,61 @@ export default function GeneralInfoForm({model, onFinish}) {
 
     return (
         <>
-        <React.Fragment>
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth>
-                        <InputLabel id="exchange-select-label" required>Stock Exchange</InputLabel>
-                        <Select
-                            size="small"
-                            labelId="exchange-select-label"
-                            id="exchange-select"
-                            value={exchange}
-                            label="Stock Exchange"
-                            onChange={handleExchange}
-                            error={exchangeError}
-                        >
-                            {Object.keys(exchanges).map((exchange) => (
-                                <MenuItem key={exchange} value={exchange}>
-                                    {exchange} - {exchanges[exchange].name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+            <React.Fragment>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel id="exchange-select-label" required>Stock Exchange</InputLabel>
+                            <Select
+                                size="small"
+                                labelId="exchange-select-label"
+                                id="exchange-select"
+                                value={exchange}
+                                label="Stock Exchange"
+                                onChange={handleExchange}
+                                error={exchangeError}
+                            >
+                                {Object.keys(exchanges).map((exchange) => (
+                                    <MenuItem key={exchange} value={exchange}>
+                                        {exchange} - {exchanges[exchange].name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel id="currency-select-label" required>Local Currency</InputLabel>
+                            <Select
+                                size="small"
+                                labelId="currency-select-label"
+                                id="currency-select"
+                                value={currency}
+                                label="Local Currency"
+                                onChange={handleCurrency}
+                                error={currencyError}
+                            >
+                                {Object.keys(currencies).map((currency) => (
+                                    <MenuItem key={currency} value={currency}>
+                                        {currency} - {currencies[currency].name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth>
-                        <InputLabel id="currency-select-label" required>Local Currency</InputLabel>
-                        <Select
-                            size="small"
-                            labelId="currency-select-label"
-                            id="currency-select"
-                            value={currency}
-                            label="Local Currency"
-                            onChange={handleCurrency}
-                            error={currencyError}
-                        >
-                            {Object.keys(currencies).map((currency) => (
-                                <MenuItem key={currency} value={currency}>
-                                    {currency} - {currencies[currency].name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
-        </React.Fragment>
-    <React.Fragment>
-        <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-            <Button
-                variant="contained"
-                sx={{mt: 3, ml: 1}}
-                onClick={handleNext}
-            >
-                Next
-            </Button>
-        </Box>
-    </React.Fragment>
-    </>
+            </React.Fragment>
+            <React.Fragment>
+                <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <Button
+                        variant="contained"
+                        sx={{mt: 3, ml: 1}}
+                        onClick={handleNext}
+                    >
+                        Next
+                    </Button>
+                </Box>
+            </React.Fragment>
+        </>
     );
 }

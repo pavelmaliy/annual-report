@@ -1,27 +1,8 @@
 import * as React from 'react';
-import {
-    DialogContent,
-    FormControl,
-    InputLabel,
-    List,
-    ListItem,
-    ListItemSecondaryAction,
-    ListItemText,
-    MenuItem,
-    Select,
-    TextField
-} from "@mui/material";
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import Grid from '@mui/material/Grid';
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
-import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {List, ListItem, ListItemSecondaryAction, ListItemText} from "@mui/material";
 import Button from "@mui/material/Button";
-import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/material/Box";
 import InputFileUpload from "../InputFileUpload";
@@ -72,7 +53,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
                 await workbook.xlsx.load(fileContent)
                 let worksheet = workbook.getWorksheet('Sheet1');
                 let transactions = []
-                worksheet.eachRow({ includeEmpty: false }, function(row, rowNumber) {
+                worksheet.eachRow({includeEmpty: false}, function (row, rowNumber) {
                     if (rowNumber > 1) {
                         transactions.push({
                             "transactionDate": formatDateToMMDDYYYY(row.getCell(1).value),
@@ -97,18 +78,19 @@ export default function TransactionForm({model, onBack, onFinish}) {
                 <div>
                     <Paper elevation={1}>
                         <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                        <Button onClick={() => {
-                            setTransactionListItems([])
-                        }}>
-                            delete all
-                        </Button>
+                            <Button onClick={() => {
+                                setTransactionListItems([])
+                            }}>
+                                delete all
+                            </Button>
                         </Box>
                         <List style={{maxHeight: 300, overflow: 'auto'}}>
                             {transactionListItems.map((item, index) => (
                                 <ListItem key={index}>
                                     <ListItemText
-                                        primary={<Typography className="framed-text" variant="button" display="block" gutterBottom>
-                                            { formatDateToMMDDYYYY(item.transactionDate) + " " + ((item.transactionType === 10) ? "sell" : "purchase") + " "  + item.stockName + " " + item.quantity}
+                                        primary={<Typography className="framed-text" variant="button" display="block"
+                                                             gutterBottom>
+                                            {formatDateToMMDDYYYY(item.transactionDate) + " " + ((item.transactionType === 10) ? "sell" : "purchase") + " " + item.stockName + " " + item.quantity}
                                         </Typography>}/>
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
@@ -142,7 +124,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
             <React.Fragment>
                 <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Button
-                        onClick={()=> {
+                        onClick={() => {
                             onBack(transactionListItems)
                         }}
                         sx={{mt: 3, ml: 1}}
@@ -152,7 +134,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
                     <Button
                         variant="contained"
                         sx={{mt: 3, ml: 1}}
-                        onClick={()=> {
+                        onClick={() => {
                             onFinish(transactionListItems)
                         }}
                     >

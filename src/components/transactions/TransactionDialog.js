@@ -101,7 +101,9 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                         <Grid item xs={12} md={6}>
                             <LocalizationProvider required dateAdapter={AdapterDayjs}>
                                 <DatePicker
-                                    shouldDisableDate={(date)=>{return dayjs(date).isAfter(dayjs());}}
+                                    shouldDisableDate={(date) => {
+                                        return dayjs(date).isAfter(dayjs());
+                                    }}
                                     labelId="transaction-date-label"
                                     label="Transaction Date"
                                     onChange={(val) => {

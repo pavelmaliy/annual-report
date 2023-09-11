@@ -1,10 +1,10 @@
-import { db } from './firebase'
-import { doc, setDoc, getDoc, updateDoc, collection } from "firebase/firestore"
+import {db} from './firebase'
+import {doc, getDoc, setDoc, updateDoc} from "firebase/firestore"
 
 const path = "transactions";
 
 export async function persistTransactions(transactions) {
-    if (transactions && transactions.length > 0 ) {
+    if (transactions && transactions.length > 0) {
         const docRef = doc(db, path, path)
         try {
             let docSnapshot = await getDoc(docRef)
