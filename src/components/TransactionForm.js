@@ -128,7 +128,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
         <div>
             {transactionListItems.length > 0 ? (
                 <div>
-                    <Paper elevation={1} gutterBottom>
+                    <Paper elevation={1}>
                         <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
                         <Button onClick={() => {
                             setTransactionListItems([])
