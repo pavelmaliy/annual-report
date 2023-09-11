@@ -1,5 +1,5 @@
 import { db } from './firebase'
-import { doc, setDoc, getDoc ,collection } from "firebase/firestore"
+import { doc, setDoc, getDoc, updateDoc,collection } from "firebase/firestore"
 export async function persistTransactions(transactions) {
     if (transactions && transactions.length > 0 ) {
         const collectionRef = collection(db, "transactions")
@@ -9,7 +9,7 @@ export async function persistTransactions(transactions) {
             if (docSnapshot.exists()) {
                 let storedTransactions = docSnapshot.data()
                 let newTransactions = transactions.concat(storedTransactions.transactions)
-                await setDoc(doc(collectionRef, "transactions"), {"transactions": newTransactions})
+                await updateDoc(doc(collectionRef, "transactions"), {"transactions": newTransactions})
             } else {
                 await setDoc(doc(collectionRef, "transactions"), {"transactions": transactions})
             }
