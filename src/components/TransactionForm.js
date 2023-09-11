@@ -35,7 +35,7 @@ import TemplateDownloadButton from "./TemplateDownload";
 export default function TransactionForm({model, onBack, onFinish}) {
     const [open, setOpen] = React.useState(false);
     const [transaction, setTransaction] = React.useState({})
-    const [transactionListItems, setTransactionListItems] = React.useState(model.transactions)
+    const [transactionListItems, setTransactionListItems] = React.useState(model.transactions ? model.transactions : [])
     const [stockNameError, setStockNameError] = React.useState('');
     const [quantityError, setQuantityError] = React.useState('');
 
@@ -129,6 +129,13 @@ export default function TransactionForm({model, onBack, onFinish}) {
             {transactionListItems.length > 0 ? (
                 <div>
                     <Paper elevation={1} gutterBottom>
+                        <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                        <Button onClick={() => {
+                            setTransactionListItems([])
+                        }}>
+                            delete all
+                        </Button>
+                        </Box>
                         <List style={{maxHeight: 300, overflow: 'auto'}}>
                             {transactionListItems.map((item, index) => (
                                 <ListItem key={index}>

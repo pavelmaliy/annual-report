@@ -8,31 +8,31 @@ import Button from "@mui/material/Button";
 
 
 export default function GeneralInfoForm({model, onFinish}) {
-    const [currency, setCurrency] = React.useState(model.currency);
-    const [exchange, setExchange] = React.useState(model.exchange);
-    const [currencyError, setCurrencyError] = React.useState('');
-    const [exchangeError, setExchangeError] = React.useState('');
+    const [currency, setCurrency] = React.useState(model.currency ? model.currency : '');
+    const [exchange, setExchange] = React.useState(model.exchange ? model.exchange : '');
+    const [currencyError, setCurrencyError] = React.useState(false);
+    const [exchangeError, setExchangeError] = React.useState(false);
 
     const handleCurrency = (event) => {
         const {value} = event.target;
         setCurrency(value);
-        setCurrencyError('')
+        setCurrencyError(false)
     };
 
     const handleExchange = (event) => {
         const {value} = event.target;
         setExchange(value);
-        setExchangeError('')
+        setExchangeError(false)
     };
 
     const handleNext = () => {
         let validationError = false
         if (!currency) {
-            setCurrencyError('cannot be empty')
+            setCurrencyError(true)
             validationError = true
         }
         if (!exchange) {
-            setExchangeError('cannot be empty')
+            setExchangeError(true)
             validationError = true
         }
         if (validationError) {
