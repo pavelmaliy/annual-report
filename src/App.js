@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import TransactionStepper from "./components/TransactionStepper";
+import TransactionStepper from "./components/transactions/TransactionStepper";
 import {Tabs} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Dashboard from "./components/Dashboard";
