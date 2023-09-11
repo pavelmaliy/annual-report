@@ -2,23 +2,22 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Box from "@mui/material/Box";
-import {Input} from "@mui/material";
 
 export default function InputFileUpload({handleFileUpload}) {
     return (
-        <Box display="flex" flexDirection="column" alignItems="center">
+        <Box display="flex" flexDirection="column" alignItems="center" style={{marginRight: '10px'}}>
             <input
                 type="file"
                 accept=".xlsx"
                 onChange={handleFileUpload}
-                style={{ display: 'none' }}
+                style={{display: 'none'}}
                 id="file-upload-input"
             />
             <label htmlFor="file-upload-input">
                 <Button
                     variant="contained"
                     component="span"
-                    startIcon={<CloudUploadIcon />}
+                    startIcon={<CloudUploadIcon/>}
                 >
                     Upload File
                 </Button>

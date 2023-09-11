@@ -30,6 +30,7 @@ import Paper from "@mui/material/Paper";
 import './TransactionForm.css'
 import xlsx from 'exceljs'
 import dayjs from 'dayjs';
+import TemplateDownloadButton from "./TemplateDownload";
 
 export default function TransactionForm({model, onBack, onFinish}) {
     const [open, setOpen] = React.useState(false);
@@ -148,6 +149,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
                     Add New
                 </Button>
                 <InputFileUpload handleFileUpload={handleFileUpload}/>
+                <TemplateDownloadButton/>
             </Box>
             <Dialog open={open} fullWidth>
                 <AppBar sx={{position: 'relative'}}>
