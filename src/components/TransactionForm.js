@@ -58,6 +58,11 @@ export default function TransactionForm({model, onBack, onFinish}) {
         setStockNameError('')
         setQuantityError('')
     };
+
+    const handleUploadAdd = (transactions) => {
+        setTransactionListItems(transactionListItems.concat(transactions))
+    }
+
     const handleAdd = () => {
         let validationError = false
         if (!transaction.stockName) {
@@ -92,17 +97,25 @@ export default function TransactionForm({model, onBack, onFinish}) {
         }
 
         const reader = new FileReader();
-        const workbook = new xlsx.Workbook();
 
         reader.onload = async (event) => {
             const fileContent = event.target.result;
             const workbook = new xlsx.Workbook()
             try {
                 await workbook.xlsx.load(fileContent)
-                var worksheet = workbook.getWorksheet('Sheet1');
-                worksheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
-                    console.log("Row " + rowNumber + " = " + JSON.stringify(row.values));
+                let worksheet = workbook.getWorksheet('Sheet1');
+                let transactions = []
+                worksheet.eachRow({ includeEmpty: false }, function(row, rowNumber) {
+                    if (rowNumber > 1) {
+                        transactions.push({
+                            "transactionDate": row.getCell(1).value,
+                            "transactionType": row.getCell(2).value,
+                            "stockName": row.getCell(3).value,
+                            "quantity": row.getCell(4).value
+                        })
+                    }
                 });
+                handleUploadAdd(transactions)
 
             } catch (error) {
                 throw error
