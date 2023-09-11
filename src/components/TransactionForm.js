@@ -29,6 +29,7 @@ import {Delete} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
 import './TransactionForm.css'
 import xlsx from 'exceljs'
+import dayjs from 'dayjs';
 
 export default function TransactionForm({model, onBack, onFinish}) {
     const [open, setOpen] = React.useState(false);
@@ -207,6 +208,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
                             <Grid item xs={12} md={6}>
                                 <LocalizationProvider required dateAdapter={AdapterDayjs}>
                                     <DatePicker
+                                        shouldDisableDate={(date)=>{return dayjs(date).isAfter(dayjs());}}
                                         labelId="transaction-date-label"
                                         label="Transaction Date"
                                         onChange={(val) => {
