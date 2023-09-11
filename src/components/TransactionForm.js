@@ -108,7 +108,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
                 worksheet.eachRow({ includeEmpty: false }, function(row, rowNumber) {
                     if (rowNumber > 1) {
                         transactions.push({
-                            "transactionDate": row.getCell(1).value,
+                            "transactionDate": formatDateToMMDDYYYY(row.getCell(1).value),
                             "transactionType": row.getCell(2).value,
                             "stockName": row.getCell(3).value,
                             "quantity": row.getCell(4).value
@@ -227,7 +227,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
                                         labelId="transaction-date-label"
                                         label="Transaction Date"
                                         onChange={(val) => {
-                                            transaction.transactionDate = val
+                                            transaction.transactionDate = formatDateToMMDDYYYY(val)
                                             setTransaction(transaction)
                                         }}
                                     />

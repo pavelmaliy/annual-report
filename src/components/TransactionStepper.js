@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import TransactionForm from './TransactionForm';
 import GeneralInfo from "./GeneralInfo";
 import {Step, StepLabel, Stepper} from "@mui/material";
-import {persist, persistTransactions} from "../storage/store"
+import {persistTransactions} from "../storage/store"
 
 function Copyright() {
     return (
