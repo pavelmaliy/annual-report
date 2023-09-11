@@ -69,8 +69,8 @@ export default function TransactionForm({model, onBack, onFinish}) {
             setStockNameError('cannot be empty')
             validationError = true
         }
-        if (!transaction.quantity) {
-            setQuantityError('cannot be empty')
+        if (!transaction.quantity || transaction.quantity < 0) {
+            setQuantityError('not valid number')
             validationError = true
         }
         if (validationError) {

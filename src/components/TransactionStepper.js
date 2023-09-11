@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import TransactionForm from './TransactionForm';
 import GeneralInfo from "./GeneralInfo";
 import {Step, StepLabel, Stepper} from "@mui/material";
+import {persist, persistTransactions} from "../storage/store"
 
 function Copyright() {
     return (
@@ -46,10 +47,16 @@ export default function TransactionStepper() {
                                             model.transactions = transactions
                                             setModel(model)
                                         }}
-                                        onFinish={(transactions) => {
-                                            setActiveStep(2)
+                                        onFinish = {async (transactions) => {
+                                            try {
+                                                await persistTransactions(transactions)
+                                            } catch (err) {
+                                                throw err
+                                            }
                                             model.transactions = transactions
                                             setModel(model)
+                                            setActiveStep(2)
+
                                         }}/>;
             default:
                 throw new Error('Unknown step');
