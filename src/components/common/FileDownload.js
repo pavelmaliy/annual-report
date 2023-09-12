@@ -24,7 +24,7 @@ function FileDownloadButton({filepath, filename}) {
             variant="contained"
             onClick={handleDownload}
             startIcon={<CloudDownloadIcon/>}
-        >Download Template</Button>
+        >Download Excel Template</Button>
     );
 }
 

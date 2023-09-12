@@ -3,10 +3,10 @@ import React, { createContext, useState } from 'react';
 const AppContext = createContext({});
 
 const AppContextProvider = ({ children }) => {
-    const [data, setData] = useState({});
+    const [model, setModel] = useState({"transactions": []});
 
     return (
-        <AppContext.Provider value={{ data, setData }}>
+        <AppContext.Provider value={{ model: model, setModel: setModel }}>
             {children}
         </AppContext.Provider>
     );

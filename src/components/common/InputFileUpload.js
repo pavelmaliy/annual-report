@@ -19,7 +19,7 @@ export default function InputFileUpload({handleFileUpload}) {
                     component="span"
                     startIcon={<CloudUploadIcon/>}
                 >
-                    Upload File
+                    Upload Excel
                 </Button>
             </label>
         </Box>

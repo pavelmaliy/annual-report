@@ -8,7 +8,7 @@ import {Tabs} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Dashboard from "./overview/Dashboard";
 
-export default function MainPage() {
+export default function MainPage({user}) {
     const [value, setValue] = React.useState('1');
 
     const handleChange = (event, newValue) => {
@@ -39,7 +39,7 @@ export default function MainPage() {
                     <Dashboard/>
                 </TabPanel>
                 <TabPanel value="2">
-                    <TransactionStepper/>
+                    <TransactionStepper user={user}/>
                 </TabPanel>
                 <TabPanel value="3">Report</TabPanel>
             </TabContext>

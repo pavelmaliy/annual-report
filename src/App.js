@@ -2,8 +2,9 @@ import * as React from 'react';
 import MainPage from "./components/MainPage";
 import Login from "./components/login/Login";
 import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";
-import {useContext} from "react";
-import {AppContext, AppContextProvider} from "./context/AppContext";
+import {AppContextProvider} from "./context/AppContext";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth} from "./storage/firebase";
 
 
 export default function App() {
@@ -15,13 +16,17 @@ export default function App() {
 }
 
 function Bootstrap() {
-    const {data} = useContext(AppContext);
+    const [user, loading] = useAuthState(auth)
+    if (loading) {
+        return
+    }
+
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Login/>} />
+                <Route path="/" element={<Login/>}/>
                 <Route exact path="login" element={<Login/>}/>
-                <Route exact path="main" element={data && data.user ? <MainPage /> : <Navigate to="/login"/>} />
+                <Route exact path="dashboard" element={user ? <MainPage user={user}/> : <Navigate to="/login" />}/>
             </Routes>
         </Router>
     );

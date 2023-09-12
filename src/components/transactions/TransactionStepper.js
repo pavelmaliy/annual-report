@@ -11,6 +11,8 @@ import {Step, StepLabel, Stepper} from "@mui/material";
 import {persistTransactions} from "../../storage/store"
 import {useContext} from "react";
 import {AppContext} from "../../context/AppContext";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth} from "../../storage/firebase";
 
 function Copyright() {
     return (
@@ -27,25 +29,21 @@ function Copyright() {
 
 const steps = ['General Info', 'Stock Transactions'];
 
-export default function TransactionStepper() {
-    const {data} = useContext(AppContext);
-
-    const [model, setModel] = React.useState({
-        "transactions": []
-    });
+export default function TransactionStepper({user}) {
+    const {model, setModel} = useContext(AppContext);
     const [activeStep, setActiveStep] = React.useState(0);
 
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return <GeneralInfo model={model} onFinish={(props) => {
+                return <GeneralInfo onFinish={(props) => {
                     model.currency = props.currency
                     model.exchange = props.exchange
                     setModel(model)
                     setActiveStep(1)
                 }}/>
             case 1:
-                return <TransactionForm model={model}
+                return <TransactionForm
                                         onBack={(transactions) => {
                                             setActiveStep(0)
                                             model.transactions = transactions
@@ -53,7 +51,7 @@ export default function TransactionStepper() {
                                         }}
                                         onFinish={async (transactions) => {
                                             try {
-                                                await persistTransactions(transactions, data.user)
+                                                await persistTransactions(transactions, user)
                                             } catch (err) {
                                                 throw err
                                             }

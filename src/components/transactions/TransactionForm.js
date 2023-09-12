@@ -13,8 +13,11 @@ import xlsx from 'exceljs'
 import FileDownloadButton from "../common/FileDownload";
 import TransactionDialog from "./TransactionDialog";
 import {formatDateToMMDDYYYY} from "../../utils/utils"
+import {useContext} from "react";
+import {AppContext} from "../../context/AppContext";
 
-export default function TransactionForm({model, onBack, onFinish}) {
+export default function TransactionForm({onBack, onFinish}) {
+    const {model} = useContext(AppContext);
     const [open, setOpen] = React.useState(false);
     const [transactionListItems, setTransactionListItems] = React.useState(model.transactions ? model.transactions : [])
 

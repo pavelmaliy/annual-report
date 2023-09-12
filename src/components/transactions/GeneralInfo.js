@@ -5,9 +5,13 @@ import exchanges from "../../resources/stockExchange.json";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import {useContext} from "react";
+import {AppContext} from "../../context/AppContext";
 
 
-export default function GeneralInfoForm({model, onFinish}) {
+export default function GeneralInfoForm({onFinish}) {
+    const {model} = useContext(AppContext);
+
     const [currency, setCurrency] = React.useState(model.currency ? model.currency : '');
     const [exchange, setExchange] = React.useState(model.exchange ? model.exchange : '');
     const [currencyError, setCurrencyError] = React.useState(false);

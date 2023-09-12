@@ -9,15 +9,17 @@ function Login() {
     const [password, setPassword] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
-    const { data, setData } = useContext(AppContext);
 
 
     useEffect(() => {
+        console.log("in login user:" + JSON.stringify(user) + "loading is " + loading)
         if (loading) {
             // maybe trigger a loading screen
             return;
         }
-        if (user) navigate("/main");
+        if (user) {
+            navigate("/dashboard");
+        }
     }, [user, loading]);
     return (
         <div className="login">
@@ -43,8 +45,7 @@ function Login() {
                     Login
                 </button>
                 <button className="login__btn login__google" onClick={async () => {
-                    let user = await logInWithGoogle()
-                    setData({...data, user})
+                    await logInWithGoogle()
                 }}>
                     Login with Google
                 </button>
