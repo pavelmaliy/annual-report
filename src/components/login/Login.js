@@ -40,6 +40,12 @@ function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
                 />
+                <button
+                    className="login__btn"
+                    onClick={() => logInWithEmailAndPassword(email, password)}
+                >
+                    Login
+                </button>
                 <GoogleButton
                     type="dark"
                     onClick={async () => {
