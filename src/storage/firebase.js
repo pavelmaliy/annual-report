@@ -1,5 +1,6 @@
 import {initializeApp} from "firebase/app";
-import {addDoc, getFirestore, collection} from "firebase/firestore";
+import {addDoc, getFirestore, collection, query, where, getDocs} from "firebase/firestore";
+
 import {
     GoogleAuthProvider,
     getAuth,
@@ -25,7 +26,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-const signInWithGoogle = async () => {
+
+
+const logInWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, googleProvider);
         const user = res.user;
@@ -39,6 +42,7 @@ const signInWithGoogle = async () => {
                 email: user.email,
             });
         }
+        return user
     } catch (err) {
         console.error(err);
         alert(err.message);
@@ -82,7 +86,7 @@ const logout = () => {
 export {
     auth,
     db,
-    signInWithGoogle,
+    logInWithGoogle,
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,
     sendPasswordReset,

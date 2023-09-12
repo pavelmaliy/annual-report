@@ -9,6 +9,8 @@ import TransactionForm from './TransactionForm';
 import GeneralInfo from "./GeneralInfo";
 import {Step, StepLabel, Stepper} from "@mui/material";
 import {persistTransactions} from "../../storage/store"
+import {useContext} from "react";
+import {AppContext} from "../../context/AppContext";
 
 function Copyright() {
     return (
@@ -26,6 +28,8 @@ function Copyright() {
 const steps = ['General Info', 'Stock Transactions'];
 
 export default function TransactionStepper() {
+    const {data} = useContext(AppContext);
+
     const [model, setModel] = React.useState({
         "transactions": []
     });
@@ -49,7 +53,7 @@ export default function TransactionStepper() {
                                         }}
                                         onFinish={async (transactions) => {
                                             try {
-                                                await persistTransactions(transactions)
+                                                await persistTransactions(transactions, data.user)
                                             } catch (err) {
                                                 throw err
                                             }
