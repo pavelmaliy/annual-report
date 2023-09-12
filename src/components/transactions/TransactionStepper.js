@@ -29,7 +29,7 @@ function Copyright() {
 
 const steps = ['General Info', 'Stock Transactions'];
 
-export default function TransactionStepper({user}) {
+export default function TransactionStepper() {
     const {model, setModel} = useContext(AppContext);
     const [activeStep, setActiveStep] = React.useState(0);
 
@@ -51,7 +51,7 @@ export default function TransactionStepper({user}) {
                                         }}
                                         onFinish={async (transactions) => {
                                             try {
-                                                await persistTransactions(transactions, user)
+                                                await persistTransactions(transactions, model.user)
                                             } catch (err) {
                                                 throw err
                                             }
