@@ -1,25 +1,17 @@
 import {db} from './firebase'
-import {doc, getDoc, setDoc, updateDoc} from "firebase/firestore"
+import {collection, doc, runTransaction} from "firebase/firestore"
 
-const path = "transactions";
-
-export async function persistTransactions(transactions) {
-    if (transactions && transactions.length > 0) {
-        const docRef = doc(db, path, path)
+export async function persistTransactions(stockTransactions) {
+    if (stockTransactions && stockTransactions.length > 0) {
+        let colRef = collection(db, "transactions")
         try {
-            let docSnapshot = await getDoc(docRef)
-            if (docSnapshot.exists()) {
-                let storedTransactions = docSnapshot.data()
-                let newTransactions = transactions
-                if (storedTransactions.transactions) {
-                    newTransactions = transactions.concat(storedTransactions.transactions)
-                }
-                await updateDoc(docRef, {"transactions": newTransactions})
-            } else {
-                await setDoc(docRef, {"transactions": transactions})
-            }
-        } catch (err) {
-            throw err
+            await runTransaction(db, async (transaction) => {
+               stockTransactions.map(item => {
+                   transaction.set(doc(colRef), item)
+               })
+            });
+        } catch (e) {
+            throw e
         }
     }
 }

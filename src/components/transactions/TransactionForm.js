@@ -81,7 +81,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
                             <Button onClick={() => {
                                 setTransactionListItems([])
                             }}>
-                                delete all
+                                clear all
                             </Button>
                         </Box>
                         <List style={{maxHeight: 300, overflow: 'auto'}}>
