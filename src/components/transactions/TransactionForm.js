@@ -5,12 +5,12 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/material/Box";
-import InputFileUpload from "../InputFileUpload";
+import InputFileUpload from "../common/InputFileUpload";
 import {Delete} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
 import './TransactionForm.css'
 import xlsx from 'exceljs'
-import TemplateDownloadButton from "../TemplateDownload";
+import FileDownloadButton from "../common/FileDownload";
 import TransactionDialog from "./TransactionDialog";
 import {formatDateToMMDDYYYY} from "../../utils/utils"
 
@@ -118,7 +118,7 @@ export default function TransactionForm({model, onBack, onFinish}) {
                     Add New
                 </Button>
                 <InputFileUpload handleFileUpload={handleFileUpload}/>
-                <TemplateDownloadButton/>
+                <FileDownloadButton filepath='/resources' filename='template.xlsx' />
             </Box>
             <TransactionDialog onFinish={onDialogFinish} open={open} setOpen={setOpen}/>
             <React.Fragment>

@@ -6,7 +6,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import TransactionStepper from "./components/transactions/TransactionStepper";
 import {Tabs} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/overview/Dashboard";
 
 export default function LabTabs() {
     const [value, setValue] = React.useState('1');

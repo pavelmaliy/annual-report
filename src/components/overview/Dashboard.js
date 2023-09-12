@@ -4,8 +4,8 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import StockPieChart from "./charts/PieChart";
-import StockBarChart from "./charts/BarChart";
+import StockPieChart from "./PieChart";
+import StockBarChart from "./BarChart";
 import Box from "@mui/material/Box";
 
 function Copyright() {

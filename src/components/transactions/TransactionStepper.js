@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import TransactionForm from './TransactionForm';
-import GeneralInfo from "../GeneralInfo";
+import GeneralInfo from "./GeneralInfo";
 import {Step, StepLabel, Stepper} from "@mui/material";
 import {persistTransactions} from "../../storage/store"
 
