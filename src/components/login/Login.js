@@ -4,6 +4,8 @@ import { auth, logInWithEmailAndPassword, logInWithGoogle } from "../../storage/
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
 import {AppContext} from "../../context/AppContext"
+import GoogleButton from "react-google-button";
+import Link from "@mui/material/Link";
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -38,23 +40,18 @@ function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
                 />
-                <button
-                    className="login__btn"
-                    onClick={() => logInWithEmailAndPassword(email, password)}
-                >
-                    Login
-                </button>
-                <button className="login__btn login__google" onClick={async () => {
-                    await logInWithGoogle()
-                }}>
-                    Login with Google
-                </button>
-               {/* <div>
+                <GoogleButton
+                    type="dark"
+                    onClick={async () => {
+                        await logInWithGoogle()
+                    }}
+                />
+               <div>
                     <Link to="/reset">Forgot Password</Link>
-                </div>*/}
-                {/*<div>
+                </div>
+                <div>
                     Don't have an account? <Link to="/register">Register</Link> now.
-                </div>*/}
+                </div>
             </div>
         </div>
     );
