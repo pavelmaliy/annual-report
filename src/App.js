@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom
 import {AppContextProvider} from "./context/AppContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "./storage/firebase";
+import Register from "./components/login/Register";
 
 
 export default function App() {
@@ -26,6 +27,7 @@ function Bootstrap() {
             <Routes>
                 <Route path="/" element={<Login/>}/>
                 <Route exact path="login" element={<Login/>}/>
+                <Route exact path="register" element={<Register/>}/>
                 <Route exact path="dashboard" element={user ? <MainPage user={user}/> : <Navigate to="/login" />}/>
             </Routes>
         </Router>

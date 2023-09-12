@@ -1,11 +1,9 @@
-import React, {useContext, useEffect, useState} from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import { auth, logInWithEmailAndPassword, logInWithGoogle } from "../../storage/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
-import {AppContext} from "../../context/AppContext"
 import GoogleButton from "react-google-button";
-import Link from "@mui/material/Link";
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
