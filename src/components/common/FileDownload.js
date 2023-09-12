@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from "@mui/material/Button";
-import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { ReactComponent as ExcelIcon } from '../../icons/excel.svg';
 
 function FileDownloadButton({filepath, filename}) {
     const handleDownload = () => {
@@ -23,8 +23,8 @@ function FileDownloadButton({filepath, filename}) {
         <Button
             variant="contained"
             onClick={handleDownload}
-            startIcon={<CloudDownloadIcon/>}
-        >Download Excel Template</Button>
+            startIcon={<ExcelIcon/>}
+        >Download Template</Button>
     );
 }
 

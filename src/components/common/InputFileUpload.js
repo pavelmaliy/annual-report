@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { ReactComponent as ExcelIcon } from '../../icons/excel.svg';
 import Box from "@mui/material/Box";
 
 export default function InputFileUpload({handleFileUpload}) {
@@ -17,9 +17,9 @@ export default function InputFileUpload({handleFileUpload}) {
                 <Button
                     variant="contained"
                     component="span"
-                    startIcon={<CloudUploadIcon/>}
+                    startIcon={<ExcelIcon/>}
                 >
-                    Upload Excel
+                    Upload
                 </Button>
             </label>
         </Box>
