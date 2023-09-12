@@ -21,7 +21,7 @@ function Bootstrap() {
             <Routes>
                 <Route path="/" element={<Login/>} />
                 <Route exact path="login" element={<Login/>}/>
-                <Route exact path="main" element={<MainPage/>}/>
+                <Route exact path="main" element={data && data.user ? <MainPage /> : <Navigate to="/login"/>} />
             </Routes>
         </Router>
     );
