@@ -17,13 +17,14 @@ const defaultTheme = createTheme();
 export default function EmailVerification() {
     const { email } = useParams();
     const [user, loading, error] = useAuthState(auth);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (loading) {
             // maybe trigger a loading screen
             return;
         }
-        if (user) {
+        if (user && user.emailVerified) {
             navigate("/dashboard");
         }
     }, [user, loading]);

@@ -33,7 +33,7 @@ export default function SignIn() {
             // maybe trigger a loading screen
             return;
         }
-        if (user) {
+        if (user && user.emailVerified) {
             navigate("/dashboard");
         }
     }, [user, loading]);

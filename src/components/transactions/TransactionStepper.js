@@ -11,6 +11,8 @@ import GeneralInfo from "./GeneralInfo";
 import {Step, StepLabel, Stepper} from "@mui/material";
 import {persistTransactions} from "../../storage/store"
 import {AppContext} from "../../context/AppContext";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth} from "../../storage/firebase";
 
 function Copyright() {
     return (
@@ -30,6 +32,7 @@ const steps = ['General Info', 'Stock Transactions'];
 export default function TransactionStepper() {
     const {model, setModel} = useContext(AppContext);
     const [activeStep, setActiveStep] = React.useState(0);
+    const [user] = useAuthState(auth)
 
     function getStepContent(step) {
         switch (step) {
@@ -49,7 +52,7 @@ export default function TransactionStepper() {
                     }}
                     onFinish={async (transactions) => {
                         try {
-                            await persistTransactions(transactions, model.user)
+                            await persistTransactions(transactions, user)
                         } catch (err) {
                             throw err
                         }
