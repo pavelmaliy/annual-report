@@ -16,7 +16,17 @@ const defaultTheme = createTheme();
 
 export default function EmailVerification() {
     const { email } = useParams();
+    const [user, loading, error] = useAuthState(auth);
 
+    useEffect(() => {
+        if (loading) {
+            // maybe trigger a loading screen
+            return;
+        }
+        if (user) {
+            navigate("/dashboard");
+        }
+    }, [user, loading]);
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
