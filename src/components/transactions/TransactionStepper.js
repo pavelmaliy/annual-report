@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useContext} from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -9,10 +10,7 @@ import TransactionForm from './TransactionForm';
 import GeneralInfo from "./GeneralInfo";
 import {Step, StepLabel, Stepper} from "@mui/material";
 import {persistTransactions} from "../../storage/store"
-import {useContext} from "react";
 import {AppContext} from "../../context/AppContext";
-import {useAuthState} from "react-firebase-hooks/auth";
-import {auth} from "../../storage/firebase";
 
 function Copyright() {
     return (
@@ -44,22 +42,22 @@ export default function TransactionStepper() {
                 }}/>
             case 1:
                 return <TransactionForm
-                                        onBack={(transactions) => {
-                                            setActiveStep(0)
-                                            model.transactions = transactions
-                                            setModel(model)
-                                        }}
-                                        onFinish={async (transactions) => {
-                                            try {
-                                                await persistTransactions(transactions, model.user)
-                                            } catch (err) {
-                                                throw err
-                                            }
-                                            model.transactions = transactions
-                                            setModel(model)
-                                            setActiveStep(2)
+                    onBack={(transactions) => {
+                        setActiveStep(0)
+                        model.transactions = transactions
+                        setModel(model)
+                    }}
+                    onFinish={async (transactions) => {
+                        try {
+                            await persistTransactions(transactions, model.user)
+                        } catch (err) {
+                            throw err
+                        }
+                        model.transactions = transactions
+                        setModel(model)
+                        setActiveStep(2)
 
-                                        }}/>;
+                    }}/>;
             default:
                 throw new Error('Unknown step');
         }
