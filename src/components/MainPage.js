@@ -11,29 +11,41 @@ import Typography from '@mui/material/Typography';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import IconButton from '@mui/material/IconButton';
 import {Stack} from "@mui/system";
+import {logout} from "../storage/firebase";
+import {useNavigate} from "react-router-dom";
 
 export default function MainPage({user}) {
-    const [value, setValue] = React.useState('1');
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const [tab, setTab] = React.useState('1');
+    const navigate = useNavigate();
+    const handleTabChange = (event, newValue) => {
+        setTab(newValue);
     };
+
+    const handleLogout = async () => {
+        try {
+            await logout()
+        } catch (e) {
+            throw e
+        }
+        navigate("/login");
+    }
 
     return (
         <Box sx={{width: '100%', typography: 'body1'}}>
-            <TabContext value={value}>
+            <TabContext value={tab}>
                 <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                     <AppBar position="static">
                         <Box pt={1} pr={2}>
                             <Stack direction="column" alignItems="flex-end">
-                                <Typography sx={{ mb: -1 }}>{user}</Typography>
-                                <IconButton color="inherit" >
+                                <Typography sx={{ mb: -1, cursor: 'default'  }}>{user}</Typography>
+                                <IconButton color="inherit" onClick={handleLogout}>
                                     <ExitToAppIcon />
                                 </IconButton>
                             </Stack>
                         </Box>
                         <Tabs
-                            value={value}
-                            onChange={handleChange}
+                            value={tab}
+                            onChange={handleTabChange}
                             indicatorColor="secondary"
                             textColor="inherit"
                             centered

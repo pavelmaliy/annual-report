@@ -52,7 +52,6 @@ export default function SignIn() {
         try {
             await logInWithEmailAndPassword(email, password)
         } catch (err) {
-            console.log(err.message)
             setEmailError('invalid email or password')
         }
     };

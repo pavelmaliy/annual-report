@@ -8,6 +8,7 @@ import {auth} from "./storage/firebase";
 import Register from "./components/login/Register";
 import {useContext} from "react";
 import Reset from "./components/login/Reset";
+import EmailVerification from "./components/login/EmailVerification";
 
 
 export default function App() {
@@ -36,6 +37,7 @@ function Bootstrap() {
                 <Route exact path="login" element={<Login/>}/>
                 <Route exact path="register" element={<Register/>}/>
                 <Route exact path="reset" element={<Reset/>}/>
+                <Route path="verification" element={<EmailVerification/>}/>
                 <Route exact path="dashboard" element={user && user.emailVerified ? <MainPage user={user.displayName}/> : <Navigate to="/login" />}/>
             </Routes>
         </Router>

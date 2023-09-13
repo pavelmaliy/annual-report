@@ -53,6 +53,7 @@ const logInWithEmailAndPassword = async (email, password) => {
     try {
         await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
+        console.error(err.message)
         throw err
     }
 };
@@ -68,6 +69,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
         });
         await sendEmailVerification(user)
     } catch (err) {
+        console.error(err.message)
         throw err
     }
 };
@@ -75,11 +77,17 @@ const sendPasswordReset = async (email) => {
     try {
         await sendPasswordResetEmail(auth, email);
     } catch (err) {
+        console.error(err.message)
         throw err
     }
 };
-const logout = () => {
-    signOut(auth);
+const logout = async () => {
+    try {
+        await signOut(auth);
+    } catch (err) {
+        console.error(err.message)
+        throw err
+    }
 };
 export {
     auth,

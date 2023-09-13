@@ -42,7 +42,6 @@ export default function Reset() {
         try {
             await sendPasswordReset(email)
         } catch (err) {
-            console.log(err.message)
             setEmailError('invalid email')
             return
         }
