@@ -8,6 +8,7 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
+    sendEmailVerification,
     signOut,
 } from "firebase/auth";
 
@@ -66,6 +67,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
             authProvider: "local",
             email,
         });
+        await sendEmailVerification(user)
     } catch (err) {
         console.error(err);
         alert(err.message);

@@ -11,20 +11,40 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {Link} from "react-router-dom";
-import {Google} from "@mui/icons-material";
-import {logInWithGoogle} from "../../storage/firebase";
+import {Link, useNavigate} from "react-router-dom";
+import {Google, Visibility, VisibilityOff} from "@mui/icons-material";
+import {logInWithGoogle, registerWithEmailAndPassword} from "../../storage/firebase";
+import {InputAdornment} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import {useState} from "react";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-    const handleSubmit = (event) => {
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const navigate = useNavigate();
+
+        let email = data.get('email')
+        let firstName = data.get('firstName')
+        let lastName = data.get('lastName')
+        try {
+            await registerWithEmailAndPassword(firstName + " " + lastName, email, password)
+        } catch (e) {
+            throw e
+        }
+        navigate("/login");
+    };
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
     };
 
     return (
@@ -80,13 +100,28 @@ export default function SignUp() {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
+                                    id="password"
+                                    margin="normal"
                                     required
                                     fullWidth
-                                    name="password"
                                     label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="new-password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    autoComplete="password"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                >
+                                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
                             </Grid>
                         </Grid>

@@ -34,7 +34,7 @@ function Bootstrap() {
                 <Route path="/" element={<Login/>}/>
                 <Route exact path="login" element={<Login/>}/>
                 <Route exact path="register" element={<Register/>}/>
-                <Route exact path="dashboard" element={user ? <MainPage/> : <Navigate to="/login" />}/>
+                <Route exact path="dashboard" element={user && user.emailVerified ? <MainPage/> : <Navigate to="/login" />}/>
             </Routes>
         </Router>
     );
