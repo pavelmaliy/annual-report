@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,24 +11,53 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {Link, useNavigate} from "react-router-dom";
 import {Google, Visibility, VisibilityOff} from "@mui/icons-material";
-import {logInWithGoogle, registerWithEmailAndPassword} from "../../storage/firebase";
+import {auth, logInWithGoogle, registerWithEmailAndPassword} from "../../storage/firebase";
 import {InputAdornment} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [passwordError, setPasswordError] = useState('')
+    const [emailError, setEmailError] = useState('')
+    const navigate = useNavigate();
+    const [user, loading, error] = useAuthState(auth);
+
+    useEffect(() => {
+        if (loading) {
+            // maybe trigger a loading screen
+            return;
+        }
+        if (user) {
+            navigate("/dashboard");
+        }
+    }, [user, loading]);
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         const data = new FormData(event.currentTarget);
-        const navigate = useNavigate();
-
         let email = data.get('email')
         let firstName = data.get('firstName')
         let lastName = data.get('lastName')
+
+        let validationError = false
+        if (password.length < 6) {
+            setPasswordError('password should be at least 6 characters')
+            validationError = true
+        }
+        if (email.length === 0 || !emailRegex.test(email)) {
+            setEmailError('invalid email')
+            validationError = true
+        }
+
+        if (validationError) {
+            return
+        }
+
         try {
             await registerWithEmailAndPassword(firstName + " " + lastName, email, password)
         } catch (e) {
@@ -95,6 +122,11 @@ export default function SignUp() {
                                     id="email"
                                     label="Email Address"
                                     name="email"
+                                    error={!!emailError}
+                                    helperText={emailError}
+                                    onChange={(e) => {
+                                        setEmailError('')
+                                    }}
                                     autoComplete="email"
                                 />
                             </Grid>
@@ -108,7 +140,11 @@ export default function SignUp() {
                                     type={showPassword ? 'text' : 'password'}
                                     value={password}
                                     autoComplete="password"
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    error={!!passwordError}
+                                    helperText={passwordError}
+                                    onChange={(e) => {
+                                        setPasswordError('')
+                                        setPassword(e.target.value)}}
                                     InputProps={{
                                         endAdornment: (
                                             <InputAdornment position="end">

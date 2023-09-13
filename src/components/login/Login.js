@@ -24,6 +24,7 @@ const defaultTheme = createTheme();
 export default function SignIn() {
     const [user, loading, error] = useAuthState(auth);
     const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('')
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
@@ -49,9 +50,14 @@ export default function SignIn() {
         event.preventDefault();
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        logInWithEmailAndPassword(email, password)
+        try {
+            await logInWithEmailAndPassword(email, password)
+        } catch (err) {
+            console.log(err.message)
+            setEmailError('invalid email or password')
+        }
     };
 
     return (
@@ -80,8 +86,13 @@ export default function SignIn() {
                             id="email"
                             label="Email Address"
                             name="email"
+                            error={!!emailError}
+                            helperText={emailError}
                             autoComplete="email"
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setEmailError('')
+                                setEmail(e.target.value)
+                            }}
                             autoFocus
                         />
                         <TextField
@@ -117,7 +128,6 @@ export default function SignIn() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
-                            onClick={() => logInWithEmailAndPassword(email, password)}
                         >
                             Sign In
                         </Button>
