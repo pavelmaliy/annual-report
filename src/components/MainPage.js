@@ -8,8 +8,9 @@ import {Tabs} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Dashboard from "./overview/Dashboard";
 import Typography from '@mui/material/Typography';
-import LogoutIcon from '@mui/icons-material/Logout';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import IconButton from '@mui/material/IconButton';
+import {Stack} from "@mui/system";
 
 export default function MainPage({user}) {
     const [value, setValue] = React.useState('1');
@@ -23,13 +24,12 @@ export default function MainPage({user}) {
                 <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                     <AppBar position="static">
                         <Box pt={1} pr={2}>
-                            <Typography
-                                align="right"
-                                component="div"
-                                style={{ cursor: 'pointer' }}
-                            >
-                                {user}
-                            </Typography>
+                            <Stack direction="column" alignItems="flex-end">
+                                <Typography sx={{ mb: -1 }}>{user}</Typography>
+                                <IconButton color="inherit" >
+                                    <ExitToAppIcon />
+                                </IconButton>
+                            </Stack>
                         </Box>
                         <Tabs
                             value={value}

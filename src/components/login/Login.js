@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -23,11 +21,10 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
     const [user, loading, error] = useAuthState(auth);
-    const [email, setEmail] = useState(localStorage.getItem('email') || '');
+    const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('')
-    const [password, setPassword] = useState(localStorage.getItem('password') || '');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false);
 
     const navigate = useNavigate();
 
@@ -57,11 +54,6 @@ export default function SignIn() {
         } catch (err) {
             console.log(err.message)
             setEmailError('invalid email or password')
-            return
-        }
-        if (rememberMe) {
-            localStorage.setItem('email', email);
-            localStorage.setItem('password', password);
         }
     };
 
@@ -125,13 +117,6 @@ export default function SignIn() {
                                     </InputAdornment>
                                 ),
                             }}
-                        />
-                        <FormControlLabel name='remember'
-                                          control={<Checkbox value={rememberMe} color="primary" checked={rememberMe}
-                                                             onChange={(e) => {
-                                                                 setRememberMe(e.target.checked)
-                                                             }}/>}
-                                          label="Remember me"
                         />
                         <Button
                             type="submit"
