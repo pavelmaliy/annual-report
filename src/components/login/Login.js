@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,22 +11,21 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {Google, Visibility, VisibilityOff} from "@mui/icons-material";
 import {InputAdornment} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import {useState, useEffect} from "react";
 import {useAuthState} from "react-firebase-hooks/auth";
-import { auth, logInWithEmailAndPassword, logInWithGoogle } from "../../storage/firebase";
+import {auth, logInWithEmailAndPassword, logInWithGoogle} from "../../storage/firebase";
 import {Link, useNavigate} from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
     const [user, loading, error] = useAuthState(auth);
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(localStorage.getItem('email') || '');
     const [emailError, setEmailError] = useState('')
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState(localStorage.getItem('password') || '');
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
 
@@ -57,13 +57,18 @@ export default function SignIn() {
         } catch (err) {
             console.log(err.message)
             setEmailError('invalid email or password')
+            return
+        }
+        if (rememberMe) {
+            localStorage.setItem('email', email);
+            localStorage.setItem('password', password);
         }
     };
 
     return (
         <ThemeProvider theme={defaultTheme}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <Box
                     sx={{
                         marginTop: 8,
@@ -72,13 +77,13 @@ export default function SignIn() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
+                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
                         <TextField
                             margin="normal"
                             required
@@ -86,6 +91,7 @@ export default function SignIn() {
                             id="email"
                             label="Email Address"
                             name="email"
+                            value={email}
                             error={!!emailError}
                             helperText={emailError}
                             autoComplete="email"
@@ -97,6 +103,7 @@ export default function SignIn() {
                         />
                         <TextField
                             id="password"
+                            name="password"
                             margin="normal"
                             required
                             fullWidth
@@ -113,21 +120,24 @@ export default function SignIn() {
                                             onClick={handleClickShowPassword}
                                             onMouseDown={handleMouseDownPassword}
                                         >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            {showPassword ? <Visibility/> : <VisibilityOff/>}
                                         </IconButton>
                                     </InputAdornment>
                                 ),
                             }}
                         />
                         <FormControlLabel name='remember'
-                            control={<Checkbox value={rememberMe} color="primary" onChange={(e) => {setRememberMe(e.target.checked)}} />}
-                            label="Remember me"
+                                          control={<Checkbox value={rememberMe} color="primary" checked={rememberMe}
+                                                             onChange={(e) => {
+                                                                 setRememberMe(e.target.checked)
+                                                             }}/>}
+                                          label="Remember me"
                         />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{mt: 3, mb: 2}}
                         >
                             Sign In
                         </Button>
@@ -135,7 +145,7 @@ export default function SignIn() {
                             startIcon={<Google/>}
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{mt: 3, mb: 2}}
                             onClick={async () => {
                                 await logInWithGoogle()
                             }}
