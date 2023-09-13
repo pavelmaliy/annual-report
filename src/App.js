@@ -7,6 +7,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "./storage/firebase";
 import Register from "./components/login/Register";
 import {useContext} from "react";
+import Reset from "./components/login/Reset";
 
 
 export default function App() {
@@ -34,7 +35,8 @@ function Bootstrap() {
                 <Route path="/" element={<Login/>}/>
                 <Route exact path="login" element={<Login/>}/>
                 <Route exact path="register" element={<Register/>}/>
-                <Route exact path="dashboard" element={user ? <MainPage/> : <Navigate to="/login" />}/>
+                <Route exact path="reset" element={<Reset/>}/>
+                <Route exact path="dashboard" element={user && user.emailVerified ? <MainPage/> : <Navigate to="/login" />}/>
             </Routes>
         </Router>
     );
