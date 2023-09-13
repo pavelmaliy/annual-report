@@ -7,8 +7,11 @@ import TransactionStepper from "./transactions/TransactionStepper";
 import {Tabs} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Dashboard from "./overview/Dashboard";
+import Typography from '@mui/material/Typography';
+import LogoutIcon from '@mui/icons-material/Logout';
+import IconButton from '@mui/material/IconButton';
 
-export default function MainPage() {
+export default function MainPage({user}) {
     const [value, setValue] = React.useState('1');
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -19,6 +22,15 @@ export default function MainPage() {
             <TabContext value={value}>
                 <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                     <AppBar position="static">
+                        <Box pt={1} pr={2}>
+                            <Typography
+                                align="right"
+                                component="div"
+                                style={{ cursor: 'pointer' }}
+                            >
+                                {user}
+                            </Typography>
+                        </Box>
                         <Tabs
                             value={value}
                             onChange={handleChange}
