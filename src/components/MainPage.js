@@ -56,8 +56,12 @@ export default function MainPage({user}) {
             <TabContext value={tab}>
                 <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                     <AppBar position="static">
-                        <Toolbar>
+                        <Toolbar style={{ marginLeft: 'auto' }}>
+                            <Typography style={{ flexGrow: 1, cursor: 'default' }}>
+                                {user}
+                            </Typography>
                             <IconButton
+                                style={{ paddingLeft: '16px' }}
                                 edge="start"
                                 color="inherit"
                                 aria-label="menu"
@@ -65,9 +69,6 @@ export default function MainPage({user}) {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Typography variant="h6" style={{ flexGrow: 1 }}>
-                                {user}
-                            </Typography>
                         </Toolbar>
                         <Menu
                             anchorEl={anchorEl}
