@@ -52,7 +52,7 @@ export default function EmailVerification() {
                                 We've sent a verification email to:
                             </Typography>
                             <Typography component="h1" variant="h5" align="center">
-                                {location.state.email}
+                                {(location && location.state && location.state.email) || ''}
                             </Typography>
                             <Box noValidate sx={{mt: 1}}>
                                 <Grid container>
