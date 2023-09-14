@@ -16,9 +16,7 @@ import {auth, logInWithGoogle, registerWithEmailAndPassword} from "../../storage
 import {InputAdornment} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {useAuthState} from "react-firebase-hooks/auth";
-import '../../styles.css'
-import ReactLoading from "react-loading";
-
+import LoadingScreen from "../common/LoadingScreen";
 const defaultTheme = createTheme();
 
 export default function SignUp() {
@@ -95,9 +93,7 @@ export default function SignUp() {
     return (
         <div>
             {(!userReady) ? (
-                <div className="loading-container">
-                    <ReactLoading type="spin" color="#0000FF"/>
-                </div>
+                <LoadingScreen/>
             ) : (
                 <ThemeProvider theme={defaultTheme}>
                     <Container component="main" maxWidth="xs">

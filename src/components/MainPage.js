@@ -13,11 +13,23 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {logout} from "../storage/firebase";
 import {useNavigate} from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
+import {useEffect} from "react";
 
 export default function MainPage({user}) {
-    const [tab, setTab] = React.useState('1');
+    const [tab, setTab] = React.useState(localStorage.getItem('lastActiveTab') || '1');
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+    useEffect(() => {
+        const storedValue = localStorage.getItem('lastActiveTab');
+        if (storedValue) {
+            setTab(storedValue)
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('lastActiveTab', tab);
+    }, [tab]);
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);

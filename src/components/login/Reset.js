@@ -13,8 +13,7 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, sendPasswordReset} from "../../storage/firebase";
 import {Link, useNavigate} from "react-router-dom";
-import ReactLoading from "react-loading";
-import '../../styles.css'
+import LoadingScreen from "../common/LoadingScreen";
 const defaultTheme = createTheme();
 
 export default function Reset() {
@@ -51,9 +50,7 @@ export default function Reset() {
     return (
         <div>
             {(!userReady) ? (
-                <div className="loading-container">
-                    <ReactLoading type="spin" color="#0000FF"/>
-                </div>
+                <LoadingScreen/>
             ) : (
                 <ThemeProvider theme={defaultTheme}>
                     <Container component="main" maxWidth="xs">
