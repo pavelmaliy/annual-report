@@ -11,11 +11,12 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../../storage/firebase";
 import {Link, useNavigate, useParams} from "react-router-dom";
+import {useLocation} from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function EmailVerification() {
-    const { email } = useParams();
+    const location = useLocation();
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
 
@@ -47,7 +48,7 @@ export default function EmailVerification() {
                         We've sent a verification email to:
                     </Typography>
                     <Typography component="h1" variant="h5" align="center">
-                        {email}
+                        {location.state.email}
                     </Typography>
                     <Box noValidate sx={{mt: 1}}>
                         <Grid container>

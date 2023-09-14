@@ -23,7 +23,7 @@ export default function Bootstrap() {
                 <Route exact path="login" element={<Login/>}/>
                 <Route exact path="register" element={<Register/>}/>
                 <Route exact path="reset" element={<Reset/>}/>
-                <Route path="verification/*" element={<EmailVerification/>}/>
+                <Route path="verification" element={<EmailVerification/>}/>
                 <Route exact path="dashboard" element={user && user.emailVerified ? <MainPage user={user.displayName}/> : <Navigate to="/login" />}/>
             </Routes>
         </Router>

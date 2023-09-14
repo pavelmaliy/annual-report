@@ -71,9 +71,15 @@ export default function SignUp() {
         try {
             await registerWithEmailAndPassword(firstName + " " + lastName, email, password)
         } catch (e) {
+            if (e.toString().includes('email-already-in-use')) {
+                setEmailError('email already in use')
+                return
+            }
             throw e
         }
-        navigate(`/verification/${email}`);
+
+        let mailState = {email}
+        navigate('/verification', {state: mailState});
     };
 
     const handleClickShowPassword = () => {
