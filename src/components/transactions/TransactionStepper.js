@@ -10,22 +10,31 @@ import GeneralInfo from "./GeneralInfo";
 import {
     Step,
     StepLabel,
-    Stepper, TableCell, TableHead, TableRow, TableContainer, Table, TableBody
+    Stepper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
 } from "@mui/material";
 import {persistTransactions} from "../../storage/store"
 import {AppContext} from "../../context/AppContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, db} from "../../storage/firebase";
-import StarIcon from "@mui/icons-material/Star";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import {collection, getDocs, query, where} from "firebase/firestore";
-import ReactLoading from "react-loading";
 
 const steps = ['General Info', 'Stock Transactions'];
 const tableContainerStyle = {
     maxHeight: '300px', // Set the maximum height for vertical scrolling
     overflowY: 'auto',   // Enable vertical scroll
+};
+
+const tableHeaderStyle = {
+    position: 'sticky',
+    top: 0,
+    background: 'white',
+    zIndex: 1,
 };
 
 export default function TransactionStepper() {
@@ -83,100 +92,121 @@ export default function TransactionStepper() {
         }
     }
 
+    function NewTransaction() {
+        return (
+            <Container component="main" maxWidth="lg" sx={{mb: 4}}>
+                <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
+                    <Typography component="h1" variant="h4" align="center">
+                        New Transaction
+                    </Typography>
+                    <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
+                        {steps.map((label) => (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        ))}
+                    </Stepper>
+                    {activeStep === steps.length ? (
+                        <React.Fragment>
+                            <Typography variant="h5" gutterBottom>
+                                Transactions successfully saved.
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    model.transactions = []
+                                    model.currency = ''
+                                    model.exchange = ''
+                                    setModel(model)
+                                    setActiveStep(0);
+                                }}
+                                sx={{mt: 3, ml: 1}}
+                            >
+                                Finish
+                            </Button>
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                            {getStepContent(activeStep, model, setModel, setActiveStep)}
+                        </React.Fragment>
+                    )}
+                </Paper>
+            </Container>
+        );
+    }
+
     return (
         <div>
             {(loading) ? (
-                <div className="loading-container">
-                    <ReactLoading type="spin" color="#0000FF"/>
-                </div>
+                <React.Fragment>
+                    <CssBaseline/>
+                    <NewTransaction/>
+                </React.Fragment>
             ) : (
                 <React.Fragment>
                     <CssBaseline/>
+                    <NewTransaction/>
                     <Container component="main" maxWidth="lg" sx={{mb: 4}}>
                         <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                            <Typography component="h1" variant="h4" align="center">
-                                New Transaction
-                            </Typography>
-                            <Stepper activeStep={activeStep} sx={{pt: 3, pb: 5}}>
-                                {steps.map((label) => (
-                                    <Step key={label}>
-                                        <StepLabel>{label}</StepLabel>
-                                    </Step>
-                                ))}
-                            </Stepper>
-                            {activeStep === steps.length ? (
-                                <React.Fragment>
-                                    <Typography variant="h5" gutterBottom>
-                                        Transactions successfully saved.
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => {
-                                            model.transactions = []
-                                            model.currency = ''
-                                            model.exchange = ''
-                                            setModel(model)
-                                            setActiveStep(0);
-                                        }}
-                                        sx={{mt: 3, ml: 1}}
-                                    >
-                                        Finish
-                                    </Button>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    {getStepContent(activeStep, model, setModel, setActiveStep)}
-                                </React.Fragment>
-                            )}
-                        </Paper>
-                    </Container>
-                    <Container component="main" maxWidth="lg" sx={{mb: 4}}>
-                        <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                            <Typography component="h1" variant="h4" align="center">
+                            <Typography component="h1" variant="h4" align="center" style={{marginBottom: '12px'}}>
                                 Transaction History
                             </Typography>
                             <React.Fragment>
-                                <div style={tableContainerStyle}>
-                                    <TableContainer component={Paper}>
-                                        <Table>
-                                            <TableHead>
+                                <TableContainer component={Paper} style={tableContainerStyle}>
+                                    <Table>
+                                        <TableHead style={tableHeaderStyle}>
+                                            <TableRow>
+                                                <TableCell>
+                                                    <Typography style={{fontWeight: 'bold'}}>
+                                                        Date
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Typography style={{fontWeight: 'bold'}}>
+                                                        Stock
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Typography style={{fontWeight: 'bold'}}>
+                                                        Action
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Typography style={{fontWeight: 'bold'}}>
+                                                        Quantity
+                                                    </Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {history.map((item, index) => (
                                                 <TableRow>
-                                                    <TableCell style={{fontWeight: 'bold'}}>Date</TableCell>
-                                                    <TableCell style={{fontWeight: 'bold'}}>Stock</TableCell>
-                                                    <TableCell style={{fontWeight: 'bold'}}>Action</TableCell>
-                                                    <TableCell style={{fontWeight: 'bold'}}>Quantity</TableCell>
+                                                    <TableCell>
+                                                        <Typography>
+                                                            {item.transactionDate}
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography>
+                                                            {item.stockName}
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography>
+                                                            {item.transactionType}
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography>
+                                                            {item.quantity}
+                                                        </Typography>
+                                                    </TableCell>
                                                 </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {history.map((item, index) => (
-                                                    <TableRow>
-                                                        <TableCell>
-                                                            <Typography>
-                                                                {item.transactionDate}
-                                                            </Typography>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Typography>
-                                                                {item.stockName}
-                                                            </Typography>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Typography>
-                                                                {item.transactionType}
-                                                            </Typography>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Typography>
-                                                                {item.quantity}
-                                                            </Typography>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))}
+                                            ))}
 
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </div>
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                             </React.Fragment>
                         </Paper>
                     </Container>
@@ -185,3 +215,4 @@ export default function TransactionStepper() {
         </div>
     );
 }
+
