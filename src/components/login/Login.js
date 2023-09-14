@@ -22,7 +22,6 @@ const defaultTheme = createTheme();
 export default function SignIn() {
     const [user, loading, error] = useAuthState(auth);
     const [emailError, setEmailError] = useState('')
-    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
@@ -50,6 +49,7 @@ export default function SignIn() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         let email = data.get('email')
+        let password = data.get('password')
         try {
             await logInWithEmailAndPassword(email, password)
         } catch (err) {
@@ -99,9 +99,7 @@ export default function SignIn() {
                             fullWidth
                             label="Password"
                             type={showPassword ? 'text' : 'password'}
-                            value={password}
                             autoComplete="password"
-                            onChange={(e) => setPassword(e.target.value)}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">

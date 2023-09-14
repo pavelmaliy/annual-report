@@ -20,7 +20,6 @@ import {useAuthState} from "react-firebase-hooks/auth";
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [passwordError, setPasswordError] = useState('')
     const [emailError, setEmailError] = useState('')
@@ -43,6 +42,7 @@ export default function SignUp() {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         const data = new FormData(event.currentTarget);
         let email = data.get('email')
+        let password = data.get('password')
         let firstName = data.get('firstName')
         let lastName = data.get('lastName')
 
@@ -159,18 +159,17 @@ export default function SignUp() {
                             <Grid item xs={12}>
                                 <TextField
                                     id="password"
+                                    name="password"
                                     margin="normal"
                                     required
                                     fullWidth
                                     label="Password"
                                     type={showPassword ? 'text' : 'password'}
-                                    value={password}
                                     autoComplete="password"
                                     error={!!passwordError}
                                     helperText={passwordError}
                                     onChange={(e) => {
                                         setPasswordError('')
-                                        setPassword(e.target.value)
                                     }}
                                     InputProps={{
                                         endAdornment: (
