@@ -49,6 +49,8 @@ export default function SignIn() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        let email = data.get('email')
         try {
             await logInWithEmailAndPassword(email, password)
         } catch (err) {
@@ -88,7 +90,6 @@ export default function SignIn() {
                             autoComplete="email"
                             onChange={(e) => {
                                 setEmailError('')
-                                setEmail(e.target.value)
                             }}
                             autoFocus
                         />
