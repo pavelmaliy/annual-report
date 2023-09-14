@@ -11,10 +11,7 @@ import MainPage from "./MainPage";
 import * as React from "react";
 
 export default function Bootstrap() {
-    const [user, loading] = useAuthState(auth)
-    if (loading) {
-        return
-    }
+    const [user] = useAuthState(auth)
 
     return (
         <Router>

@@ -16,6 +16,8 @@ import {auth, logInWithGoogle, registerWithEmailAndPassword} from "../../storage
 import {InputAdornment} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {useAuthState} from "react-firebase-hooks/auth";
+import '../../styles.css'
+import ReactLoading from "react-loading";
 
 const defaultTheme = createTheme();
 
@@ -25,16 +27,16 @@ export default function SignUp() {
     const [emailError, setEmailError] = useState('')
     const [firstNameError, setFirstNameError] = useState('')
     const [lastNameError, setLastNameError] = useState('')
+    const [userReady, setUserReady] = useState(false)
     const navigate = useNavigate();
     const [user, loading, error] = useAuthState(auth);
 
     useEffect(() => {
-        if (loading) {
-            // maybe trigger a loading screen
-            return;
-        }
-        if (user && user.emailVerified) {
-            navigate("/dashboard");
+        if (!loading) {
+            if (user && user.emailVerified) {
+                navigate("/dashboard");
+            }
+            setUserReady(true)
         }
     }, [user, loading]);
     const handleSubmit = async (event) => {
@@ -91,131 +93,139 @@ export default function SignUp() {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                        <LockOutlinedIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="given-name"
-                                    name="firstName"
-                                    error={!!firstNameError}
-                                    helperText={firstNameError}
-                                    onChange={(e) => {
-                                        setFirstNameError('')
-                                    }}
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    error={!!lastNameError}
-                                    helperText={lastNameError}
-                                    onChange={(e) => {
-                                        setLastNameError('')
-                                    }}
-                                    autoComplete="family-name"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    error={!!emailError}
-                                    helperText={emailError}
-                                    onChange={(e) => {
-                                        setEmailError('')
-                                    }}
-                                    autoComplete="email"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    id="password"
-                                    name="password"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    label="Password"
-                                    type={showPassword ? 'text' : 'password'}
-                                    autoComplete="password"
-                                    error={!!passwordError}
-                                    helperText={passwordError}
-                                    onChange={(e) => {
-                                        setPasswordError('')
-                                    }}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                >
-                                                    {showPassword ? <Visibility/> : <VisibilityOff/>}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2}}
-                        >
-                            Sign Up
-                        </Button>
-                        <Button
-                            startIcon={<Google/>}
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2}}
-                            onClick={async () => {
-                                await logInWithGoogle()
+        <div>
+            {(!userReady) ? (
+                <div className="loading-container">
+                    <ReactLoading type="spin" color="#0000FF"/>
+                </div>
+            ) : (
+                <ThemeProvider theme={defaultTheme}>
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline/>
+                        <Box
+                            sx={{
+                                marginTop: 8,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
                             }}
                         >
-                            Login with Google
-                        </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link to="/login">
-                                    {" Already have an account? Sign in"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
-        </ThemeProvider>
+                            <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                                <LockOutlinedIcon/>
+                            </Avatar>
+                            <Typography component="h1" variant="h5">
+                                Sign up
+                            </Typography>
+                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-name"
+                                            name="firstName"
+                                            error={!!firstNameError}
+                                            helperText={firstNameError}
+                                            onChange={(e) => {
+                                                setFirstNameError('')
+                                            }}
+                                            required
+                                            fullWidth
+                                            id="firstName"
+                                            label="First Name"
+                                            autoFocus
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="lastName"
+                                            label="Last Name"
+                                            name="lastName"
+                                            error={!!lastNameError}
+                                            helperText={lastNameError}
+                                            onChange={(e) => {
+                                                setLastNameError('')
+                                            }}
+                                            autoComplete="family-name"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="email"
+                                            label="Email Address"
+                                            name="email"
+                                            error={!!emailError}
+                                            helperText={emailError}
+                                            onChange={(e) => {
+                                                setEmailError('')
+                                            }}
+                                            autoComplete="email"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="password"
+                                            name="password"
+                                            margin="normal"
+                                            required
+                                            fullWidth
+                                            label="Password"
+                                            type={showPassword ? 'text' : 'password'}
+                                            autoComplete="password"
+                                            error={!!passwordError}
+                                            helperText={passwordError}
+                                            onChange={(e) => {
+                                                setPasswordError('')
+                                            }}
+                                            InputProps={{
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            aria-label="toggle password visibility"
+                                                            onClick={handleClickShowPassword}
+                                                            onMouseDown={handleMouseDownPassword}
+                                                        >
+                                                            {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{mt: 3, mb: 2}}
+                                >
+                                    Sign Up
+                                </Button>
+                                <Button
+                                    startIcon={<Google/>}
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{mt: 3, mb: 2}}
+                                    onClick={async () => {
+                                        await logInWithGoogle()
+                                    }}
+                                >
+                                    Login with Google
+                                </Button>
+                                <Grid container justifyContent="flex-end">
+                                    <Grid item>
+                                        <Link to="/login">
+                                            {" Already have an account? Sign in"}
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Box>
+                    </Container>
+                </ThemeProvider>
+            )}
+        </div>
     );
 }

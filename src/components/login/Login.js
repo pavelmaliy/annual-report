@@ -16,6 +16,8 @@ import IconButton from "@mui/material/IconButton";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, logInWithEmailAndPassword, logInWithGoogle} from "../../storage/firebase";
 import {Link, useNavigate} from "react-router-dom";
+import ReactLoading from "react-loading";
+import '../../styles.css'
 
 const defaultTheme = createTheme();
 
@@ -23,16 +25,16 @@ export default function SignIn() {
     const [user, loading, error] = useAuthState(auth);
     const [emailError, setEmailError] = useState('')
     const [showPassword, setShowPassword] = useState(false);
+    const [userReady, setUserReady] = useState(false)
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (loading) {
-            // maybe trigger a loading screen
-            return;
-        }
-        if (user && user.emailVerified) {
-            navigate("/dashboard");
+        if (!loading) {
+            if (user && user.emailVerified) {
+                navigate("/dashboard");
+            }
+            setUserReady(true)
         }
     }, [user, loading]);
 
@@ -58,94 +60,102 @@ export default function SignIn() {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                        <LockOutlinedIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            error={!!emailError}
-                            helperText={emailError}
-                            autoComplete="email"
-                            onChange={(e) => {
-                                setEmailError('')
-                            }}
-                            autoFocus
-                        />
-                        <TextField
-                            id="password"
-                            name="password"
-                            margin="normal"
-                            required
-                            fullWidth
-                            label="Password"
-                            type={showPassword ? 'text' : 'password'}
-                            autoComplete="password"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                        >
-                                            {showPassword ? <Visibility/> : <VisibilityOff/>}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2}}
-                        >
-                            Sign In
-                        </Button>
-                        <Button
-                            startIcon={<Google/>}
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 3, mb: 2}}
-                            onClick={async () => {
-                                await logInWithGoogle()
+        <div>
+            {(!userReady) ? (
+                <div className="loading-container">
+                <ReactLoading type="spin" color="#0000FF"/>
+                </div>
+            ) : (
+                <ThemeProvider theme={defaultTheme}>
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline/>
+                        <Box
+                            sx={{
+                                marginTop: 8,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
                             }}
                         >
-                            Login with Google
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link to="/reset">Forgot Password</Link>
-                            </Grid>
-                            <Grid item>
-                                <Link to="/register">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
-        </ThemeProvider>
+                            <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                                <LockOutlinedIcon/>
+                            </Avatar>
+                            <Typography component="h1" variant="h5">
+                                Sign in
+                            </Typography>
+                            <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    error={!!emailError}
+                                    helperText={emailError}
+                                    autoComplete="email"
+                                    onChange={(e) => {
+                                        setEmailError('')
+                                    }}
+                                    autoFocus
+                                />
+                                <TextField
+                                    id="password"
+                                    name="password"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    label="Password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    autoComplete="password"
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                >
+                                                    {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{mt: 3, mb: 2}}
+                                >
+                                    Sign In
+                                </Button>
+                                <Button
+                                    startIcon={<Google/>}
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{mt: 3, mb: 2}}
+                                    onClick={async () => {
+                                        await logInWithGoogle()
+                                    }}
+                                >
+                                    Login with Google
+                                </Button>
+                                <Grid container>
+                                    <Grid item xs>
+                                        <Link to="/reset">Forgot Password</Link>
+                                    </Grid>
+                                    <Grid item>
+                                        <Link to="/register">
+                                            {"Don't have an account? Sign Up"}
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Box>
+                    </Container>
+                </ThemeProvider>
+            )}
+        </div>
     );
 }

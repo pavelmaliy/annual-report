@@ -1,0 +1,18 @@
+/* This is the container element that holds the react-loading component */
+.loading-container {
+    /* Make it cover the entire screen */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* This is the react-loading component itself */
+.loading-container > div {
+    /* Center it horizontally and vertically */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
