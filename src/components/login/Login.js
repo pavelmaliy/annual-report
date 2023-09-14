@@ -21,7 +21,6 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
     const [user, loading, error] = useAuthState(auth);
-    const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('')
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -84,7 +83,6 @@ export default function SignIn() {
                             id="email"
                             label="Email Address"
                             name="email"
-                            value={email}
                             error={!!emailError}
                             helperText={emailError}
                             autoComplete="email"
