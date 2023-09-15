@@ -16,8 +16,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import Dashboard from "./overview/Dashboard";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {logout} from "../storage/firebase";
@@ -94,7 +92,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function MainPage() {
+export default function MainPage({user}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [mainContent, setMainContent] = React.useState(<Dashboard/>)
@@ -134,9 +132,9 @@ export default function MainPage() {
                     >
                         <MenuIcon />
                     </IconButton>
-{/*                    <Typography variant="h6" noWrap component="div">
-                        Mini variant drawer
-                    </Typography>*/}
+                    <Typography noWrap component="div">
+                        {user}
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
