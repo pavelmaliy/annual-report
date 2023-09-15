@@ -16,7 +16,8 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
+    TablePagination
 } from "@mui/material";
 import {persistTransactions} from "../../storage/store"
 import {AppContext} from "../../context/AppContext";
@@ -25,16 +26,26 @@ import {auth, db} from "../../storage/firebase";
 import {collection, getDocs, query, where} from "firebase/firestore";
 
 const steps = ['General Info', 'Stock Transactions'];
-const tableContainerStyle = {
-    maxHeight: '300px', // Set the maximum height for vertical scrolling
-    overflowY: 'auto',   // Enable vertical scroll
-};
 
-const tableHeaderStyle = {
-    position: 'sticky',
-    top: 0,
-    background: 'white',
-    zIndex: 1,
+const styles = {
+    tableHeaderStyle: {
+        position: 'sticky',
+        top: 0,
+        background: 'white',
+        zIndex: 1,
+    },
+    tableWrapper: {
+        position: 'relative',
+        overflowX: 'auto',
+        maxHeight: '400px', // Set the maximum height for vertical scrolling
+        overflowY: 'auto'
+    },
+    pagination: {
+        position: 'sticky',
+        bottom: 0,
+        backgroundColor: 'white', // Adjust this based on your table background
+        zIndex: 1, // Ensure it's above the table content
+    },
 };
 
 export default function TransactionStepper() {
@@ -43,6 +54,9 @@ export default function TransactionStepper() {
     const [user] = useAuthState(auth)
     const [history, setHistory] = React.useState([])
     const [loading, setLoading] = React.useState(true);
+    const rowsPerPageOptions = [5, 10, 25];
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     useEffect(() => {
         (async () => {
@@ -91,6 +105,15 @@ export default function TransactionStepper() {
                 throw new Error('Unknown step');
         }
     }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0); // Reset to the first page when changing rows per page
+    };
 
     function NewTransaction() {
         return (
@@ -152,9 +175,9 @@ export default function TransactionStepper() {
                                 Transaction History
                             </Typography>
                             <React.Fragment>
-                                <TableContainer component={Paper} style={tableContainerStyle}>
+                                <TableContainer component={Paper} style={styles.tableWrapper}>
                                     <Table>
-                                        <TableHead style={tableHeaderStyle}>
+                                        <TableHead style={styles.tableHeaderStyle}>
                                             <TableRow>
                                                 <TableCell>
                                                     <Typography style={{fontWeight: 'bold'}}>
@@ -179,8 +202,8 @@ export default function TransactionStepper() {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {history.map((item, index) => (
-                                                <TableRow>
+                                            {history.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
+                                                <TableRow key={index}>
                                                     <TableCell>
                                                         <Typography>
                                                             {item.transactionDate}
@@ -206,6 +229,16 @@ export default function TransactionStepper() {
 
                                         </TableBody>
                                     </Table>
+                                    <TablePagination
+                                        style={styles.pagination}
+                                        rowsPerPageOptions={rowsPerPageOptions}
+                                        component="div"
+                                        count={history.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                    />
                                 </TableContainer>
                             </React.Fragment>
                         </Paper>
