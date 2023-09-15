@@ -31,7 +31,7 @@ export default function SignIn() {
     useEffect(() => {
         if (!loading) {
             if (user && user.emailVerified) {
-                navigate("/dashboard");
+                navigate("/dashboard" + window.location.hash);
             }
             setUserReady(true)
         }

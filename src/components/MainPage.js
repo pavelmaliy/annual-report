@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import {useEffect} from 'react';
+import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -24,7 +25,6 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import ArticleIcon from '@mui/icons-material/Article';
 import Typography from "@mui/material/Typography";
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-import {useEffect} from "react";
 
 const drawerWidth = 240;
 
@@ -93,21 +93,64 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
+const getPageFromHash = function () {
+    // Get the hash portion of the URL and remove the leading '#' character
+    const hash = window.location.hash.slice(1);
+
+// Split the hash into an array of key-value pairs
+    const keyValuePairs = hash.split('&');
+
+// Create an object to store the parsed key-value pairs
+    const parsedData = {};
+
+// Iterate through the key-value pairs and split each pair into a key and a value
+    keyValuePairs.forEach((pair) => {
+        const [key, value] = pair.split('=');
+        // Decode URI components to handle special characters
+        parsedData[key] = decodeURIComponent(value);
+    });
+
+    return (parsedData['page'] && parseInt(parsedData['page']) ) || 0
+
+}
+
+const setPageInHash = function (page) {
+    // Get the current hash
+    const currentHash = window.location.hash.slice(1);
+
+// Parse the current hash into an object
+    const hashObject = currentHash
+        ? currentHash.split('&').reduce((acc, pair) => {
+            const [key, value] = pair.split('=');
+            acc[key] = decodeURIComponent(value);
+            return acc;
+        }, {})
+        : {};
+
+// Add or update key-value pairs
+    hashObject.page = page;
+
+
+// Convert the object back into a hash string
+// Set the updated hash to window.location.hash
+    window.location.hash = Object.entries(hashObject)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join('&');
+
+}
+
 export default function MainPage({user}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [page, setPage] = React.useState(localStorage.getItem('lastPage') ? parseInt(localStorage.getItem('lastPage')) : 0)
+    const [page, setPage] = React.useState(getPageFromHash())
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedValue = localStorage.getItem('lastPage');
-        if (storedValue) {
-            setPage(parseInt(storedValue))
-        }
+        setPage(getPageFromHash())
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('lastPage', page.toString());
+        setPageInHash(page)
     }, [page]);
 
     const handleLogout = async () => {
@@ -176,6 +219,7 @@ export default function MainPage({user}) {
                                     justifyContent: open ? 'initial' : 'center',
                                     px: 2.5,
                                 }}
+                                selected={page===0}
                             >
                                 <ListItemIcon
                                     sx={{
@@ -196,6 +240,7 @@ export default function MainPage({user}) {
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
+                            selected={page===1}
                         >
                             <ListItemIcon
                                 sx={{
@@ -216,6 +261,7 @@ export default function MainPage({user}) {
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
+                            selected={page===2}
                         >
                             <ListItemIcon
                                 sx={{
