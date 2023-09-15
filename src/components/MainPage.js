@@ -24,6 +24,7 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import ArticleIcon from '@mui/icons-material/Article';
 import Typography from "@mui/material/Typography";
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import {useEffect} from "react";
 
 const drawerWidth = 240;
 
@@ -95,8 +96,19 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MainPage({user}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [mainContent, setMainContent] = React.useState(<Dashboard/>)
+    const [page, setPage] = React.useState(localStorage.getItem('lastPage') ? parseInt(localStorage.getItem('lastPage')) : 0)
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const storedValue = localStorage.getItem('lastPage');
+        if (storedValue) {
+            setPage(parseInt(storedValue))
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('lastPage', page.toString());
+    }, [page]);
 
     const handleLogout = async () => {
         try {
@@ -114,6 +126,19 @@ export default function MainPage({user}) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    function getContent(pageNum) {
+        switch (pageNum) {
+            case 0:
+                return <Dashboard/>
+            case 1:
+                return <TransactionStepper/>
+            case 2:
+                return <Typography>reports</Typography>
+            default:
+                throw new Error('Unknown page');
+        }
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -144,7 +169,7 @@ export default function MainPage({user}) {
                     </IconButton>
                 </DrawerHeader>
                 <List>
-                    <ListItem key='overview' disablePadding sx={{ display: 'block' }} onClick={() => {setMainContent(<Dashboard/>)}}>
+                    <ListItem key='overview' disablePadding sx={{ display: 'block' }} onClick={() => {setPage(0)}}>
                             <ListItemButton
                                 sx={{
                                     minHeight: 48,
@@ -164,7 +189,7 @@ export default function MainPage({user}) {
                                 <ListItemText primary='Overview' sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
                         </ListItem>
-                    <ListItem key='transactions' disablePadding sx={{ display: 'block' }} onClick={() => {setMainContent(<TransactionStepper/>)}}>
+                    <ListItem key='transactions' disablePadding sx={{ display: 'block' }} onClick={() => {setPage(1)}}>
                         <ListItemButton
                             sx={{
                                 minHeight: 48,
@@ -184,7 +209,7 @@ export default function MainPage({user}) {
                             <ListItemText primary='Transactions' sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
-                    <ListItem key='reports' disablePadding sx={{ display: 'block' }} onClick={() => {setMainContent(<Typography>reports</Typography>)}}>
+                    <ListItem key='reports' disablePadding sx={{ display: 'block' }} onClick={() => {setPage(2)}}>
                         <ListItemButton
                             sx={{
                                 minHeight: 48,
@@ -231,7 +256,7 @@ export default function MainPage({user}) {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                {mainContent}
+                {getContent(page)}
             </Box>
         </Box>
     );
