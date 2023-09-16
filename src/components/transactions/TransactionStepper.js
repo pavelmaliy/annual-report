@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useContext, useEffect} from 'react';
+import {useContext} from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -7,12 +7,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TransactionForm from './TransactionForm';
 import GeneralInfo from "./GeneralInfo";
-import {
-    Step,
-    StepLabel,
-    Stepper,
-} from "@mui/material";
-import {getUserTransactions, persistTransactions} from "../../storage/store"
+import {Step, StepLabel, Stepper,} from "@mui/material";
+import {persistTransactions} from "../../storage/store"
 import {AppContext} from "../../context/AppContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../../storage/firebase";
@@ -24,20 +20,6 @@ export default function TransactionStepper() {
     const {model, setModel} = useContext(AppContext);
     const [activeStep, setActiveStep] = React.useState(0);
     const [user] = useAuthState(auth)
-    const [history, setHistory] = React.useState([])
-    const [loading, setLoading] = React.useState(true);
-
-    useEffect(() => {
-        (async () => {
-            let docs = await getUserTransactions(user)
-            let newHistory = []
-            docs.map((item) => {
-                newHistory.push(item.data())
-            })
-            setHistory(newHistory)
-            setLoading(false);
-        })()
-    }, []);
 
     function getStepContent(step) {
         switch (step) {
@@ -115,29 +97,21 @@ export default function TransactionStepper() {
     }
 
     return (
-        <div>
-            {(loading) ? (
-                <React.Fragment>
-                    <CssBaseline/>
-                    <NewTransaction/>
-                </React.Fragment>
-            ) : (
-                <React.Fragment>
-                    <CssBaseline/>
-                    <NewTransaction/>
-                    <Container component="main" maxWidth="lg" sx={{mb: 4}}>
-                        <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                            <Typography component="h1" variant="h4" align="center" style={{marginBottom: '12px'}}>
-                                Transaction History
-                            </Typography>
-                            <React.Fragment>
-                                <HistoryTable history={history}/>
-                            </React.Fragment>
-                        </Paper>
-                    </Container>
-                </React.Fragment>
-            )}
-        </div>
-    );
+        <React.Fragment>
+            <CssBaseline/>
+            <NewTransaction/>
+            <Container component="main" maxWidth="lg" sx={{mb: 4}}>
+                <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
+                    <Typography component="h1" variant="h4" align="center" style={{marginBottom: '12px'}}>
+                        Transaction History
+                    </Typography>
+                    <React.Fragment>
+                        <HistoryTable user={user}/>
+                    </React.Fragment>
+                </Paper>
+            </Container>
+        </React.Fragment>
+    )
+
 }
 

@@ -11,6 +11,8 @@ import {
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import {useEffect} from "react";
+import {getUserTransactions} from "../../storage/store";
 
 const styles = {
     tableHeaderStyle: {
@@ -32,11 +34,26 @@ const styles = {
         zIndex: 1, // Ensure it's above the table content
     },
 };
-export function HistoryTable({history}) {
+
+export function HistoryTable({user}) {
     const rowsPerPageOptions = [5, 10, 25];
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [sortConfig, setSortConfig] = React.useState({key: '', direction: ''});
     const [page, setPage] = React.useState(0);
+    const [loading, setLoading] = React.useState(true);
+    const [history, setHistory] = React.useState([])
+
+    useEffect(() => {
+        (async () => {
+            let docs = await getUserTransactions(user)
+            let newHistory = []
+            docs.map((item) => {
+                newHistory.push(item.data())
+            })
+            setHistory(newHistory)
+            setLoading(false);
+        })()
+    }, []);
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
@@ -71,94 +88,100 @@ export function HistoryTable({history}) {
     };
 
     return (
-        <TableContainer component={Paper} style={styles.tableWrapper}>
-            <Table>
-                <TableHead style={styles.tableHeaderStyle}>
-                    <TableRow>
-                        <TableCell>
-                            <TableSortLabel
-                                active={sortConfig.key === 'transactionDate'}
-                                direction={sortConfig.key === 'transactionDate' ? sortConfig.direction : 'asc'}
-                                onClick={() => handleSort('transactionDate')}
-                            >
-                                <Typography style={{fontWeight: 'bold'}}>
-                                    Date
-                                </Typography>
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell>
-                            <TableSortLabel
-                                active={sortConfig.key === 'stockName'}
-                                direction={sortConfig.key === 'stockName' ? sortConfig.direction : 'asc'}
-                                onClick={() => handleSort('stockName')}
-                            >
-                                <Typography style={{fontWeight: 'bold'}}>
-                                    Stock
-                                </Typography>
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell>
-                            <TableSortLabel
-                                active={sortConfig.key === 'transactionType'}
-                                direction={sortConfig.key === 'transactionType' ? sortConfig.direction : 'asc'}
-                                onClick={() => handleSort('transactionType')}
-                            >
-                                <Typography style={{fontWeight: 'bold'}}>
-                                    Action
-                                </Typography>
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell>
-                            <TableSortLabel
-                                active={sortConfig.key === 'quantity'}
-                                direction={sortConfig.key === 'quantity' ? sortConfig.direction : 'asc'}
-                                onClick={() => handleSort('quantity')}
-                            >
-                                <Typography style={{fontWeight: 'bold'}}>
-                                    Quantity
-                                </Typography>
-                            </TableSortLabel>
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
-                        <TableRow key={index}>
-                            <TableCell>
-                                <Typography>
-                                    {item.transactionDate}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography>
-                                    {item.stockName}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography>
-                                    {item.transactionType}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography>
-                                    {item.quantity}
-                                </Typography>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+        <div>
+            {(loading) ? (
+                <div/>
+            ) : (
+                <TableContainer component={Paper} style={styles.tableWrapper}>
+                    <Table>
+                        <TableHead style={styles.tableHeaderStyle}>
+                            <TableRow>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={sortConfig.key === 'transactionDate'}
+                                        direction={sortConfig.key === 'transactionDate' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('transactionDate')}
+                                    >
+                                        <Typography style={{fontWeight: 'bold'}}>
+                                            Date
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={sortConfig.key === 'stockName'}
+                                        direction={sortConfig.key === 'stockName' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('stockName')}
+                                    >
+                                        <Typography style={{fontWeight: 'bold'}}>
+                                            Stock
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={sortConfig.key === 'transactionType'}
+                                        direction={sortConfig.key === 'transactionType' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('transactionType')}
+                                    >
+                                        <Typography style={{fontWeight: 'bold'}}>
+                                            Action
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={sortConfig.key === 'quantity'}
+                                        direction={sortConfig.key === 'quantity' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('quantity')}
+                                    >
+                                        <Typography style={{fontWeight: 'bold'}}>
+                                            Quantity
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <Typography>
+                                            {item.transactionDate}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography>
+                                            {item.stockName}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography>
+                                            {item.transactionType}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography>
+                                            {item.quantity}
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
 
-                </TableBody>
-            </Table>
-            <TablePagination
-                style={styles.pagination}
-                rowsPerPageOptions={rowsPerPageOptions}
-                component="div"
-                count={history.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </TableContainer>
+                        </TableBody>
+                    </Table>
+                    <TablePagination
+                        style={styles.pagination}
+                        rowsPerPageOptions={rowsPerPageOptions}
+                        component="div"
+                        count={history.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </TableContainer>
+            )}
+        </div>
     );
 }
