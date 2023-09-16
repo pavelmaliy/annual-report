@@ -13,6 +13,7 @@ import {AppContext} from "../../context/AppContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../../storage/firebase";
 import {HistoryTable} from './HistoryTable'
+import {generateRandomString} from '../../utils/utils'
 
 const steps = ['General Info', 'Stock Transactions'];
 
@@ -20,6 +21,8 @@ export default function TransactionStepper() {
     const {model, setModel} = useContext(AppContext);
     const [activeStep, setActiveStep] = React.useState(0);
     const [user] = useAuthState(auth)
+
+    const childRef = React.useRef(null);
 
     function getStepContent(step) {
         switch (step) {
@@ -81,6 +84,9 @@ export default function TransactionStepper() {
                                     model.exchange = ''
                                     setModel(model)
                                     setActiveStep(0);
+                                    if (childRef.current) {
+                                        childRef.current.setReloadHistory(generateRandomString(8))
+                                    }
                                 }}
                                 sx={{mt: 3, ml: 1}}
                             >
@@ -100,7 +106,7 @@ export default function TransactionStepper() {
                         Transaction History
                     </Typography>
                     <React.Fragment>
-                        <HistoryTable user={user}/>
+                        <HistoryTable user={user} forwardedRef={childRef}/>
                     </React.Fragment>
                 </Paper>
             </Container>

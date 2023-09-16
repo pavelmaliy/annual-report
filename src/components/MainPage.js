@@ -18,6 +18,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Dashboard from "./overview/Dashboard";
+import Report from "./reports/Report";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {logout} from "../storage/firebase";
 import {useNavigate} from "react-router-dom";
@@ -178,7 +179,7 @@ export default function MainPage({user}) {
             case 1:
                 return <TransactionStepper/>
             case 2:
-                return <Typography>reports</Typography>
+                return <Report/>
             default:
                 throw new Error('Unknown page');
         }

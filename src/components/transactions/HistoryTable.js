@@ -35,13 +35,14 @@ const styles = {
     },
 };
 
-export function HistoryTable({user}) {
+export function HistoryTable({user, forwardedRef }) {
     const rowsPerPageOptions = [5, 10, 25];
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [sortConfig, setSortConfig] = React.useState({key: '', direction: ''});
     const [page, setPage] = React.useState(0);
     const [loading, setLoading] = React.useState(true);
     const [history, setHistory] = React.useState([])
+    const [reloadHistory, setReloadHistory] = React.useState('')
 
     useEffect(() => {
         (async () => {
@@ -53,7 +54,11 @@ export function HistoryTable({user}) {
             setHistory(newHistory)
             setLoading(false);
         })()
-    }, []);
+    }, [reloadHistory]);
+
+    React.useImperativeHandle(forwardedRef, () => ({
+        setReloadHistory
+    }));
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
