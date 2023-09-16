@@ -53,8 +53,9 @@ export default function TransactionStepper() {
         }
     }
 
-    function NewTransaction() {
-        return (
+    return (
+        <React.Fragment>
+            <CssBaseline/>
             <Container component="main" maxWidth="lg" sx={{mb: 4}}>
                 <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
                     <Typography component="h1" variant="h4" align="center">
@@ -93,13 +94,6 @@ export default function TransactionStepper() {
                     )}
                 </Paper>
             </Container>
-        );
-    }
-
-    return (
-        <React.Fragment>
-            <CssBaseline/>
-            <NewTransaction/>
             <Container component="main" maxWidth="lg" sx={{mb: 4}}>
                 <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
                     <Typography component="h1" variant="h4" align="center" style={{marginBottom: '12px'}}>

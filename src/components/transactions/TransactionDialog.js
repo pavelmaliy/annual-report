@@ -31,6 +31,12 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
         if (validationError) {
             return
         }
+        if (!transaction.transactionType) {
+            transaction.transactionType="Purchase"
+        }
+        if (!transaction.transactionDate) {
+            transaction.transactionDate = formatDateToMMDDYYYY()
+        }
         onFinish(transaction)
         setTransaction({})
     };
