@@ -27,7 +27,7 @@ export default function Reset() {
     useEffect(() => {
         if (!loading) {
             if (user && user.emailVerified) {
-                navigate("/dashboard");
+                navigate("/dashboard" + window.location.hash);
             }
             setUserReady(true)
         }
@@ -97,7 +97,7 @@ export default function Reset() {
                                 </Button>
                                 <Grid container>
                                     <Grid item>
-                                        <Link to="/login">
+                                        <Link to={"/login" + window.location.hash}>
                                             {"Back to Sign In"}
                                         </Link>
                                     </Grid>

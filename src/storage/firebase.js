@@ -46,7 +46,6 @@ const logInWithGoogle = async () => {
         return user
     } catch (err) {
         console.error(err);
-        alert(err.message);
     }
 };
 const logInWithEmailAndPassword = async (email, password) => {

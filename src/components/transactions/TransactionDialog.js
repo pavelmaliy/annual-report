@@ -93,7 +93,7 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                 helperText={quantityError}
                                 onChange={(e) => {
                                     setQuantityError('')
-                                    transaction.quantity = e.target.value;
+                                    transaction.quantity = parseInt(e.target.value);
                                     setTransaction(transaction)
                                 }}
                             />
@@ -123,7 +123,7 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                     value={transaction.transactionType}
                                     label="Transaction Type"
                                     onChange={(e) => {
-                                        transaction.transactionType = e.target.value
+                                        transaction.transactionType = ((e.target.value === 10) ? 'Sell' : 'Purchase')
                                         setTransaction(transaction)
                                     }}
                                 >

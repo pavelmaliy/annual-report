@@ -24,7 +24,7 @@ export default function EmailVerification() {
     useEffect(() => {
         if (!loading) {
             if (user && user.emailVerified) {
-                navigate("/dashboard");
+                navigate("/dashboard" + window.location.hash);
             }
             setUserReady(true)
         }
@@ -57,7 +57,7 @@ export default function EmailVerification() {
                             <Box noValidate sx={{mt: 1}}>
                                 <Grid container>
                                     <Grid item xs>
-                                        <Link to="/login">After verifying your email login</Link>
+                                        <Link to={"/login" + window.location.hash}>After verifying your email login</Link>
                                     </Grid>
                                 </Grid>
                             </Box>

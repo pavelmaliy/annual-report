@@ -140,11 +140,11 @@ export default function SignIn() {
                                 </Button>
                                 <Grid container>
                                     <Grid item xs>
-                                        <Link to="/reset">Forgot Password</Link>
+                                        <Link to={"/reset" + window.location.hash}>Forgot Password</Link>
                                     </Grid>
                                     <Grid item>
-                                        <Link to="/register">
-                                            {"Don't have an account? Sign Up"}
+                                        <Link to={"/register" + window.location.hash}>
+                                            Don't have an account? Sign Up
                                         </Link>
                                     </Grid>
                                 </Grid>

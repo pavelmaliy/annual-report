@@ -1,5 +1,5 @@
 import {db} from './firebase'
-import {collection, doc, runTransaction} from "firebase/firestore"
+import {collection, doc, getDocs, query, runTransaction, where} from "firebase/firestore"
 
 export async function persistTransactions(stockTransactions, user) {
     if (stockTransactions && stockTransactions.length > 0) {
@@ -14,4 +14,15 @@ export async function persistTransactions(stockTransactions, user) {
             throw e
         }
     }
+}
+
+export async function getUserTransactions(user) {
+    const q = query(collection(db, "transactions"), where("user_id", "==", user.uid));
+    try {
+        const docs = await getDocs(q);
+        return docs.docs
+    } catch (e) {
+        console.error(e)
+    }
+    return []
 }

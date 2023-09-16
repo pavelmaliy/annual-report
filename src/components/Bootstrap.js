@@ -1,5 +1,3 @@
-import {useContext} from "react";
-import {AppContext} from "../context/AppContext";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../storage/firebase";
 import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";

@@ -16,14 +16,14 @@ import {
     TableCell,
     TableContainer,
     TableHead,
+    TablePagination,
     TableRow,
-    TablePagination
+    TableSortLabel
 } from "@mui/material";
-import {persistTransactions} from "../../storage/store"
+import {getUserTransactions, persistTransactions} from "../../storage/store"
 import {AppContext} from "../../context/AppContext";
 import {useAuthState} from "react-firebase-hooks/auth";
-import {auth, db} from "../../storage/firebase";
-import {collection, getDocs, query, where} from "firebase/firestore";
+import {auth} from "../../storage/firebase";
 
 const steps = ['General Info', 'Stock Transactions'];
 
@@ -57,22 +57,42 @@ export default function TransactionStepper() {
     const rowsPerPageOptions = [5, 10, 25];
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [sortConfig, setSortConfig] = React.useState({key: '', direction: ''});
 
     useEffect(() => {
         (async () => {
-            const q = query(collection(db, "transactions"), where("user_id", "==", user.uid));
-            try {
-                const docs = await getDocs(q);
-                docs.docs.map((item) => {
-                    history.push(item.data())
-                })
-            } catch (e) {
-                console.error(e)
-            }
-            setHistory(history)
+            let docs = await getUserTransactions(user)
+            let newHistory = []
+            docs.map((item) => {
+                newHistory.push(item.data())
+            })
+            setHistory(newHistory)
             setLoading(false);
         })()
     }, []);
+
+    const handleSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({key, direction});
+    };
+
+    const sortedData = [...history].sort((a, b) => {
+        let firstCell = a[sortConfig.key]
+        let secondCell = b[sortConfig.key]
+        if (sortConfig.direction === 'asc') {
+            if (firstCell && firstCell.localeCompare) {
+                return firstCell.localeCompare(secondCell)
+            }
+            return firstCell - secondCell;
+        }
+        if (secondCell && secondCell.localeCompare) {
+            return secondCell.localeCompare(firstCell)
+        }
+        return secondCell - firstCell
+    });
 
     function getStepContent(step) {
         switch (step) {
@@ -180,29 +200,53 @@ export default function TransactionStepper() {
                                         <TableHead style={styles.tableHeaderStyle}>
                                             <TableRow>
                                                 <TableCell>
-                                                    <Typography style={{fontWeight: 'bold'}}>
-                                                        Date
-                                                    </Typography>
+                                                    <TableSortLabel
+                                                        active={sortConfig.key === 'transactionDate'}
+                                                        direction={sortConfig.key === 'transactionDate' ? sortConfig.direction : 'asc'}
+                                                        onClick={() => handleSort('transactionDate')}
+                                                    >
+                                                        <Typography style={{fontWeight: 'bold'}}>
+                                                            Date
+                                                        </Typography>
+                                                    </TableSortLabel>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Typography style={{fontWeight: 'bold'}}>
-                                                        Stock
-                                                    </Typography>
+                                                    <TableSortLabel
+                                                        active={sortConfig.key === 'stockName'}
+                                                        direction={sortConfig.key === 'stockName' ? sortConfig.direction : 'asc'}
+                                                        onClick={() => handleSort('stockName')}
+                                                    >
+                                                        <Typography style={{fontWeight: 'bold'}}>
+                                                            Stock
+                                                        </Typography>
+                                                    </TableSortLabel>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Typography style={{fontWeight: 'bold'}}>
-                                                        Action
-                                                    </Typography>
+                                                    <TableSortLabel
+                                                        active={sortConfig.key === 'transactionType'}
+                                                        direction={sortConfig.key === 'transactionType' ? sortConfig.direction : 'asc'}
+                                                        onClick={() => handleSort('transactionType')}
+                                                    >
+                                                        <Typography style={{fontWeight: 'bold'}}>
+                                                            Action
+                                                        </Typography>
+                                                    </TableSortLabel>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Typography style={{fontWeight: 'bold'}}>
-                                                        Quantity
-                                                    </Typography>
+                                                    <TableSortLabel
+                                                        active={sortConfig.key === 'quantity'}
+                                                        direction={sortConfig.key === 'quantity' ? sortConfig.direction : 'asc'}
+                                                        onClick={() => handleSort('quantity')}
+                                                    >
+                                                        <Typography style={{fontWeight: 'bold'}}>
+                                                            Quantity
+                                                        </Typography>
+                                                    </TableSortLabel>
                                                 </TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {history.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
+                                            {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
                                                 <TableRow key={index}>
                                                     <TableCell>
                                                         <Typography>

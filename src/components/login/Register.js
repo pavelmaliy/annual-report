@@ -32,7 +32,7 @@ export default function SignUp() {
     useEffect(() => {
         if (!loading) {
             if (user && user.emailVerified) {
-                navigate("/dashboard");
+                navigate("/dashboard" + window.location.hash);
             }
             setUserReady(true)
         }
@@ -212,7 +212,7 @@ export default function SignUp() {
                                 </Button>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
-                                        <Link to="/login">
+                                        <Link to={"/login" + window.location.hash}>
                                             {" Already have an account? Sign in"}
                                         </Link>
                                     </Grid>

@@ -81,6 +81,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
+        background: 'blue',
         boxSizing: 'border-box',
         ...(open && {
             ...openedMixin(theme),
