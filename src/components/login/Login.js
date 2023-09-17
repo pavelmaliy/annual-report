@@ -17,6 +17,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, logInWithEmailAndPassword, logInWithGoogle} from "../../storage/firebase";
 import {Link, useNavigate} from "react-router-dom";
 import LoadingScreen from "../common/LoadingScreen";
+import Divider from "@mui/material/Divider";
 
 const defaultTheme = createTheme();
 
@@ -127,6 +128,13 @@ export default function SignIn() {
                                 >
                                     Sign In
                                 </Button>
+                                <Box display="flex" alignItems="center">
+                                    <Divider style={{ flexGrow: 1 }} />
+                                    <Typography variant="body1" color="textSecondary" style={{ margin: '0 16px' }}>
+                                        OR
+                                    </Typography>
+                                    <Divider style={{ flexGrow: 1 }} />
+                                </Box>
                                 <Button
                                     startIcon={<Google/>}
                                     fullWidth
