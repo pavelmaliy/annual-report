@@ -112,6 +112,7 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                     }}
                                     labelId="transaction-date-label"
                                     label="Transaction Date"
+                                    format="DD/MM/YYYY"
                                     onChange={(val) => {
                                         transaction.transactionDate = formatDateToMMDDYYYY(val)
                                         setTransaction(transaction)

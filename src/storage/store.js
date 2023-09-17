@@ -1,7 +1,7 @@
 import {db} from './firebase'
 import {collection, doc, getDocs, query, runTransaction, where} from "firebase/firestore"
 
-export async function persistTransactions(stockTransactions, currency, exchange,user) {
+export async function persistTransactions(stockTransactions, currency, exchange, user) {
     if (stockTransactions && stockTransactions.length > 0) {
         let colRef = collection(db, "transactions")
         try {

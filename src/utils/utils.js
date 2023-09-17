@@ -7,7 +7,7 @@ export const formatDateToMMDDYYYY = function (millis) {
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
 
-    return `${month}/${day}/${year}`;
+    return `${day}/${month}/${year}`;
 }
 
 export const generateRandomString = function (length) {

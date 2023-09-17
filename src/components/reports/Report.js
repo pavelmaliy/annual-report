@@ -29,6 +29,7 @@ export default function Report() {
                                     <FormControl fullWidth>
                                     <LocalizationProvider required dateAdapter={AdapterDayjs}>
                                         <DatePicker
+                                            format="DD/MM/YYYY"
                                             renderInput={(params) => <TextField {...params} fullWidth />}
                                             shouldDisableDate={(date) => {
                                                 return dayjs(date).isAfter(dayjs());
@@ -43,6 +44,7 @@ export default function Report() {
                                     <FormControl fullWidth>
                                     <LocalizationProvider required dateAdapter={AdapterDayjs}>
                                         <DatePicker
+                                            format="DD/MM/YYYY"
                                             shouldDisableDate={(date) => {
                                                 return dayjs(date).isAfter(dayjs());
                                             }}
