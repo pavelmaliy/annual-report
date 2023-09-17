@@ -5,8 +5,11 @@ import Box from "@mui/material/Box";
 import xlsx from "exceljs";
 import {collection, doc, runTransaction} from "firebase/firestore";
 import {db} from "../../storage/firebase";
+import LoadingScreen from '../common/LoadingScreen';
+import {useState} from 'react';
 
 export default function CurrencyUpload() {
+    const [uploading, setUploading] = useState(false)
     async function readCSV(file) {
         // Create a new workbook
         const workbook = new xlsx.Workbook();
@@ -27,6 +30,7 @@ export default function CurrencyUpload() {
     }
 
     const handleFileUpload = async (e) => {
+        setUploading(true)
         const selectedFile = e.target.files[0];
         if (!selectedFile) {
             // No file selected
@@ -52,7 +56,9 @@ export default function CurrencyUpload() {
                     transaction.set(doc(colRef), {item})
                 })
             });
+            setUploading(false)
         } catch(e) {
+            setUploading(true)
             throw e
         }
     }
@@ -75,6 +81,11 @@ export default function CurrencyUpload() {
                     Upload
                 </Button>
             </label>
+            {(uploading) ? (
+                <LoadingScreen/>
+            ) : (
+                <div></div>
+            )}
         </Box>
     );
 }
