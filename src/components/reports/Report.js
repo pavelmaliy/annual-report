@@ -7,6 +7,11 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 export default function Report() {
     return (
@@ -14,96 +19,72 @@ export default function Report() {
             <CssBaseline/>
             <Container component="main" maxWidth="lg" sx={{mb: 4}}>
                 <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                    <Typography component="h1" variant="h4" align="center">
+                    <Typography component="h1" variant="h4" align="center" style={{marginBottom: '20px'}}>
                         New Report
                     </Typography>
                     <Box display="flex" flexDirection="row" alignItems="center">
                         <React.Fragment>
                             <Grid container spacing={3}>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        required
-                                        id="firstName"
-                                        name="firstName"
-                                        label="First name"
-                                        fullWidth
-                                        autoComplete="given-name"
-                                        variant="standard"
-                                    />
+                                    <FormControl fullWidth>
+                                    <LocalizationProvider required dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            renderInput={(params) => <TextField {...params} fullWidth />}
+                                            shouldDisableDate={(date) => {
+                                                return dayjs(date).isAfter(dayjs());
+                                            }}
+                                            labelId="start-date-label"
+                                            label="Start Date"
+                                        />
+                                    </LocalizationProvider>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        required
-                                        id="lastName"
-                                        name="lastName"
-                                        label="Last name"
-                                        fullWidth
-                                        autoComplete="family-name"
-                                        variant="standard"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        id="address1"
-                                        name="address1"
-                                        label="Address line 1"
-                                        fullWidth
-                                        autoComplete="shipping address-line1"
-                                        variant="standard"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        id="address2"
-                                        name="address2"
-                                        label="Address line 2"
-                                        fullWidth
-                                        autoComplete="shipping address-line2"
-                                        variant="standard"
-                                    />
+                                    <FormControl fullWidth>
+                                    <LocalizationProvider required dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            shouldDisableDate={(date) => {
+                                                return dayjs(date).isAfter(dayjs());
+                                            }}
+                                            labelId="end-date-label"
+                                            label="End Date"
+                                        />
+                                    </LocalizationProvider>
+                                        </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        required
-                                        id="city"
-                                        name="city"
-                                        label="City"
-                                        fullWidth
-                                        autoComplete="shipping address-level2"
-                                        variant="standard"
-                                    />
+                                    <FormControl fullWidth>
+                                        <InputLabel id="alg-select-label">Alghorithm</InputLabel>
+                                        <Select
+                                            size="small"
+                                            labelId="alg-select-label"
+                                            id="simple-select"
+                                            //value={transaction.transactionType}
+                                            label="Alghoritm"
+                                            onChange={(e) => {
+                                            }}
+                                        >
+                                            <MenuItem value={10}>Optimized</MenuItem>
+                                            <MenuItem value={20}>FIFO</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        id="state"
-                                        name="state"
-                                        label="State/Province/Region"
-                                        fullWidth
-                                        variant="standard"
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        required
-                                        id="zip"
-                                        name="zip"
-                                        label="Zip / Postal code"
-                                        fullWidth
-                                        autoComplete="shipping postal-code"
-                                        variant="standard"
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        required
-                                        id="country"
-                                        name="country"
-                                        label="Country"
-                                        fullWidth
-                                        autoComplete="shipping country"
-                                        variant="standard"
-                                    />
+                                    <FormControl fullWidth>
+                                        <InputLabel id="format-select-label">Format</InputLabel>
+                                        <Select
+                                            size="small"
+                                            labelId="format-select-label"
+                                            id="simple-select"
+                                            //value={transaction.transactionType}
+                                            label="Format"
+                                            onChange={(e) => {
+                                            }}
+                                        >
+                                            <MenuItem value={10}>Simplified</MenuItem>
+                                            <MenuItem value={20}>Official</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <div style={{ textAlign: 'right' }}>
