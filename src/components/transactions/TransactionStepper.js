@@ -42,7 +42,7 @@ export default function TransactionStepper() {
                     }}
                     onFinish={async (transactions) => {
                         try {
-                            await persistTransactions(transactions, user)
+                            await persistTransactions(transactions, model.currency, model.exchange, user)
                         } catch (err) {
                             throw err
                         }
