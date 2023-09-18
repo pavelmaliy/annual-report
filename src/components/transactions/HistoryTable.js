@@ -13,7 +13,8 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {useEffect} from "react";
 import {getUserTransactions} from "../../storage/store";
-import { parse, format } from 'date-fns'
+import { parse } from 'date-fns'
+import currencies from "../../resources/commonCurrency.json";
 
 const styles = {
     tableHeaderStyle: {
@@ -164,6 +165,17 @@ export function HistoryTable({user, forwardedRef }) {
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={sortConfig.key === 'curr'}
+                                        direction={sortConfig.key === 'curr' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('curr')}
+                                    >
+                                        <Typography style={{fontWeight: 'bold'}}>
+                                            Currency
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -192,6 +204,11 @@ export function HistoryTable({user, forwardedRef }) {
                                     <TableCell>
                                         <Typography>
                                             {item.price}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography>
+                                            {currencies[item.marketCurrency].symbol}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>
