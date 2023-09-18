@@ -13,9 +13,9 @@ export default function GeneralInfoForm({onFinish}) {
     const {model} = useContext(AppContext);
 
     const [currency, setCurrency] = React.useState(model.currency ? model.currency : 'ILS');
-    const [exchange, setExchange] = React.useState(model.exchange ? model.exchange : 'NASDAQ');
+    const [marketCurrency, setMarketCurrency] = React.useState(model.exchange ? model.exchange : 'EUR');
     const [currencyError, setCurrencyError] = React.useState(false);
-    const [exchangeError, setExchangeError] = React.useState(false);
+    const [marketCurrError, setMarketCurrError] = React.useState(false);
 
     const handleCurrency = (event) => {
         const {value} = event.target;
@@ -23,10 +23,10 @@ export default function GeneralInfoForm({onFinish}) {
         setCurrencyError(false)
     };
 
-    const handleExchange = (event) => {
+    const handleMarketCurrency = (event) => {
         const {value} = event.target;
-        setExchange(value);
-        setExchangeError(false)
+        setMarketCurrency(value);
+        setMarketCurrError(false)
     };
 
     const handleNext = () => {
@@ -35,8 +35,8 @@ export default function GeneralInfoForm({onFinish}) {
             setCurrencyError(true)
             validationError = true
         }
-        if (!exchange) {
-            setExchangeError(true)
+        if (!marketCurrency) {
+            setMarketCurrError(true)
             validationError = true
         }
         if (validationError) {
@@ -45,7 +45,7 @@ export default function GeneralInfoForm({onFinish}) {
 
         onFinish({
             currency,
-            exchange
+            marketCurrency
         })
     }
 
@@ -55,19 +55,19 @@ export default function GeneralInfoForm({onFinish}) {
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                         <FormControl fullWidth>
-                            <InputLabel id="exchange-select-label" required>Stock Exchange</InputLabel>
+                            <InputLabel id="exchange-select-label" required>Market Currency</InputLabel>
                             <Select
                                 size="small"
                                 labelId="exchange-select-label"
                                 id="exchange-select"
-                                value={exchange}
-                                label="Stock Exchange"
-                                onChange={handleExchange}
-                                error={exchangeError}
+                                value={marketCurrency}
+                                label="Market Currency"
+                                onChange={handleMarketCurrency}
+                                error={marketCurrError}
                             >
-                                {Object.keys(exchanges).map((exchange) => (
-                                    <MenuItem key={exchange} value={exchange}>
-                                        {exchange} - {exchanges[exchange].name}
+                                {Object.keys(currencies).map((currency) => (
+                                    <MenuItem key={currency} value={currency}>
+                                        {currency} - {currencies[currency].name}
                                     </MenuItem>
                                 ))}
                             </Select>

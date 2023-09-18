@@ -62,7 +62,8 @@ export default function TransactionForm({onBack, onFinish}) {
                             "transactionDate": formatDateToMMDDYYYY(row.getCell(1).value),
                             "transactionType": row.getCell(2).value,
                             "stockName": row.getCell(3).value,
-                            "quantity": parseInt(row.getCell(4).value)
+                            "quantity": parseInt(row.getCell(4).value),
+                            "price": parseFloat(row.getCell(5).value)
                         })
                     }
                 });

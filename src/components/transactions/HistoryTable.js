@@ -153,6 +153,17 @@ export function HistoryTable({user, forwardedRef }) {
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={sortConfig.key === 'price'}
+                                        direction={sortConfig.key === 'price' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('price')}
+                                    >
+                                        <Typography style={{fontWeight: 'bold'}}>
+                                            Price
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -176,6 +187,11 @@ export function HistoryTable({user, forwardedRef }) {
                                     <TableCell>
                                         <Typography>
                                             {item.quantity}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography>
+                                            {item.price}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>

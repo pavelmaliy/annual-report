@@ -29,7 +29,7 @@ export default function TransactionStepper() {
             case 0:
                 return <GeneralInfo onFinish={(props) => {
                     model.currency = props.currency
-                    model.exchange = props.exchange
+                    model.marketCurrency = props.marketCurrency
                     setModel(model)
                     setActiveStep(1)
                 }}/>
@@ -42,7 +42,7 @@ export default function TransactionStepper() {
                     }}
                     onFinish={async (transactions) => {
                         try {
-                            await persistTransactions(transactions, model.currency, model.exchange, user)
+                            await persistTransactions(transactions, model.currency, model.marketCurrency, user)
                         } catch (err) {
                             throw err
                         }
@@ -81,7 +81,7 @@ export default function TransactionStepper() {
                                 onClick={() => {
                                     model.transactions = []
                                     model.currency = ''
-                                    model.exchange = ''
+                                    model.marketCurrency = ''
                                     setModel(model)
                                     setActiveStep(0);
                                     if (childRef.current) {

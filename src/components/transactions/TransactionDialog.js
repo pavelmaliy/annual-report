@@ -17,6 +17,7 @@ import {formatDateToMMDDYYYY} from "../../utils/utils"
 export default function TransactionDialog({onFinish, open, setOpen}) {
     const [stockNameError, setStockNameError] = React.useState('');
     const [quantityError, setQuantityError] = React.useState('');
+    const [priceError, setPriceError] = React.useState('');
     const [transaction, setTransaction] = React.useState({})
     const handleAdd = () => {
         let validationError = false
@@ -28,6 +29,11 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
             setQuantityError('not valid number')
             validationError = true
         }
+        if (!transaction.price || transaction.price < 0) {
+            setPriceError('not valid number')
+            validationError = true
+        }
+
         if (validationError) {
             return
         }
@@ -100,6 +106,36 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                 onChange={(e) => {
                                     setQuantityError('')
                                     transaction.quantity = parseInt(e.target.value);
+                                    setTransaction(transaction)
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                required
+                                id="price"
+                                label="Price"
+                                fullWidth
+                                autoComplete="price"
+                                variant="standard"
+                                error={!!priceError}
+                                helperText={priceError}
+                                onChange={(e) => {
+                                    setPriceError('')
+                                    transaction.price = parseFloat(e.target.value);
+                                    setTransaction(transaction)
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                id="description"
+                                label="Description"
+                                fullWidth
+                                autoComplete="description"
+                                variant="standard"
+                                onChange={(e) => {
+                                    transaction.description = e.target.value;
                                     setTransaction(transaction)
                                 }}
                             />
