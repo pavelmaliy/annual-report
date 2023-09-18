@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {useEffect} from "react";
 import {getUserTransactions} from "../../storage/store";
+import { parse, format } from 'date-fns'
 
 const styles = {
     tableHeaderStyle: {
@@ -74,8 +75,15 @@ export function HistoryTable({user, forwardedRef }) {
     };
 
     const sortedData = [...history].sort((a, b) => {
+        const dateFormatPattern = /^\d{2}\/\d{2}\/\d{4}$/;
         let firstCell = a[sortConfig.key]
         let secondCell = b[sortConfig.key]
+
+        if (dateFormatPattern.test(firstCell) ) {
+            firstCell = parse(firstCell.toString(), "dd/MM/yyyy", new Date());
+            secondCell = parse(secondCell.toString(), "dd/MM/yyyy", new Date());
+        }
+
         if (sortConfig.direction === 'asc') {
             if (firstCell && firstCell.localeCompare) {
                 return firstCell.localeCompare(secondCell)
