@@ -1,5 +1,6 @@
 import {db} from './firebase'
 import {collection, doc, getDocs, query, runTransaction, where} from "firebase/firestore"
+import {formatDateToMMDDYYYY} from "../utils/utils";
 
 export async function persistTransactions(stockTransactions, currency, marketCurrency, user) {
     if (stockTransactions && stockTransactions.length > 0) {
@@ -7,7 +8,7 @@ export async function persistTransactions(stockTransactions, currency, marketCur
         try {
             await runTransaction(db, async (transaction) => {
                stockTransactions.map(item => {
-                   transaction.set(doc(colRef), {...item, "user_id": user.uid, "currency":currency, "marketCurrency": marketCurrency})
+                   transaction.set(doc(colRef), {...item, "transactionDate": formatDateToMMDDYYYY(item.transactionDate),"user_id": user.uid, "currency":currency, "marketCurrency": marketCurrency})
                })
             });
         } catch (e) {

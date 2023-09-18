@@ -59,7 +59,7 @@ export default function TransactionForm({onBack, onFinish}) {
                 worksheet.eachRow({includeEmpty: false}, function (row, rowNumber) {
                     if (rowNumber > 1) {
                         transactions.push({
-                            "transactionDate": formatDateToMMDDYYYY(row.getCell(1).value),
+                            "transactionDate": row.getCell(1).value,
                             "transactionType": row.getCell(2).value,
                             "stockName": row.getCell(3).value,
                             "quantity": parseInt(row.getCell(4).value),

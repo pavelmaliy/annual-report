@@ -12,7 +12,6 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {formatDateToMMDDYYYY} from "../../utils/utils"
 
 export default function TransactionDialog({onFinish, open, setOpen}) {
     const [stockNameError, setStockNameError] = React.useState('');
@@ -41,7 +40,7 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
             transaction.transactionType="Purchase"
         }
         if (!transaction.transactionDate) {
-            transaction.transactionDate = formatDateToMMDDYYYY()
+            transaction.transactionDate = new Date().getTime()
         }
         onFinish(transaction)
         setTransaction({})
@@ -150,7 +149,7 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                     label="Transaction Date"
                                     format="DD/MM/YYYY"
                                     onChange={(val) => {
-                                        transaction.transactionDate = formatDateToMMDDYYYY(val)
+                                        transaction.transactionDate = val
                                         setTransaction(transaction)
                                     }}
                                 />
