@@ -43,35 +43,5 @@
     "name": "Frankfurt Stock Exchange",
     "country": "Germany",
     "currency": "EUR"
-  },
-  "BSE": {
-    "name": "Bombay Stock Exchange",
-    "country": "India",
-    "currency": "INR"
-  },
-  "ASX": {
-    "name": "Australian Securities Exchange",
-    "country": "Australia",
-    "currency": "AUD"
-  },
-  "BMV": {
-    "name": "Mexican Stock Exchange",
-    "country": "Mexico",
-    "currency": "MXN"
-  },
-  "MOEX": {
-    "name": "Moscow Exchange",
-    "country": "Russia",
-    "currency": "RUB"
-  },
-  "JSE": {
-    "name": "Johannesburg Stock Exchange",
-    "country": "South Africa",
-    "currency": "ZAR"
-  },
-  "KRX": {
-    "name": "Korea Exchange",
-    "country": "South Korea",
-    "currency": "KRW"
   }
 }

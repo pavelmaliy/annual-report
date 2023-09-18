@@ -26,6 +26,7 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import ArticleIcon from '@mui/icons-material/Article';
 import Typography from "@mui/material/Typography";
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import piggy from '../icons/piggybank.png'
 
 const drawerWidth = 240;
 
@@ -202,6 +203,8 @@ export default function MainPage({user}) {
                     >
                         <MenuIcon />
                     </IconButton>
+
+                    <img src={piggy} alt={'piggy'}/>
                     <div style={{ flex: 1 }} />
                     <Typography noWrap component="div">
                         {user}
