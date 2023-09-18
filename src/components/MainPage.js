@@ -203,8 +203,6 @@ export default function MainPage({user}) {
                     >
                         <MenuIcon />
                     </IconButton>
-
-                    <img src={piggy} alt={'piggy'}/>
                     <div style={{ flex: 1 }} />
                     <Typography noWrap component="div">
                         {user}
