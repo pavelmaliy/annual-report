@@ -12,8 +12,8 @@ import {AppContext} from "../../context/AppContext";
 export default function GeneralInfoForm({onFinish}) {
     const {model} = useContext(AppContext);
 
-    const [currency, setCurrency] = React.useState(model.currency ? model.currency : '');
-    const [exchange, setExchange] = React.useState(model.exchange ? model.exchange : '');
+    const [currency, setCurrency] = React.useState(model.currency ? model.currency : 'ILS');
+    const [exchange, setExchange] = React.useState(model.exchange ? model.exchange : 'NASDAQ');
     const [currencyError, setCurrencyError] = React.useState(false);
     const [exchangeError, setExchangeError] = React.useState(false);
 

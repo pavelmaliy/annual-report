@@ -202,6 +202,7 @@ export default function MainPage({user}) {
                     >
                         <MenuIcon />
                     </IconButton>
+                    <div style={{ flex: 1 }} />
                     <Typography noWrap component="div">
                         {user}
                     </Typography>

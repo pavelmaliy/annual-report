@@ -14,6 +14,9 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 export default function Report() {
+    const [algorithm, setAlgorithm] = React.useState(10);
+    const [format, setFormat] = React.useState(10);
+
     return (
         <React.Fragment>
             <CssBaseline/>
@@ -56,14 +59,15 @@ export default function Report() {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <FormControl fullWidth>
-                                        <InputLabel id="alg-select-label">Alghorithm</InputLabel>
+                                        <InputLabel id="alg-select-label">Algorithm</InputLabel>
                                         <Select
                                             size="small"
                                             labelId="alg-select-label"
                                             id="simple-select"
-                                            //value={transaction.transactionType}
-                                            label="Alghoritm"
+                                            value={algorithm}
+                                            label="Algoritm"
                                             onChange={(e) => {
+                                                setAlgorithm(e.target.value)
                                             }}
                                         >
                                             <MenuItem value={10}>Optimized</MenuItem>
@@ -78,9 +82,10 @@ export default function Report() {
                                             size="small"
                                             labelId="format-select-label"
                                             id="simple-select"
-                                            //value={transaction.transactionType}
+                                            value={format}
                                             label="Format"
                                             onChange={(e) => {
+                                                setFormat(e.target.value)
                                             }}
                                         >
                                             <MenuItem value={10}>Simplified</MenuItem>
