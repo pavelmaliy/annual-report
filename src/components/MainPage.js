@@ -25,8 +25,7 @@ import {useNavigate} from "react-router-dom";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import ArticleIcon from '@mui/icons-material/Article';
 import Typography from "@mui/material/Typography";
-import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-import piggy from '../icons/piggybank.png'
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 
 const drawerWidth = 240;
 
@@ -203,7 +202,7 @@ export default function MainPage({user}) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <div style={{ flex: 1 }} />
+                    <div style={{ flex: 1, backgroundColor: "red", color: "red" }} />
                     <Typography noWrap component="div">
                         {user}
                     </Typography>
@@ -253,7 +252,7 @@ export default function MainPage({user}) {
                                     justifyContent: 'center',
                                 }}
                             >
-                                <PointOfSaleIcon />
+                                <CurrencyExchangeIcon />
                             </ListItemIcon>
                             <ListItemText primary='Transactions' sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>

@@ -12,12 +12,16 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import currencies from "../../resources/commonCurrency.json";
+import {formatDateToMMDDYYYY} from "../../utils/utils";
 
 export default function TransactionDialog({onFinish, open, setOpen}) {
     const [stockNameError, setStockNameError] = React.useState('');
     const [quantityError, setQuantityError] = React.useState('');
     const [priceError, setPriceError] = React.useState('');
     const [transaction, setTransaction] = React.useState({})
+    const [marketCurrError, setMarketCurrError] = React.useState('');
+
     const handleAdd = () => {
         let validationError = false
         if (!transaction.stockName) {
@@ -33,11 +37,15 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
             validationError = true
         }
 
+        if (!transaction.marketCurrency) {
+            transaction.marketCurrency = 'EUR'
+        }
+
         if (validationError) {
             return
         }
         if (!transaction.transactionType) {
-            transaction.transactionType="Purchase"
+            transaction.transactionType="Sell"
         }
         if (!transaction.transactionDate) {
             transaction.transactionDate = new Date().getTime()
@@ -127,19 +135,6 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                             />
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <TextField
-                                id="description"
-                                label="Description"
-                                fullWidth
-                                autoComplete="description"
-                                variant="standard"
-                                onChange={(e) => {
-                                    transaction.description = e.target.value;
-                                    setTransaction(transaction)
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
                             <LocalizationProvider required dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     shouldDisableDate={(date) => {
@@ -162,7 +157,7 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                     size="small"
                                     labelId="transaction-select-label"
                                     id="simple-select"
-                                    value={transaction.transactionType}
+                                    defaultValue={10}
                                     label="Transaction Type"
                                     onChange={(e) => {
                                         transaction.transactionType = ((e.target.value === 10) ? 'Sell' : 'Purchase')
@@ -171,6 +166,30 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                 >
                                     <MenuItem value={10}>Sell</MenuItem>
                                     <MenuItem value={20}>Purchase</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <FormControl fullWidth>
+                                <InputLabel id="exchange-select-label" >Market Currency</InputLabel>
+                                <Select
+                                    size="small"
+                                    labelId="exchange-select-label"
+                                    id="exchange-select"
+                                    defaultValue={'EUR'}
+                                    label="Market Currency"
+                                    onChange={(event) => {
+                                        transaction.marketCurrency = event.target.value
+                                        setMarketCurrError('')
+                                        setTransaction(transaction)
+                                    }}
+                                    error={marketCurrError}
+                                >
+                                    {Object.keys(currencies).map((currency) => (
+                                        <MenuItem key={currency} value={currency}>
+                                            {currency} - {currencies[currency].name}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                         </Grid>

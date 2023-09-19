@@ -1,4 +1,3 @@
-import {parse} from "date-fns";
 
 export const formatDateToMMDDYYYY = function (millis) {
     if (isNaN(millis) || !millis) {

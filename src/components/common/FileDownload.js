@@ -21,7 +21,7 @@ function FileDownloadButton({filepath, filename}) {
 
     return (
         <Button
-            variant="contained"
+            variant="outlined"
             onClick={handleDownload}
             startIcon={<ExcelIcon/>}
         >Download Template</Button>

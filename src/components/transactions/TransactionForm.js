@@ -15,8 +15,9 @@ import TransactionDialog from "./TransactionDialog";
 import {formatDateToMMDDYYYY} from "../../utils/utils"
 import {useContext} from "react";
 import {AppContext} from "../../context/AppContext";
+import Divider from "@mui/material/Divider";
 
-export default function TransactionForm({onBack, onFinish}) {
+export default function TransactionForm({onFinish}) {
     const {model} = useContext(AppContext);
     const [open, setOpen] = React.useState(false);
     const [transactionListItems, setTransactionListItems] = React.useState(model.transactions ? model.transactions : [])
@@ -63,7 +64,8 @@ export default function TransactionForm({onBack, onFinish}) {
                             "transactionType": row.getCell(2).value,
                             "stockName": row.getCell(3).value,
                             "quantity": parseInt(row.getCell(4).value),
-                            "price": parseFloat(row.getCell(5).value)
+                            "price": parseFloat(row.getCell(5).value),
+                            "marketCurrency": row.getCell(6).value
                         })
                     }
                 });
@@ -90,11 +92,11 @@ export default function TransactionForm({onBack, onFinish}) {
                         </Box>
                         <List style={{maxHeight: 300, overflow: 'auto'}}>
                             {transactionListItems.map((item, index) => (
-                                <ListItem key={index}>
+                                <ListItem className={"listItem"} key={index}>
                                     <ListItemText
-                                        primary={<Typography className="framed-text" variant="button" display="block"
+                                        primary={<Typography  variant="button" display="block"
                                                              gutterBottom>
-                                            {formatDateToMMDDYYYY(item.transactionDate) + " " + ((item.transactionType === 10) ? "sell" : "purchase") + " " + item.stockName + " " + item.quantity}
+                                            {formatDateToMMDDYYYY(item.transactionDate) + " " + item.transactionType + " " + item.stockName + " " + item.quantity}
                                         </Typography>}/>
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
@@ -115,7 +117,7 @@ export default function TransactionForm({onBack, onFinish}) {
                 <Button
                     style={{marginRight: '10px'}}
                     component="label"
-                    variant="contained"
+                    variant="outlined"
                     startIcon={<AddIcon fontSize="large"/>}
                     onClick={handleClickOpen}
                 >
@@ -128,15 +130,6 @@ export default function TransactionForm({onBack, onFinish}) {
             <React.Fragment>
                 <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Button
-                        onClick={() => {
-                            onBack(transactionListItems)
-                        }}
-                        sx={{mt: 3, ml: 1}}
-                    >
-                        Back
-                    </Button>
-                    <Button
-                        variant="contained"
                         sx={{mt: 3, ml: 1}}
                         onClick={() => {
                             onFinish(transactionListItems)

@@ -15,7 +15,7 @@ export default function InputFileUpload({handleFileUpload}) {
             />
             <label htmlFor="file-upload-input">
                 <Button
-                    variant="contained"
+                    variant="outlined"
                     component="span"
                     startIcon={<ExcelIcon/>}
                 >

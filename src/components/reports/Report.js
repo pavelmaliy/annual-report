@@ -96,7 +96,7 @@ export default function Report() {
                                 <Grid item xs={12}>
                                     <div style={{ textAlign: 'right' }}>
                                     <Button
-                                        variant="contained"
+                                        variant="outlined"
                                         sx={{mt: 3, ml: 1}}
                                     >
                                         Generate

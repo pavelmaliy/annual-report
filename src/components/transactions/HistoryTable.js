@@ -167,9 +167,9 @@ export function HistoryTable({user, forwardedRef }) {
                                 </TableCell>
                                 <TableCell>
                                     <TableSortLabel
-                                        active={sortConfig.key === 'curr'}
-                                        direction={sortConfig.key === 'curr' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('curr')}
+                                        active={sortConfig.key === 'marketCurrency'}
+                                        direction={sortConfig.key === 'marketCurrency' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('marketCurrency')}
                                     >
                                         <Typography style={{fontWeight: 'bold'}}>
                                             Currency
