@@ -12,7 +12,7 @@ import './TransactionForm.css'
 import xlsx from 'exceljs'
 import FileDownloadButton from "../common/FileDownload";
 import TransactionDialog from "./TransactionDialog";
-import {formatDateToMMDDYYYY} from "../../utils/utils"
+import {formatDateToDDMMYYYY} from "../../utils/utils"
 import {useContext} from "react";
 import {AppContext} from "../../context/AppContext";
 
@@ -95,7 +95,7 @@ export default function TransactionForm({onFinish}) {
                                     <ListItemText
                                         primary={<Typography  variant="button" display="block"
                                                              gutterBottom>
-                                            {formatDateToMMDDYYYY(item.transactionDate) + " " + item.transactionType + " " + item.stockName + " " + item.quantity}
+                                            {formatDateToDDMMYYYY(item.transactionDate) + " " + item.transactionType + " " + item.stockName + " " + item.quantity}
                                         </Typography>}/>
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>

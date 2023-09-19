@@ -1,5 +1,5 @@
 
-export const formatDateToMMDDYYYY = function (millis) {
+export const formatDateToDDMMYYYY = function (millis) {
     if (isNaN(millis) || !millis) {
         millis = new Date().getTime()
     }

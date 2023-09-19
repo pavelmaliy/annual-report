@@ -6,7 +6,6 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TransactionForm from './TransactionForm';
-import {Step, StepLabel, Stepper,} from "@mui/material";
 import {persistTransactions} from "../../storage/store"
 import {AppContext} from "../../context/AppContext";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -14,9 +13,8 @@ import {auth} from "../../storage/firebase";
 import {HistoryTable} from './HistoryTable'
 import {generateRandomString} from '../../utils/utils'
 
-const steps = ['Stock Transactions'];
 
-export default function TransactionStepper() {
+export default function TransactionContainer() {
     const {model, setModel} = useContext(AppContext);
     const [summary, setSummary] = React.useState(false);
     const [user] = useAuthState(auth)

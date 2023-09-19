@@ -7,7 +7,7 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import TransactionStepper from './transactions/TransactionStepper'
+import TransactionContainer from './transactions/TransactionContainer'
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -150,7 +150,7 @@ export default function MainPage({user}) {
             case 0:
                 return <Dashboard/>
             case 1:
-                return <TransactionStepper/>
+                return <TransactionContainer/>
             case 2:
                 return <Report/>
             default:

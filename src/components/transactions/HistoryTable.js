@@ -13,8 +13,9 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {useEffect} from "react";
 import {getUserTransactions} from "../../storage/store";
-import { parse } from 'date-fns'
+import {parse} from 'date-fns'
 import currencies from "../../resources/commonCurrency.json";
+import ReactLoading from "react-loading";
 
 const styles = {
     tableHeaderStyle: {
@@ -37,7 +38,7 @@ const styles = {
     },
 };
 
-export function HistoryTable({user, forwardedRef }) {
+export function HistoryTable({user, forwardedRef}) {
     const rowsPerPageOptions = [5, 10, 25];
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [sortConfig, setSortConfig] = React.useState({key: '', direction: ''});
@@ -80,7 +81,7 @@ export function HistoryTable({user, forwardedRef }) {
         let firstCell = a[sortConfig.key]
         let secondCell = b[sortConfig.key]
 
-        if (dateFormatPattern.test(firstCell) ) {
+        if (dateFormatPattern.test(firstCell)) {
             firstCell = parse(firstCell.toString(), "dd/MM/yyyy", new Date());
             secondCell = parse(secondCell.toString(), "dd/MM/yyyy", new Date());
         }
@@ -103,81 +104,81 @@ export function HistoryTable({user, forwardedRef }) {
 
     return (
         <div>
-            {(loading) ? (
-                <div/>
-            ) : (
-                <TableContainer component={Paper} style={styles.tableWrapper}>
-                    <Table>
-                        <TableHead style={styles.tableHeaderStyle}>
-                            <TableRow>
-                                <TableCell>
-                                    <TableSortLabel
-                                        active={sortConfig.key === 'transactionDate'}
-                                        direction={sortConfig.key === 'transactionDate' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('transactionDate')}
-                                    >
-                                        <Typography style={{fontWeight: 'bold'}}>
-                                            Date
-                                        </Typography>
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell>
-                                    <TableSortLabel
-                                        active={sortConfig.key === 'stockName'}
-                                        direction={sortConfig.key === 'stockName' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('stockName')}
-                                    >
-                                        <Typography style={{fontWeight: 'bold'}}>
-                                            Stock
-                                        </Typography>
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell>
-                                    <TableSortLabel
-                                        active={sortConfig.key === 'transactionType'}
-                                        direction={sortConfig.key === 'transactionType' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('transactionType')}
-                                    >
-                                        <Typography style={{fontWeight: 'bold'}}>
-                                            Action
-                                        </Typography>
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell>
-                                    <TableSortLabel
-                                        active={sortConfig.key === 'quantity'}
-                                        direction={sortConfig.key === 'quantity' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('quantity')}
-                                    >
-                                        <Typography style={{fontWeight: 'bold'}}>
-                                            Quantity
-                                        </Typography>
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell>
-                                    <TableSortLabel
-                                        active={sortConfig.key === 'price'}
-                                        direction={sortConfig.key === 'price' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('price')}
-                                    >
-                                        <Typography style={{fontWeight: 'bold'}}>
-                                            Price
-                                        </Typography>
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell>
-                                    <TableSortLabel
-                                        active={sortConfig.key === 'marketCurrency'}
-                                        direction={sortConfig.key === 'marketCurrency' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('marketCurrency')}
-                                    >
-                                        <Typography style={{fontWeight: 'bold'}}>
-                                            Currency
-                                        </Typography>
-                                    </TableSortLabel>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
+            <TableContainer component={Paper} style={styles.tableWrapper}>
+                <Table>
+                    <TableHead style={styles.tableHeaderStyle}>
+                        <TableRow>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortConfig.key === 'transactionDate'}
+                                    direction={sortConfig.key === 'transactionDate' ? sortConfig.direction : 'asc'}
+                                    onClick={() => handleSort('transactionDate')}
+                                >
+                                    <Typography style={{fontWeight: 'bold'}}>
+                                        Date
+                                    </Typography>
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortConfig.key === 'stockName'}
+                                    direction={sortConfig.key === 'stockName' ? sortConfig.direction : 'asc'}
+                                    onClick={() => handleSort('stockName')}
+                                >
+                                    <Typography style={{fontWeight: 'bold'}}>
+                                        Stock
+                                    </Typography>
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortConfig.key === 'transactionType'}
+                                    direction={sortConfig.key === 'transactionType' ? sortConfig.direction : 'asc'}
+                                    onClick={() => handleSort('transactionType')}
+                                >
+                                    <Typography style={{fontWeight: 'bold'}}>
+                                        Action
+                                    </Typography>
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortConfig.key === 'quantity'}
+                                    direction={sortConfig.key === 'quantity' ? sortConfig.direction : 'asc'}
+                                    onClick={() => handleSort('quantity')}
+                                >
+                                    <Typography style={{fontWeight: 'bold'}}>
+                                        Quantity
+                                    </Typography>
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortConfig.key === 'price'}
+                                    direction={sortConfig.key === 'price' ? sortConfig.direction : 'asc'}
+                                    onClick={() => handleSort('price')}
+                                >
+                                    <Typography style={{fontWeight: 'bold'}}>
+                                        Price
+                                    </Typography>
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={sortConfig.key === 'marketCurrency'}
+                                    direction={sortConfig.key === 'marketCurrency' ? sortConfig.direction : 'asc'}
+                                    onClick={() => handleSort('marketCurrency')}
+                                >
+                                    <Typography style={{fontWeight: 'bold'}}>
+                                        Currency
+                                    </Typography>
+                                </TableSortLabel>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    {loading ? (
+                        <ReactLoading type="bubbles" color="#0000FF"/>
+                    ):(
                         <TableBody>
                             {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
                                 <TableRow key={index}>
@@ -215,19 +216,19 @@ export function HistoryTable({user, forwardedRef }) {
                             ))}
 
                         </TableBody>
-                    </Table>
-                    <TablePagination
-                        style={styles.pagination}
-                        rowsPerPageOptions={rowsPerPageOptions}
-                        component="div"
-                        count={history.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </TableContainer>
-            )}
+                    )}
+                </Table>
+                <TablePagination
+                    style={styles.pagination}
+                    rowsPerPageOptions={rowsPerPageOptions}
+                    component="div"
+                    count={history.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </TableContainer>
         </div>
     );
 }
