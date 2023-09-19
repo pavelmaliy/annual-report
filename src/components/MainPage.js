@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -20,6 +20,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Dashboard from "./overview/Dashboard";
 import Report from "./reports/Report";
 import LogoutIcon from '@mui/icons-material/Logout';
+import EuroIcon from '@mui/icons-material/Euro';
+import DollarIcon from '@mui/icons-material/AttachMoney';
+import { ReactComponent as ShekelIcon } from '../icons/shekel.svg';
 import {logout} from "../storage/firebase";
 import {useNavigate} from "react-router-dom";
 import AssessmentIcon from '@mui/icons-material/Assessment';
@@ -27,6 +30,9 @@ import ArticleIcon from '@mui/icons-material/Article';
 import Typography from "@mui/material/Typography";
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import {getPageFromHash, setPageInHash} from "../utils/utils"
+import {Menu, MenuItem} from "@mui/material";
+import currencies from "../resources/commonCurrency.json";
+import {AppContext} from "../context/AppContext";
 
 const drawerWidth = 240;
 
@@ -97,9 +103,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function MainPage({user}) {
+    const {model, setModel} = useContext(AppContext);
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [page, setPage] = React.useState(getPageFromHash())
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [currencyIcon, setCurrencyIcon] = React.useState(<EuroIcon/>)
 
     const navigate = useNavigate();
 
@@ -119,6 +128,14 @@ export default function MainPage({user}) {
         }
         navigate("/login");
     }
+
+    const handleCurrMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCurrMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -237,6 +254,50 @@ export default function MainPage({user}) {
                 </List>
                 <Divider />
                 <List>
+                    <ListItem key={'Currency'} disablePadding sx={{ display: 'block' }} onClick={handleCurrMenuClick}>
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : 'auto',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                {currencyIcon}
+                            </ListItemIcon>
+                            <ListItemText primary='Currency' sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </ListItem>
+                    <Menu
+                        id="simple-menu"
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClick={(event) => {
+                            let curr = event.target.outerText
+                            model.localCurrency = curr
+                            setModel(model)
+                            if (curr === 'USD') {
+                                setCurrencyIcon(<DollarIcon/>)
+                            } else if (curr === 'EUR') {
+                                setCurrencyIcon(<EuroIcon/>)
+                            } else if (curr === 'ILS') {
+                                setCurrencyIcon(<ShekelIcon/>)
+                            }
+                        }}
+                        onClose={handleCurrMenuClose}
+                    >
+                        {Object.keys(currencies).map((currency) => (
+                            <MenuItem key={currency} value={currency} onClick={handleCurrMenuClose}>
+                                {currency}
+                            </MenuItem>
+                        ))}
+                    </Menu>
                     <ListItem key={'Logout'} disablePadding sx={{ display: 'block' }} onClick={handleLogout}>
                         <ListItemButton
                             sx={{

@@ -15,7 +15,6 @@ import TransactionDialog from "./TransactionDialog";
 import {formatDateToMMDDYYYY} from "../../utils/utils"
 import {useContext} from "react";
 import {AppContext} from "../../context/AppContext";
-import Divider from "@mui/material/Divider";
 
 export default function TransactionForm({onFinish}) {
     const {model} = useContext(AppContext);
