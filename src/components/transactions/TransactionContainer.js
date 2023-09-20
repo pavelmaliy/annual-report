@@ -12,6 +12,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../../storage/firebase";
 import {HistoryTable} from './HistoryTable'
 import {generateRandomString} from '../../utils/utils'
+import Box from "@mui/material/Box";
 
 
 export default function TransactionContainer() {
@@ -31,9 +32,10 @@ export default function TransactionContainer() {
                     </Typography>
                     {summary ? (
                         <React.Fragment>
-                            <Typography variant="h5" gutterBottom>
+                            <Typography variant="h6" gutterBottom align="center">
                                 Transactions successfully saved.
                             </Typography>
+                            <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
                             <Button
                                 onClick={() => {
                                     model.transactions = []
@@ -47,6 +49,7 @@ export default function TransactionContainer() {
                             >
                                 Finish
                             </Button>
+                            </Box>
                         </React.Fragment>
                     ) :(
                         <TransactionForm
