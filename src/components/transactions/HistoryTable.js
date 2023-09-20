@@ -16,6 +16,7 @@ import {getUserTransactions} from "../../storage/store";
 import {parse} from 'date-fns'
 import currencies from "../../resources/commonCurrency.json";
 import ReactLoading from "react-loading";
+import {formatDateToDDMMYYYY} from "../../utils/utils";
 
 const styles = {
     tableHeaderStyle: {
@@ -77,14 +78,9 @@ export function HistoryTable({user, forwardedRef}) {
     };
 
     const sortedData = [...history].sort((a, b) => {
-        const dateFormatPattern = /^\d{2}\/\d{2}\/\d{4}$/;
         let firstCell = a[sortConfig.key]
         let secondCell = b[sortConfig.key]
 
-        if (dateFormatPattern.test(firstCell)) {
-            firstCell = parse(firstCell.toString(), "dd/MM/yyyy", new Date());
-            secondCell = parse(secondCell.toString(), "dd/MM/yyyy", new Date());
-        }
 
         if (sortConfig.direction === 'asc') {
             if (firstCell && firstCell.localeCompare) {
@@ -184,7 +180,7 @@ export function HistoryTable({user, forwardedRef}) {
                                 <TableRow key={index}>
                                     <TableCell>
                                         <Typography>
-                                            {item.transactionDate}
+                                            {formatDateToDDMMYYYY(item.transactionDate.toMillis())}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
