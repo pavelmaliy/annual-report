@@ -108,7 +108,7 @@ export default function MainPage({user}) {
     const [open, setOpen] = React.useState(false);
     const [page, setPage] = React.useState(getPageFromHash())
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [currencyIcon, setCurrencyIcon] = React.useState(<EuroIcon/>)
+    const [currencyIcon, setCurrencyIcon] = React.useState(<ShekelIcon/>)
 
     const navigate = useNavigate();
 

@@ -8,13 +8,13 @@ import Box from "@mui/material/Box";
 import InputFileUpload from "../common/InputFileUpload";
 import {Delete} from "@mui/icons-material";
 import Paper from "@mui/material/Paper";
-import './TransactionForm.css'
 import xlsx from 'exceljs'
 import FileDownloadButton from "../common/FileDownload";
 import TransactionDialog from "./TransactionDialog";
 import {formatDateToDDMMYYYY} from "../../utils/utils"
 import {useContext} from "react";
 import {AppContext} from "../../context/AppContext";
+import "../../styles.css"
 
 export default function TransactionForm({onFinish}) {
     const {model} = useContext(AppContext);
@@ -133,6 +133,7 @@ export default function TransactionForm({onFinish}) {
                         onClick={() => {
                             onFinish(transactionListItems)
                         }}
+                        disabled={transactionListItems.length === 0}
                     >
                         Save
                     </Button>

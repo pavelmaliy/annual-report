@@ -35,7 +35,6 @@ export default function TransactionContainer() {
                                 Transactions successfully saved.
                             </Typography>
                             <Button
-                                variant="contained"
                                 onClick={() => {
                                     model.transactions = []
                                     setModel(model)
