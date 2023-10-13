@@ -26,28 +26,11 @@ export default function Report() {
     const [user] = useAuthState(auth)
 
 
-    const generateReport = async () => {    
+    const generateReport = async () => {
         let startDate = new Date(from)
         let endDate = to ? new Date(to) : new Date().getTime()
-        let validationError = false
 
-        if (startDate.toString() === 'Invalid Date'){
-            setFromDateError('invalid date')
-            validationError = true
-        }
-
-        if (endDate.toString() === 'Invalid Date') {
-            setToDateError('invalid date')
-            validationError = true
-        }
-        
-        
-        if (startDate > endDate) {
-            setFromDateError('start date after end date')
-            validationError = true
-        }
-
-        if (validationError) {
+        if (validateForm(startDate, endDate)) {
             return
         }
 
@@ -86,6 +69,47 @@ export default function Report() {
 
     }
 
+    const validateForm = (startDate, endDate) => {
+        let validationError = false
+        let now = new Date().getTime()
+
+        if (startDate.toString() === 'Invalid Date') {
+            setFromDateError('invalid date')
+            validationError = true
+        }
+
+        if (endDate.toString() === 'Invalid Date') {
+            setToDateError('invalid date')
+            validationError = true
+        }
+
+        if (!validationError) {
+            if (startDate > now) {
+                setFromDateError('future date not allowed')
+                validationError = true  
+            }
+
+            if (endDate > now) {
+                setToDateError('future dates not allowed')
+                validationError = true  
+            }
+        }
+
+        if (!validationError) {
+            if (startDate > endDate) {
+                setFromDateError('start date after end date')
+                validationError = true
+            }
+        }
+
+        if (!validationError) {
+            setFromDateError('')
+            setToDateError('')
+        }
+
+        return validationError
+    }
+
     return (
         <React.Fragment>
             <CssBaseline />
@@ -112,10 +136,10 @@ export default function Report() {
                                                 }}
                                                 slotProps={{
                                                     textField: {
-                                                      error: !!fromDateError,
-                                                      helperText: fromDateError
+                                                        error: !!fromDateError,
+                                                        helperText: fromDateError
                                                     }
-                                                  }}
+                                                }}
                                                 labelId="start-date-label"
                                                 label="Start Date"
                                             />
@@ -136,10 +160,10 @@ export default function Report() {
                                                 }}
                                                 slotProps={{
                                                     textField: {
-                                                      error: !!toDateError,
-                                                      helperText: toDateError
+                                                        error: !!toDateError,
+                                                        helperText: toDateError
                                                     }
-                                                  }}                                            
+                                                }}
                                                 labelId="end-date-label"
                                                 label="End Date"
                                             />
@@ -184,7 +208,7 @@ export default function Report() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <div style={{ textAlign: 'right' }}>
-                                        <Button                                
+                                        <Button
                                             variant="outlined"
                                             sx={{ mt: 3, ml: 1 }}
                                             onClick={generateReport}
