@@ -1,33 +1,55 @@
-import * as React from 'react';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import CssBaseline from "@mui/material/CssBaseline";
-import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import Grid from '@mui/material/Grid';
+import Paper from "@mui/material/Paper";
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import dayjs from "dayjs";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { auth, db } from "../../storage/firebase";
+import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db } from "../../storage/firebase";
 
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);
     const [format, setFormat] = React.useState(10);
     const [from, setFrom] = React.useState('')
-    const [fromError, setFromError] = React.useState('')
+    const [fromDateError, setFromDateError] = React.useState('')
     const [to, setTo] = React.useState('')
+    const [toDateError, setToDateError] = React.useState('')
     const [user] = useAuthState(auth)
 
 
     const generateReport = async () => {    
         let startDate = new Date(from)
-        let endDate = new Date(to)
+        let endDate = to ? new Date(to) : new Date().getTime()
+        let validationError = false
+
+        if (startDate.toString() === 'Invalid Date'){
+            setFromDateError('invalid date')
+            validationError = true
+        }
+
+        if (endDate.toString() === 'Invalid Date') {
+            setToDateError('invalid date')
+            validationError = true
+        }
+        
+        
+        if (startDate > endDate) {
+            setFromDateError('start date after end date')
+            validationError = true
+        }
+
+        if (validationError) {
+            return
+        }
 
         const sellsQuery = query(collection(db, "transactions"),
             where('transactionDate', '>=', startDate),
@@ -86,9 +108,14 @@ export default function Report() {
                                                 }}
                                                 onChange={(val) => {
                                                     setFrom(val)
+                                                    setFromDateError('')
                                                 }}
-                                                error={!!fromError}
-                                                helperText={fromError}
+                                                slotProps={{
+                                                    textField: {
+                                                      error: !!fromDateError,
+                                                      helperText: fromDateError
+                                                    }
+                                                  }}
                                                 labelId="start-date-label"
                                                 label="Start Date"
                                             />
@@ -105,7 +132,14 @@ export default function Report() {
                                                 }}
                                                 onChange={(val) => {
                                                     setTo(val)
-                                                }}                                            
+                                                    setToDateError('')
+                                                }}
+                                                slotProps={{
+                                                    textField: {
+                                                      error: !!toDateError,
+                                                      helperText: toDateError
+                                                    }
+                                                  }}                                            
                                                 labelId="end-date-label"
                                                 label="End Date"
                                             />
