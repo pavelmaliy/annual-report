@@ -1,17 +1,18 @@
-import Dialog from "@mui/material/Dialog";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
-import {DialogContent, FormControl, InputLabel, MenuItem, Select, TextField} from "@mui/material";
-import Grid from "@mui/material/Grid";
+import { DialogContent, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
-import * as React from "react";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import Dialog from "@mui/material/Dialog";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { setDate } from "date-fns";
 import dayjs from "dayjs";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import * as React from "react";
 import currencies from "../../resources/commonCurrency.json";
 
 export default function TransactionDialog({onFinish, open, setOpen}) {
@@ -36,16 +37,22 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
             validationError = true
         }
 
-        if (!transaction.marketCurrency) {
-            transaction.marketCurrency = 'EUR'
+        if (transaction.transactionDate && transaction.transactionDate.toString() === 'Invalid Date') {
+            validationError = true
         }
 
         if (validationError) {
             return
         }
+
+        if (!transaction.marketCurrency) {
+            transaction.marketCurrency = 'EUR'
+        }
+
         if (!transaction.transactionType) {
             transaction.transactionType="Sell"
         }
+
         if (!transaction.transactionDate) {
             transaction.transactionDate = new Date().getTime()
         }
@@ -141,8 +148,8 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                     }}
                                     labelId="transaction-date-label"
                                     label="Transaction Date"
-                                    format="DD/MM/YYYY"
-                                    onChange={(val) => {
+                                    format="DD/MM/YYYY"                                    
+                                    onChange={(val) => {                                                                            
                                         transaction.transactionDate = val
                                         setTransaction(transaction)
                                     }}

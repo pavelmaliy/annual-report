@@ -95,7 +95,7 @@ export default function TransactionForm({onFinish}) {
                                     <ListItemText
                                         primary={<Typography  variant="button" display="block"
                                                              gutterBottom>
-                                            {formatDateToDDMMYYYY(item.transactionDate) + " " + item.transactionType + " " + item.stockName + " " + item.quantity}
+                                            {formatDateToDDMMYYYY(item.transactionDate) + " " + item.transactionType + " \"" + item.stockName + "\" " + item.quantity + " " + item.price + item.marketCurrency}
                                         </Typography>}/>
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
