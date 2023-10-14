@@ -15,6 +15,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
+import {generateOptimizedReport} from "../../report/report"
 
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);
@@ -65,6 +66,10 @@ export default function Report() {
             })
         } catch (e) {
             console.error(e)
+        }
+        
+        if (algorithm === 10) {
+            generateOptimizedReport(sellTransactions, buyTransactions)
         }
 
     }

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {useContext, useEffect} from 'react';
-import {styled, useTheme} from '@mui/material/styles';
+import { useContext, useEffect } from 'react';
+import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import TransactionContainer from './transactions/TransactionContainer'
@@ -23,18 +24,29 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import EuroIcon from '@mui/icons-material/Euro';
 import DollarIcon from '@mui/icons-material/AttachMoney';
 import { ReactComponent as ShekelIcon } from '../icons/shekel.svg';
-import {logout} from "../storage/firebase";
-import {useNavigate} from "react-router-dom";
+import { logout } from "../storage/firebase";
+import { useNavigate } from "react-router-dom";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import ArticleIcon from '@mui/icons-material/Article';
 import Typography from "@mui/material/Typography";
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
-import {getPageFromHash, setPageInHash} from "../utils/utils"
-import {Menu, MenuItem} from "@mui/material";
+import { getPageFromHash, setPageInHash } from "../utils/utils"
+import { Menu, MenuItem } from "@mui/material";
 import currencies from "../resources/commonCurrency.json";
-import {AppContext} from "../context/AppContext";
+import { AppContext } from "../context/AppContext";
 
 const drawerWidth = 240;
+
+const LightTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}));
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -102,13 +114,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function MainPage({user}) {
-    const {model, setModel} = useContext(AppContext);
+export default function MainPage({ user }) {
+    const { model, setModel } = useContext(AppContext);
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [page, setPage] = React.useState(getPageFromHash())
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [currencyIcon, setCurrencyIcon] = React.useState(<ShekelIcon/>)
+    const [currencyIcon, setCurrencyIcon] = React.useState(<ShekelIcon />)
 
     const navigate = useNavigate();
 
@@ -148,11 +160,11 @@ export default function MainPage({user}) {
     function getContent(pageNum) {
         switch (pageNum) {
             case 0:
-                return <Dashboard/>
+                return <Dashboard />
             case 1:
-                return <TransactionContainer/>
+                return <TransactionContainer />
             case 2:
-                return <Report/>
+                return <Report />
             default:
                 throw new Error('Unknown page');
         }
@@ -175,7 +187,7 @@ export default function MainPage({user}) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <div style={{ flex: 1}} />
+                    <div style={{ flex: 1 }} />
                     <Typography noWrap component="div">
                         {user}
                     </Typography>
@@ -188,15 +200,16 @@ export default function MainPage({user}) {
                     </IconButton>
                 </DrawerHeader>
                 <List>
-                    <ListItem key='overview' disablePadding sx={{ display: 'block' }} onClick={() => {setPage(0)}}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                                selected={page===0}
-                            >
+                    <ListItem key='overview' disablePadding sx={{ display: 'block' }} onClick={() => { setPage(0) }}>
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                            }}
+                            selected={page === 0}
+                        >
+                            <LightTooltip title="Overview">
                                 <ListItemIcon
                                     sx={{
                                         minWidth: 0,
@@ -204,55 +217,60 @@ export default function MainPage({user}) {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    <AssessmentIcon/>
+                                    <AssessmentIcon />
                                 </ListItemIcon>
-                                <ListItemText primary='Overview' sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    <ListItem key='transactions' disablePadding sx={{ display: 'block' }} onClick={() => {setPage(1)}}>
+                            </LightTooltip>
+                            <ListItemText primary='Overview' sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem key='transactions' disablePadding sx={{ display: 'block' }} onClick={() => { setPage(1) }}>
                         <ListItemButton
                             sx={{
                                 minHeight: 48,
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
-                            selected={page===1}
+                            selected={page === 1}
                         >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <CurrencyExchangeIcon />
-                            </ListItemIcon>
+                            <LightTooltip title="Transactions">
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <CurrencyExchangeIcon />
+                                </ListItemIcon>
+                            </LightTooltip>
                             <ListItemText primary='Transactions' sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
-                    <ListItem key='reports' disablePadding sx={{ display: 'block' }} onClick={() => {setPage(2)}}>
+                    <ListItem key='reports' disablePadding sx={{ display: 'block' }} onClick={() => { setPage(2) }}>
                         <ListItemButton
                             sx={{
                                 minHeight: 48,
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
-                            selected={page===2}
+                            selected={page === 2}
                         >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <ArticleIcon />
-                            </ListItemIcon>
+                            <LightTooltip title="Reports">
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <ArticleIcon />
+                                </ListItemIcon>
+                            </LightTooltip>
                             <ListItemText primary='Reports' sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
                 </List>
-                <Divider />
+                <Divider sx={{ borderBottomWidth: 2 }}/>
                 <List>
                     <ListItem key={'Currency'} disablePadding sx={{ display: 'block' }} onClick={handleCurrMenuClick}>
                         <ListItemButton
@@ -262,15 +280,17 @@ export default function MainPage({user}) {
                                 px: 2.5,
                             }}
                         >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                {currencyIcon}
-                            </ListItemIcon>
+                            <LightTooltip title="Currency">
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    {currencyIcon}
+                                </ListItemIcon>
+                            </LightTooltip>
                             <ListItemText primary='Currency' sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
@@ -283,11 +303,11 @@ export default function MainPage({user}) {
                             model.localCurrency = curr
                             setModel(model)
                             if (curr === 'USD') {
-                                setCurrencyIcon(<DollarIcon/>)
+                                setCurrencyIcon(<DollarIcon />)
                             } else if (curr === 'EUR') {
-                                setCurrencyIcon(<EuroIcon/>)
+                                setCurrencyIcon(<EuroIcon />)
                             } else if (curr === 'ILS') {
-                                setCurrencyIcon(<ShekelIcon/>)
+                                setCurrencyIcon(<ShekelIcon />)
                             }
                         }}
                         onClose={handleCurrMenuClose}
@@ -306,15 +326,17 @@ export default function MainPage({user}) {
                                 px: 2.5,
                             }}
                         >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                {<LogoutIcon/>}
-                            </ListItemIcon>
+                            <LightTooltip title="Logout">
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    {<LogoutIcon />}
+                                </ListItemIcon>
+                            </LightTooltip>
                             <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
