@@ -29,7 +29,7 @@ export default function Report() {
 
     const generateReport = async () => {
         let startDate = new Date(from)
-        let endDate = to ? new Date(to) : new Date().getTime()
+        let endDate = to ? new Date(to) : new Date()
 
         if (validateForm(startDate, endDate)) {
             return
@@ -43,7 +43,7 @@ export default function Report() {
         );
         const buyQuery = query(collection(db, "transactions"),
             where('transactionDate', '<=', endDate),
-            where('transactionType', '==', 'Buy'),
+            where('transactionType', '==', 'Purchase'),
             where("user_id", "==", user.uid)
         );
         let sellTransactions = []
@@ -51,7 +51,7 @@ export default function Report() {
         try {
             const docs = await getDocs(sellsQuery);
             docs.docs.map((item) => {
-                let tr = item.data()
+                let tr = {...item.data(), "id": item.id}
                 sellTransactions.push(tr)
             })
         } catch (e) {
@@ -61,7 +61,7 @@ export default function Report() {
         try {
             const docs = await getDocs(buyQuery);
             docs.docs.map((item) => {
-                let tr = item.data()
+                let tr = {...item.data(), "id": item.id}
                 buyTransactions.push(tr)
             })
         } catch (e) {
@@ -69,7 +69,8 @@ export default function Report() {
         }
         
         if (algorithm === 10) {
-            generateOptimizedReport(sellTransactions, buyTransactions)
+            const result =  generateOptimizedReport(sellTransactions, buyTransactions)
+            console.error(JSON.stringify(result))
         }
 
     }

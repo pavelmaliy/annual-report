@@ -8,6 +8,8 @@ import {db} from "../../storage/firebase";
 import LoadingScreen from '../common/LoadingScreen';
 import {useState} from 'react';
 
+
+
 export default function CurrencyUpload() {
     const [uploading, setUploading] = useState(false)
     async function readCSV(file) {
@@ -43,7 +45,7 @@ export default function CurrencyUpload() {
             worksheet.eachRow({includeEmpty: false}, function (row, rowNumber) {
                 if (rowNumber > 1) {
                     currency.push({
-                        "date": row.getCell(1).value.split('"').join(''),
+                        "date": convertDateStringToDate(row.getCell(1).value.split('"').join('')),
                         "rate": row.getCell(2).value.split('"').join('')
                     })
                 }
@@ -89,3 +91,11 @@ export default function CurrencyUpload() {
         </Box>
     );
 }
+
+function convertDateStringToDate(dateString) {
+    const [day, month, year] = dateString.split('.').map(Number);
+  
+    // Creating a new Date object with the year, month, and day
+    // Note: Month is 0-based in JavaScript, so we subtract 1 from the month
+    return new Date(year, month - 1, day);
+  }

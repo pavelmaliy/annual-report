@@ -1,18 +1,18 @@
-import * as React from 'react';
-import {useContext} from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import TransactionForm from './TransactionForm';
-import {persistTransactions} from "../../storage/store"
-import {AppContext} from "../../context/AppContext";
-import {useAuthState} from "react-firebase-hooks/auth";
-import {auth} from "../../storage/firebase";
-import {HistoryTable} from './HistoryTable'
-import {generateRandomString} from '../../utils/utils'
 import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import { useContext } from 'react';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { AppContext } from "../../context/AppContext";
+import { auth } from "../../storage/firebase";
+import { persistTransactions } from "../../storage/store";
+import { generateRandomString } from '../../utils/utils';
+import { HistoryTable } from './HistoryTable';
+import TransactionForm from './TransactionForm';
 
 
 export default function TransactionContainer() {

@@ -11,12 +11,11 @@ import {
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import {useEffect} from "react";
-import {getUserTransactions} from "../../storage/store";
-import {parse} from 'date-fns'
-import currencies from "../../resources/commonCurrency.json";
+import { useEffect } from "react";
 import ReactLoading from "react-loading";
-import {formatDateToDDMMYYYY} from "../../utils/utils";
+import currencies from "../../resources/commonCurrency.json";
+import { getUserTransactions } from "../../storage/store";
+import { formatDateToDDMMYYYY } from "../../utils/utils";
 
 const styles = {
     tableHeaderStyle: {
