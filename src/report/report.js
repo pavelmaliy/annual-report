@@ -1,33 +1,42 @@
+import { formatDateToDDMMYYYY } from "../utils/utils"
+
 export const generateOptimizedReport = function (sells, buys) {
     var report = {}
-    const sellByStock = groupTransactionsByStock(sells)
-    const buyByStock = groupTransactionsByStock(buys)
-
+    const sellByStock = groupTransactionsByStock(sells, true)
+    const buyByStock = groupTransactionsByStock(buys, false)
 
     for (const stock in sellByStock) {
         if (sellByStock.hasOwnProperty(stock)) {
-            for (const tid in sellByStock[stock]) {
-                if (sellByStock[stock].hasOwnProperty(tid)) {
-                    let sellTr = sellByStock[stock][tid]
-                    while (sellTr.quantity > 0) {
-                        let buyId = findBestBuy(sellTr, buyByStock[stock])
-                        addBuyTransaction(report, stock, sellTr, buyByStock[stock][buyId])
-                    }
+            let sellTransactions = sellByStock[stock]
+            sellTransactions.sort((a, b) => b.price - a.price)
+            // order by price from high to low 
+            for (const sellTr of sellTransactions) {
+                while (sellTr.quantity > 0) {
+                    let buyId = findBestBuy(sellTr, buyByStock[stock])
+                    addBuyTransaction(report, stock, sellTr, buyByStock[stock][buyId])
                 }
             }
         }
     }
 
-    return report
+    return optimizedReport(report)
 }
 
-function groupTransactionsByStock(transactions) {
+function groupTransactionsByStock(transactions, isArray) {
     let trByStock = {}
     for (const tr of transactions) {
         if (!trByStock[tr.stockName]) {
-            trByStock[tr.stockName] = {};
+            if (isArray) {
+                trByStock[tr.stockName] = [];
+            } else {
+                trByStock[tr.stockName] = {};
+            }
         }
-        trByStock[tr.stockName][tr.id] = {...tr, "originalQuantity": tr.quantity}
+        if (isArray) {
+            trByStock[tr.stockName].push({ ...tr, "originalQuantity": tr.quantity })
+        } else {
+            trByStock[tr.stockName][tr.id] = { ...tr, "originalQuantity": tr.quantity }
+        }
     }
     return trByStock
 }
@@ -43,8 +52,8 @@ function findBestBuy(sell, buys) {
                 continue
             }
             if (buyTr.transactionDate <= sell.transactionDate) {
-                if (buyTr.price - sell.price < tax) {
-                    tax = buyTr.price - sell.price
+                if (sell.price - buyTr.price < tax) {
+                    tax = sell.price - buyTr.price
                     bestBuy = buyTr
                 }
             }
@@ -65,11 +74,11 @@ function addBuyTransaction(report, stockName, sellTr, bestBuy) {
         }
     }
 
-    var buy = {...bestBuy}
+    var buy = { ...bestBuy }
     if (sellTr.quantity < bestBuy.quantity) {
         buy.quantity = sellTr.quantity
         bestBuy.quantity -= sellTr.quantity
-        sellTr.quantity = 0        
+        sellTr.quantity = 0
     } else {
         buy.quantity = bestBuy.quantity
         sellTr.quantity -= bestBuy.quantity
@@ -78,5 +87,39 @@ function addBuyTransaction(report, stockName, sellTr, bestBuy) {
     }
 
 
-    report[stockName][sellTr.id].purchases.push({buy})
+    report[stockName][sellTr.id].purchases.push(buy)
+}
+
+function optimizedReport(report) {
+    let optimizedReport = {}
+    for (const stock in report) {
+        if (report.hasOwnProperty(stock)) {
+            for (const sellID in report[stock]) {
+                if (!optimizedReport[stock]) {
+                    optimizedReport[stock] = []
+                }
+                let entry = {
+                    "id": report[stock][sellID]["sell"].id,
+                    "price": report[stock][sellID]["sell"].price,
+                    "marketCurrency": report[stock][sellID]["sell"].marketCurrency,
+                    "quantity": report[stock][sellID]["sell"].originalQuantity,
+                    "transactionType": "Sell",
+                    "date": formatDateToDDMMYYYY(report[stock][sellID]["sell"].transactionDate.toMillis()),
+                    "purchases": []
+                }
+                for (const buy of report[stock][sellID].purchases) {
+                    let p = {
+                        "id": buy.id,
+                        "price": buy.price,
+                        "usedQuantity": buy.quantity,
+                        "quantity": buy.originalQuantity,
+                        "date": formatDateToDDMMYYYY(buy.transactionDate.toMillis()),  
+                    }
+                    entry.purchases.push(p)
+                }
+                optimizedReport[stock].push(entry)
+            }
+        }
+    }
+    return optimizedReport
 }
