@@ -1,6 +1,9 @@
-import { formatDateToDDMMYYYY } from "../utils/utils"
+import { parseDDMMYYYYDate, formatDateToDDMMYYYY } from "../utils/utils"
+import { db } from "../storage/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-export const generateOptimizedReport = function (sells, buys) {
+export const generateOptimizedReport = async function (sells, buys) {
+    let exchangeRate = await getExchangeRate()
     var report = {}
     const sellByStock = groupTransactionsByStock(sells, true)
     const buyByStock = groupTransactionsByStock(buys, false)
@@ -19,7 +22,7 @@ export const generateOptimizedReport = function (sells, buys) {
         }
     }
 
-    return optimizedReport(report)
+    return optimizedReport(report, exchangeRate)
 }
 
 function groupTransactionsByStock(transactions, isArray) {
@@ -90,7 +93,7 @@ function addBuyTransaction(report, stockName, sellTr, bestBuy) {
     report[stockName][sellTr.id].purchases.push(buy)
 }
 
-function optimizedReport(report) {
+function optimizedReport(report, exchangeRate) {
     let optimizedReport = {}
     for (const stock in report) {
         if (report.hasOwnProperty(stock)) {
@@ -98,22 +101,26 @@ function optimizedReport(report) {
                 if (!optimizedReport[stock]) {
                     optimizedReport[stock] = []
                 }
+                let sellDate = formatDateToDDMMYYYY(report[stock][sellID]["sell"].transactionDate.toMillis())
                 let entry = {
                     "id": report[stock][sellID]["sell"].id,
                     "price": report[stock][sellID]["sell"].price,
                     "marketCurrency": report[stock][sellID]["sell"].marketCurrency,
                     "quantity": report[stock][sellID]["sell"].originalQuantity,
                     "transactionType": "Sell",
-                    "date": formatDateToDDMMYYYY(report[stock][sellID]["sell"].transactionDate.toMillis()),
+                    "date": sellDate,
+                    "exchangeRate": getRateByDate(sellDate, exchangeRate),
                     "purchases": []
                 }
                 for (const buy of report[stock][sellID].purchases) {
+                    let buyDate = formatDateToDDMMYYYY(buy.transactionDate.toMillis())
                     let p = {
                         "id": buy.id,
                         "price": buy.price,
                         "usedQuantity": buy.quantity,
                         "quantity": buy.originalQuantity,
-                        "date": formatDateToDDMMYYYY(buy.transactionDate.toMillis()),  
+                        "date": buyDate,
+                        "exchangeRate": getRateByDate(buyDate, exchangeRate),
                     }
                     entry.purchases.push(p)
                 }
@@ -122,4 +129,36 @@ function optimizedReport(report) {
         }
     }
     return optimizedReport
+}
+
+async function getExchangeRate() {
+    let rates = {}
+    let now = new Date()
+    const exchangeQuery = query(collection(db, "eur_ils"));
+
+    try {
+        const docs = await getDocs(exchangeQuery);
+        docs.docs.map((item) => {
+            rates[formatDateToDDMMYYYY(item.data().date.toMillis())] = parseFloat(item.data().rate)
+        })
+    } catch (e) {
+        console.error(e)
+    }
+
+    return rates
+}
+
+function getRateByDate(dateString, rates) {
+    if(rates[dateString]) {
+        return rates[dateString]
+    }
+
+    let rate = null
+    let date = parseDDMMYYYYDate(dateString)
+    while(!rate) {
+        date.setDate(date.getDate() - 1)
+        rate = rates[formatDateToDDMMYYYY(date.getTime())]
+    }
+    
+    return rate
 }

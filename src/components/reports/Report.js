@@ -69,7 +69,7 @@ export default function Report() {
         }
         
         if (algorithm === 10) {
-            const result =  generateOptimizedReport(sellTransactions, buyTransactions)
+            const result =  await generateOptimizedReport(sellTransactions, buyTransactions)
             console.error(JSON.stringify(result))
         }
 

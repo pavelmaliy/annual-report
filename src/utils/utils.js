@@ -11,6 +11,30 @@ export const formatDateToDDMMYYYY = function (millis) {
     return `${day}/${month}/${year}`;
 }
 
+export const parseDDMMYYYYDate = function(dateStr) {
+    // Split the input string by '/'
+    const parts = dateStr.split('/');
+  
+    // Ensure there are 3 parts (day, month, year)
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1] - 1, 10); // Subtract 1 from the month since it's 0-based
+      const year = parseInt(parts[2], 10);
+  
+      // Create a Date object
+      const date = new Date(year, month, day);
+  
+      // Check if the date is valid
+      if (isNaN(date)) {
+        return null; // Date is invalid
+      }
+  
+      return date;
+    }
+  
+    return null; // Invalid format
+  }
+
 export const generateRandomString = function (length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';

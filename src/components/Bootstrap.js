@@ -11,6 +11,9 @@ import * as React from "react";
 export default function Bootstrap() {
     const [user] = useAuthState(auth)
 
+    // validate today exchange rate exist
+    // https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/latest/ILS
+
     return (
         <Router>
             <Routes>

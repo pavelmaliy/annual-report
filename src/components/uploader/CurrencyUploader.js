@@ -55,7 +55,7 @@ export default function CurrencyUpload() {
 
             await runTransaction(db, async (transaction) => {
                 currency.map(item => {
-                    transaction.set(doc(colRef), {item})
+                    transaction.set(doc(colRef), item)
                 })
             });
             setUploading(false)
