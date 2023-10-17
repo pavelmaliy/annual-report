@@ -10,8 +10,9 @@ export const getExchangeRate = async function() {
     try {
         const latestDocs = await getDocs(latestRateQuery);
         let lastCurrencyDate = latestDocs.docs[0].data().date.toDate()
-        if (lastCurrencyDate < new Date()) {
-            await updateRates(lastCurrencyDate)
+        let now = new Date(lastCurrencyDate.getFullYear(), lastCurrencyDate.getMonth(), lastCurrencyDate.getDate())
+        if (lastCurrencyDate < now) {
+            await updateRates(lastCurrencyDate, now)
         }
 
         const docs = await getDocs(exchangeQuery);
@@ -25,9 +26,8 @@ export const getExchangeRate = async function() {
     return rates
 }
 
-async function updateRates(lastCurrencyDate) {
+async function updateRates(lastCurrencyDate, now) {
     let missingDate = new Date(lastCurrencyDate)
-    let now = new Date()
 
     while (missingDate < now) {
         missingDate.setDate(missingDate.getDate() + 1)
