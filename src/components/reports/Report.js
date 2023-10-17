@@ -15,7 +15,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
-import {generateOptimizedReport} from "../../report/report"
+import { generateOptimizedReport } from "../../report/report"
 
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);
@@ -49,27 +49,22 @@ export default function Report() {
         let sellTransactions = []
         let buyTransactions = []
         try {
-            const docs = await getDocs(sellsQuery);
-            docs.docs.map((item) => {
-                let tr = {...item.data(), "id": item.id}
+            const selldocs = await getDocs(sellsQuery);
+            selldocs.docs.map((item) => {
+                let tr = { ...item.data(), "id": item.id }
                 sellTransactions.push(tr)
             })
-        } catch (e) {
-            console.error(e)
-        }
-
-        try {
-            const docs = await getDocs(buyQuery);
-            docs.docs.map((item) => {
-                let tr = {...item.data(), "id": item.id}
+            const buydocs = await getDocs(buyQuery);
+            buydocs.docs.map((item) => {
+                let tr = { ...item.data(), "id": item.id }
                 buyTransactions.push(tr)
             })
         } catch (e) {
-            console.error(e)
+            throw e
         }
-        
+
         if (algorithm === 10) {
-            const result =  await generateOptimizedReport(sellTransactions, buyTransactions)
+            const result = await generateOptimizedReport(sellTransactions, buyTransactions)
             console.error(JSON.stringify(result))
         }
 
@@ -92,12 +87,12 @@ export default function Report() {
         if (!validationError) {
             if (startDate > now) {
                 setFromDateError('future date not allowed')
-                validationError = true  
+                validationError = true
             }
 
             if (endDate > now) {
                 setToDateError('future dates not allowed')
-                validationError = true  
+                validationError = true
             }
         }
 
