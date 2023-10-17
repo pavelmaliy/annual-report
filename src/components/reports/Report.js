@@ -59,15 +59,16 @@ export default function Report() {
                 let tr = { ...item.data(), "id": item.id }
                 buyTransactions.push(tr)
             })
-        } catch (e) {
-            throw e
-        }
 
-        if (algorithm === 10) {
-            const result = await generateOptimizedReport(sellTransactions, buyTransactions)
-            console.error(JSON.stringify(result))
+            if (algorithm === 10) {
+                const result = await generateOptimizedReport(sellTransactions, buyTransactions)
+                console.error(JSON.stringify(result))
+            }
         }
+        catch (e) {
+            console.error(e)
 
+        }
     }
 
     const validateForm = (startDate, endDate) => {
