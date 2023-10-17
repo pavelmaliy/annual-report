@@ -1,8 +1,7 @@
-import { parseDDMMYYYYDate, formatDateToDDMMYYYY } from "../utils/utils"
-import { db } from "../storage/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {formatDateToDDMMYYYY } from "../utils/utils"
+import {getRateByDate, getExchangeRate} from "./exchange"
 
-export const generateOptimizedReport = async function (sells, buys) {
+ export const generateOptimizedReport = async function (sells, buys) {
     let exchangeRate = await getExchangeRate()
     var report = {}
     const sellByStock = groupTransactionsByStock(sells, true)
@@ -129,36 +128,4 @@ function optimizedReport(report, exchangeRate) {
         }
     }
     return optimizedReport
-}
-
-async function getExchangeRate() {
-    let rates = {}
-    let now = new Date()
-    const exchangeQuery = query(collection(db, "eur_ils"));
-
-    try {
-        const docs = await getDocs(exchangeQuery);
-        docs.docs.map((item) => {
-            rates[formatDateToDDMMYYYY(item.data().date.toMillis())] = parseFloat(item.data().rate)
-        })
-    } catch (e) {
-        console.error(e)
-    }
-
-    return rates
-}
-
-function getRateByDate(dateString, rates) {
-    if(rates[dateString]) {
-        return rates[dateString]
-    }
-
-    let rate = null
-    let date = parseDDMMYYYYDate(dateString)
-    while(!rate) {
-        date.setDate(date.getDate() - 1)
-        rate = rates[formatDateToDDMMYYYY(date.getTime())]
-    }
-    
-    return rate
 }
