@@ -10,7 +10,7 @@ export const getExchangeRate = async function() {
     try {
         const latestDocs = await getDocs(latestRateQuery);
         let lastCurrencyDate = latestDocs.docs[0].data().date.toDate()
-        let now = new Date(lastCurrencyDate.getFullYear(), lastCurrencyDate.getMonth(), lastCurrencyDate.getDate())
+        let now = new Date(lastCurrencyDate.getFullYear(), lastCurrencyDate.getMonth(), lastCurrencyDate.getDate() - 1)
         if (lastCurrencyDate < now) {
             await updateRates(lastCurrencyDate, now)
         }
