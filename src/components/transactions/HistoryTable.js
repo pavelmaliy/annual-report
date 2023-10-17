@@ -38,10 +38,10 @@ const styles = {
     },
 };
 
-export function HistoryTable({user, forwardedRef}) {
+export function HistoryTable({ user, forwardedRef }) {
     const rowsPerPageOptions = [5, 10, 25];
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [sortConfig, setSortConfig] = React.useState({key: '', direction: ''});
+    const [sortConfig, setSortConfig] = React.useState({ key: '', direction: '' });
     const [page, setPage] = React.useState(0);
     const [loading, setLoading] = React.useState(true);
     const [history, setHistory] = React.useState([])
@@ -73,7 +73,7 @@ export function HistoryTable({user, forwardedRef}) {
         if (sortConfig.key === key && sortConfig.direction === 'asc') {
             direction = 'desc';
         }
-        setSortConfig({key, direction});
+        setSortConfig({ key, direction });
     };
 
     const sortedData = [...history].sort((a, b) => {
@@ -109,7 +109,7 @@ export function HistoryTable({user, forwardedRef}) {
                                     direction={sortConfig.key === 'transactionDate' ? sortConfig.direction : 'asc'}
                                     onClick={() => handleSort('transactionDate')}
                                 >
-                                    <Typography style={{fontWeight: 'bold'}}>
+                                    <Typography style={{ fontWeight: 'bold' }}>
                                         Date
                                     </Typography>
                                 </TableSortLabel>
@@ -120,7 +120,7 @@ export function HistoryTable({user, forwardedRef}) {
                                     direction={sortConfig.key === 'stockName' ? sortConfig.direction : 'asc'}
                                     onClick={() => handleSort('stockName')}
                                 >
-                                    <Typography style={{fontWeight: 'bold'}}>
+                                    <Typography style={{ fontWeight: 'bold' }}>
                                         Stock
                                     </Typography>
                                 </TableSortLabel>
@@ -131,7 +131,7 @@ export function HistoryTable({user, forwardedRef}) {
                                     direction={sortConfig.key === 'transactionType' ? sortConfig.direction : 'asc'}
                                     onClick={() => handleSort('transactionType')}
                                 >
-                                    <Typography style={{fontWeight: 'bold'}}>
+                                    <Typography style={{ fontWeight: 'bold' }}>
                                         Action
                                     </Typography>
                                 </TableSortLabel>
@@ -142,7 +142,7 @@ export function HistoryTable({user, forwardedRef}) {
                                     direction={sortConfig.key === 'quantity' ? sortConfig.direction : 'asc'}
                                     onClick={() => handleSort('quantity')}
                                 >
-                                    <Typography style={{fontWeight: 'bold'}}>
+                                    <Typography style={{ fontWeight: 'bold' }}>
                                         Quantity
                                     </Typography>
                                 </TableSortLabel>
@@ -153,7 +153,7 @@ export function HistoryTable({user, forwardedRef}) {
                                     direction={sortConfig.key === 'price' ? sortConfig.direction : 'asc'}
                                     onClick={() => handleSort('price')}
                                 >
-                                    <Typography style={{fontWeight: 'bold'}}>
+                                    <Typography style={{ fontWeight: 'bold' }}>
                                         Price
                                     </Typography>
                                 </TableSortLabel>
@@ -164,7 +164,7 @@ export function HistoryTable({user, forwardedRef}) {
                                     direction={sortConfig.key === 'marketCurrency' ? sortConfig.direction : 'asc'}
                                     onClick={() => handleSort('marketCurrency')}
                                 >
-                                    <Typography style={{fontWeight: 'bold'}}>
+                                    <Typography style={{ fontWeight: 'bold' }}>
                                         Currency
                                     </Typography>
                                 </TableSortLabel>
@@ -172,46 +172,57 @@ export function HistoryTable({user, forwardedRef}) {
                         </TableRow>
                     </TableHead>
                     {loading ? (
-                        <ReactLoading type="bubbles" color="#0000FF"/>
-                    ):(
                         <TableBody>
-                            {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>
-                                        <Typography>
-                                            {formatDateToDDMMYYYY(item.transactionDate.toMillis())}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography>
-                                            {item.stockName}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography>
-                                            {item.transactionType}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography>
-                                            {item.quantity}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography>
-                                            {item.price}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography>
-                                            {currencies[item.marketCurrency].symbol}
-                                        </Typography>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-
+                            <TableRow>
+                                <TableCell>
+                                    <ReactLoading type="bubbles" color="#0000FF" />
+                                </TableCell>
+                                <TableCell/>                                    
+                                <TableCell/>                                                            
+                                <TableCell/>                                                                    
+                                <TableCell/>                                                                    
+                                <TableCell/>                                                                
+                            </TableRow>
                         </TableBody>
-                    )}
+                    ) : (
+                            <TableBody>
+                                {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>
+                                            <Typography>
+                                                {formatDateToDDMMYYYY(item.transactionDate.toMillis())}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.stockName}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.transactionType}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.quantity}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.price}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {currencies[item.marketCurrency].symbol}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+
+                            </TableBody>
+                        )}
                 </Table>
                 <TablePagination
                     style={styles.pagination}
