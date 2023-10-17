@@ -1,17 +1,20 @@
 import { db } from "../storage/firebase";
-import { collection, getDocs, addDoc, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, addDoc, orderBy, query, limit } from "firebase/firestore";
 import { parseDDMMYYYYDate, formatDateToDDMMYYYY } from "../utils/utils"
 
 export const getExchangeRate = async function() {
     let rates = {}
-    const exchangeQuery = query(collection(db, "eur_ils"), orderBy("date", "desc"));
+    const exchangeQuery = query(collection(db, "eur_ils"));
+    const latestRateQuery = query(collection(db, "eur_ils"), orderBy("date", "desc"), limit(1));
 
     try {
-        const docs = await getDocs(exchangeQuery);
-        let lastCurrencyDate = docs.docs[0].data().date.toDate()
+        const latestDocs = await getDocs(latestRateQuery);
+        let lastCurrencyDate = latestDocs.docs[0].data().date.toDate()
         if (lastCurrencyDate < new Date()) {
             await updateRates(lastCurrencyDate)
         }
+
+        const docs = await getDocs(exchangeQuery);
         docs.docs.map((item) => {
             rates[formatDateToDDMMYYYY(item.data().date.toMillis())] = parseFloat(item.data().rate)
         })
@@ -20,21 +23,6 @@ export const getExchangeRate = async function() {
     }
 
     return rates
-}
-
-export const getRateByDate = function (dateString, rates) {
-    if (rates[dateString]) {
-        return rates[dateString]
-    }
-
-    let rate = null
-    let date = parseDDMMYYYYDate(dateString)
-    while (!rate) {
-        date.setDate(date.getDate() - 1)
-        rate = rates[formatDateToDDMMYYYY(date.getTime())]
-    }
-
-    return rate
 }
 
 async function updateRates(lastCurrencyDate) {
@@ -47,7 +35,7 @@ async function updateRates(lastCurrencyDate) {
             let rate = await retrieveRateFromAPI(missingDate)
             await addDoc(collection(db, "eur_ils"), {
                 "date": missingDate,
-                "rate": rate
+                "rate": rate.toString()
             });
         } catch (e) {
             console.error(e)
@@ -77,4 +65,19 @@ async function retrieveRateFromAPI(date) {
 
     // Process the JSON data
     return data.result;
+}
+
+export const getRateByDate = function (dateString, rates) {
+    if (rates[dateString]) {
+        return rates[dateString]
+    }
+
+    let rate = null
+    let date = parseDDMMYYYYDate(dateString)
+    while (!rate) {
+        date.setDate(date.getDate() - 1)
+        rate = rates[formatDateToDDMMYYYY(date.getTime())]
+    }
+
+    return rate
 }
