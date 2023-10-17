@@ -60,7 +60,7 @@ export default function CurrencyUpload() {
             });
             setUploading(false)
         } catch(e) {
-            setUploading(true)
+            setUploading(false)
             throw e
         }
     }
