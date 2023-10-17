@@ -29,7 +29,7 @@ async function updateRates(lastCurrencyDate) {
     let missingDate = new Date(lastCurrencyDate)
     let now = new Date()
 
-    while (missingDate <= now) {
+    while (missingDate < now) {
         missingDate.setDate(missingDate.getDate() + 1)
         try {
             let rate = await retrieveRateFromAPI(missingDate)
