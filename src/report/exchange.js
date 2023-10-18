@@ -1,16 +1,17 @@
 import { db } from "../storage/firebase";
-import { collection, getDocs, addDoc, orderBy, query, limit } from "firebase/firestore";
+import { collection, getDocs, addDoc, orderBy, query, where, limit } from "firebase/firestore";
 import { parseDDMMYYYYDate, formatDateToDDMMYYYY } from "../utils/utils"
 
-export const getExchangeRate = async function() {
+export const getExchangeRate = async function(earliestTimestamp) {
     let rates = {}
-    const exchangeQuery = query(collection(db, "eur_ils"));
+    const exchangeQuery = query(collection(db, "eur_ils"), where('date', '>=', earliestTimestamp));
     const latestRateQuery = query(collection(db, "eur_ils"), orderBy("date", "desc"), limit(1));
 
     try {
         const latestDocs = await getDocs(latestRateQuery);
         let lastCurrencyDate = latestDocs.docs[0].data().date.toDate()
-        let now = new Date(lastCurrencyDate.getFullYear(), lastCurrencyDate.getMonth(), lastCurrencyDate.getDate() - 1)
+        let now = new Date()
+        now.setHours(0,0,0,0)
         if (lastCurrencyDate < now) {
             await updateRates(lastCurrencyDate, now)
         }

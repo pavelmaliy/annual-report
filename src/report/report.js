@@ -1,8 +1,8 @@
 import {formatDateToDDMMYYYY } from "../utils/utils"
 import {getRateByDate, getExchangeRate} from "./exchange"
 
- export const generateOptimizedReport = async function (sells, buys) {
-    let exchangeRate = await getExchangeRate()
+ export const generateOptimizedReport = async function (sells, buys, earliestTimestamp) {
+    let exchangeRate = await getExchangeRate(earliestTimestamp)
     var report = {}
     const sellByStock = groupTransactionsByStock(sells, true)
     const buyByStock = groupTransactionsByStock(buys, false)

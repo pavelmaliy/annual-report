@@ -11,7 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
@@ -44,10 +44,12 @@ export default function Report() {
         const buyQuery = query(collection(db, "transactions"),
             where('transactionDate', '<=', endDate),
             where('transactionType', '==', 'Purchase'),
-            where("user_id", "==", user.uid)
+            where("user_id", "==", user.uid),
+            orderBy('transactionDate', 'asc')
         );
         let sellTransactions = []
         let buyTransactions = []
+        let earliestTimestamp = null
         try {
             const selldocs = await getDocs(sellsQuery);
             selldocs.docs.map((item) => {
@@ -57,11 +59,16 @@ export default function Report() {
             const buydocs = await getDocs(buyQuery);
             buydocs.docs.map((item) => {
                 let tr = { ...item.data(), "id": item.id }
+                if (buyTransactions.length == 0) {
+                    earliestTimestamp = tr.transactionDate.toDate()
+                    // might be weekend so we take 2 previos days as buffer
+                    earliestTimestamp.setDate(earliestTimestamp.getDate() - 2)
+                }
                 buyTransactions.push(tr)
             })
 
             if (algorithm === 10) {
-                const result = await generateOptimizedReport(sellTransactions, buyTransactions)
+                const result = await generateOptimizedReport(sellTransactions, buyTransactions, earliestTimestamp)
                 console.error(JSON.stringify(result))
             }
         }
