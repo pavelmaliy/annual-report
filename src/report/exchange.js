@@ -49,9 +49,9 @@ async function retrieveRateFromAPI(date) {
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
     const dateParam = `${year}-${month}-${day}`
+    const accessKey = process.env.REACT_APP_exchangeKey
 
-
-    const url = `http://api.exchangerate.host/convert?access_key=d9eee996255ffd8af0fa11ed015229a1&from=EUR&to=ILS&amount=1&date=${dateParam}`;
+    const url = `http://api.exchangerate.host/convert?access_key=${accessKey}&from=EUR&to=ILS&amount=1&date=${dateParam}`;
 
     // Use the fetch() method to make a GET request to the URL
     const response = await fetch(url);

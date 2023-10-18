@@ -17,7 +17,7 @@ import LoadingScreen from "../common/LoadingScreen";
 const defaultTheme = createTheme();
 
 export default function Reset() {
-    const [user, loading, error] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('')
     const [userReady, setUserReady] = useState(false)
