@@ -11,12 +11,16 @@ export const generateOptimizedReport = async function (sells, buys, earliestTime
         for (const stock in sellByStock) {
             if (sellByStock.hasOwnProperty(stock)) {
                 let sellTransactions = sellByStock[stock]
-                sellTransactions.sort((a, b) => b.price - a.price)
                 // order by price from high to low 
+                sellTransactions.sort((a, b) => b.price - a.price)
+                
                 for (const sellTr of sellTransactions) {
                     while (sellTr.quantity > 0) {
                         let buyId = findBestBuy(sellTr, buyByStock[stock], exchangeRate)
                         addBuyTransaction(report, stock, sellTr, buyByStock[stock][buyId], exchangeRate)
+                        if (!buyId) {
+                            throw "Not enough buy transactions to cover all sells"                        
+                        }
                     }
                     let formattedDate = formatDateToDDMMYYYY(sellTr.transactionDate.toMillis())
                     let rate = getRateByDate(formattedDate, exchangeRate)
@@ -46,6 +50,10 @@ function addBuyTransaction(report, stockName, sellTr, bestBuy, exchangeRate) {
         report[stockName][sellTr.id] = {
             "purchases": []
         }
+    }
+
+    if (!bestBuy) {
+        return
     }
 
     const formattedDate = formatDateToDDMMYYYY(bestBuy.transactionDate.toMillis())
@@ -110,7 +118,7 @@ function findBestBuy(sell, buys, exchangeRate) {
             }
         }
     }
-    return bestBuy.id
+    return bestBuy && bestBuy.id
 }
 
 async function toCSV(jsonReport) {
@@ -136,24 +144,28 @@ async function toCSV(jsonReport) {
         if (jsonReport.hasOwnProperty(stock)) {
             for (const trID in jsonReport[stock]) {
                 if (jsonReport[stock].hasOwnProperty(trID)) {
-                    for (const purchase of jsonReport[stock][trID].purchases) {
+                    for (const buy of jsonReport[stock][trID].purchases) {
                         const sell = jsonReport[stock][trID]
-                        const buyPrice = purchase.price * purchase.quantity
-                        const localBuyPrice = (buyPrice * purchase.exchangeRate).toFixed(4)
-                        const sellPrice = sell.price * purchase.quantity
-                        const localSellPrice = (sellPrice * purchase.exchangeRate).toFixed(4)
-                        const index = (sell.exchangeRate / purchase.exchangeRate).toFixed(4)
+                        const sellExchangeRate = sell.exchangeRate.toFixed(4)
+                        const sellPrice = sell.price * buy.quantity
+                        const localSellPrice = (sellPrice * sellExchangeRate).toFixed(4)
+
+                        const buyExchangeRate = buy.exchangeRate.toFixed(4)
+                        const buyPrice = buy.price * buy.quantity
+                        const localBuyPrice = (buyPrice * buyExchangeRate).toFixed(4)
+
+                        const index = (sellExchangeRate / buyExchangeRate).toFixed(4)
                         const localAdaptedBuyPrice = (localBuyPrice * index).toFixed(4)
                         data.push([
                             stock,
                             sell.marketCurrency + "/ILS",
                             buyPrice,
                             purchase.date,
-                            purchase.exchangeRate.toFixed(4),
+                            buyExchangeRate,
                             localBuyPrice,
                             sellPrice,
                             sell.date,
-                            sell.exchangeRate.toFixed(4),
+                            sellExchangeRate,
                             localSellPrice,
                             index,
                             localAdaptedBuyPrice,
