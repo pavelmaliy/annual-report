@@ -160,7 +160,7 @@ async function toCSV(jsonReport) {
                             stock,
                             sell.marketCurrency + "/ILS",
                             buyPrice,
-                            purchase.date,
+                            buy.date,
                             buyExchangeRate,
                             localBuyPrice,
                             sellPrice,
