@@ -72,13 +72,13 @@ export default function Report() {
             if (algorithm === 10) {
                 csv =  await generateOptimizedReport(sellTransactions, buyTransactions, earliestTimestamp)
             }
+
+            downloadCSV(csv)
         }
         catch (e) {
             console.error(e)
 
         }
-
-        downloadCSV(csv)
     }
 
     function downloadCSV(csvContent) {
