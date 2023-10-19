@@ -17,6 +17,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
 import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
+import Copyright from '../common/Copyright'
 
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);
@@ -26,7 +27,6 @@ export default function Report() {
     const [to, setTo] = React.useState('')
     const [toDateError, setToDateError] = React.useState('')
     const [user] = useAuthState(auth)
-
 
     const generateReport = async () => {
         let csv = ''
@@ -238,6 +238,7 @@ export default function Report() {
                         </React.Fragment>
                     </Box>
                 </Paper>
+                <Copyright />
             </Container>
         </React.Fragment>
     );

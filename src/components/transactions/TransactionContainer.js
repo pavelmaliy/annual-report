@@ -13,10 +13,11 @@ import { persistTransactions } from "../../storage/store";
 import { generateRandomString } from '../../utils/utils';
 import { HistoryTable } from './HistoryTable';
 import TransactionForm from './TransactionForm';
+import Copyright from '../common/Copyright'
 
 
 export default function TransactionContainer() {
-    const {model, setModel} = useContext(AppContext);
+    const { model, setModel } = useContext(AppContext);
     const [summary, setSummary] = React.useState(false);
     const [user] = useAuthState(auth)
 
@@ -24,10 +25,10 @@ export default function TransactionContainer() {
 
     return (
         <React.Fragment>
-            <CssBaseline/>
-            <Container component="main" maxWidth="lg" sx={{mb: 4}}>
-                <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                    <Typography component="h1" variant="h4" align="center" style={{marginBottom: '12px'}}>
+            <CssBaseline />
+            <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
+                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '12px' }}>
                         New Transaction
                     </Typography>
                     {summary ? (
@@ -35,52 +36,51 @@ export default function TransactionContainer() {
                             <Typography variant="h6" gutterBottom align="center">
                                 Transactions successfully saved.
                             </Typography>
-                            <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                            <Button
-                                onClick={() => {
-                                    model.transactions = []
-                                    setModel(model)
-                                    if (childRef.current) {
-                                        childRef.current.setReloadHistory(generateRandomString(8))
-                                    }
-                                    setSummary(false)
-                                }}
-                                sx={{mt: 3, ml: 1}}
-                            >
-                                Finish
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                    onClick={() => {
+                                        model.transactions = []
+                                        setModel(model)
+                                        if (childRef.current) {
+                                            childRef.current.setReloadHistory(generateRandomString(8))
+                                        }
+                                        setSummary(false)
+                                    }}
+                                    sx={{ mt: 3, ml: 1 }}
+                                >
+                                    Finish
                             </Button>
                             </Box>
                         </React.Fragment>
-                    ) :(
-                        <TransactionForm
-                            onFinish={async (transactions) => {
-                                try {
-                                    if (transactions.length > 0) {
-                                        await persistTransactions(transactions, user)
+                    ) : (
+                            <TransactionForm
+                                onFinish={async (transactions) => {
+                                    try {
+                                        if (transactions.length > 0) {
+                                            await persistTransactions(transactions, user)
+                                        }
+                                    } catch (err) {
+                                        throw err
                                     }
-                                } catch (err) {
-                                    throw err
-                                }
-                                model.transactions = transactions
-                                setModel(model)
-                                setSummary(true)
-                            }}/>
-                    )}
+                                    model.transactions = transactions
+                                    setModel(model)
+                                    setSummary(true)
+                                }} />
+                        )}
 
                 </Paper>
             </Container>
-            <Container component="main" maxWidth="lg" sx={{mb: 4}}>
-                <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                    <Typography component="h1" variant="h4" align="center" style={{marginBottom: '12px'}}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
+                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '12px' }}>
                         Transaction History
                     </Typography>
                     <React.Fragment>
-                        <HistoryTable user={user} forwardedRef={childRef}/>
+                        <HistoryTable user={user} forwardedRef={childRef} />
                     </React.Fragment>
                 </Paper>
+                <Copyright />
             </Container>
         </React.Fragment>
     )
-
 }
-

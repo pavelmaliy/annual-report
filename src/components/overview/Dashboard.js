@@ -1,25 +1,12 @@
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
-import StockPieChart from "./PieChart";
-import StockBarChart from "./BarChart";
 import Box from "@mui/material/Box";
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import StockBarChart from "./BarChart";
+import StockPieChart from "./PieChart";
+import Copyright from '../common/Copyright'
 
 export default function Dashboard() {
 
