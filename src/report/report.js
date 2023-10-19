@@ -117,7 +117,7 @@ async function toCSV(jsonReport) {
     let data = [
         [
             'Stock',
-            'Market Currency',
+            'Currency (Market/Local)',
             'Buy Price',
             'Buy Date',
             'Buy Exchange Rate',
@@ -146,7 +146,7 @@ async function toCSV(jsonReport) {
                         const localAdaptedBuyPrice = (localBuyPrice * index).toFixed(4)
                         data.push([
                             stock,
-                            sell.marketCurrency,
+                            sell.marketCurrency + "/ILS",
                             buyPrice,
                             purchase.date,
                             purchase.exchangeRate.toFixed(4),
