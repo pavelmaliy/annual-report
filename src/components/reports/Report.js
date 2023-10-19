@@ -16,6 +16,7 @@ import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
 import { generateOptimizedReport } from "../../report/report"
+import { saveAs } from "file-saver";
 
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);
@@ -28,6 +29,7 @@ export default function Report() {
 
 
     const generateReport = async () => {
+        let csv = ''
         let startDate = new Date(from)
         let endDate = to ? new Date(to) : new Date()
 
@@ -68,15 +70,21 @@ export default function Report() {
             })
 
             if (algorithm === 10) {
-                const result = await generateOptimizedReport(sellTransactions, buyTransactions, earliestTimestamp)
-                console.error(JSON.stringify(result))
+                csv =  await generateOptimizedReport(sellTransactions, buyTransactions, earliestTimestamp)
             }
         }
         catch (e) {
             console.error(e)
 
         }
+
+        downloadCSV(csv)
     }
+
+    function downloadCSV(csvContent) {
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        saveAs(blob, "annual-report.csv"); // Specify the file name
+      }
 
     const validateForm = (startDate, endDate) => {
         let validationError = false
