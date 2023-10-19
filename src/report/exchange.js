@@ -69,12 +69,19 @@ async function retrieveRateFromAPI(date) {
 }
 
 export const getRateByDate = function (dateString, rates) {
+    if (!rates) {
+        throw "No exchange rates provided"
+    }
+
     if (rates[dateString]) {
         return rates[dateString]
     }
 
     let rate = null
     let date = parseDDMMYYYYDate(dateString)
+    if (isNaN(date)) {
+        throw "Invalid date"
+    }
     while (!rate) {
         date.setDate(date.getDate() - 1)
         rate = rates[formatDateToDDMMYYYY(date.getTime())]

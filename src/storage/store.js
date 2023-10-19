@@ -7,7 +7,7 @@ export async function persistTransactions(stockTransactions, user) {
         try {
             await runTransaction(db, async (transaction) => {
                stockTransactions.map(item => {
-                   transaction.set(doc(colRef), {...item, "transactionDate": Timestamp.fromMillis(item.transactionDate),"user_id": user.uid})
+                   transaction.set(doc(colRef), {...item, "originalQuantity": item.quantity, "transactionDate": Timestamp.fromMillis(item.transactionDate),"user_id": user.uid})
                })
             });
         } catch (e) {
