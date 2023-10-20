@@ -20,7 +20,6 @@ export default function Dashboard() {
                         <StockBarChart/>
                     </Box>
                 </Paper>
-                <Copyright/>
             </Container>
         </React.Fragment>
     );

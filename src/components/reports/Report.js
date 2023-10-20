@@ -131,7 +131,7 @@ export default function Report() {
         <React.Fragment>
             <CssBaseline />
             <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
-                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                {/* <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}> */}
                     <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '20px' }}>
                         New Report
                     </Typography>
@@ -207,13 +207,13 @@ export default function Report() {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <FormControl fullWidth>
-                                        <InputLabel id="format-select-label">Format</InputLabel>
+                                        <InputLabel id="format-select-label">Type</InputLabel>
                                         <Select
                                             size="small"
                                             labelId="format-select-label"
                                             id="simple-select"
                                             value={format}
-                                            label="Format"
+                                            label="Type"
                                             onChange={(e) => {
                                                 setFormat(e.target.value)
                                             }}
@@ -237,8 +237,7 @@ export default function Report() {
                             </Grid>
                         </React.Fragment>
                     </Box>
-                </Paper>
-                <Copyright />
+              {/*   </Paper> */}
             </Container>
         </React.Fragment>
     );

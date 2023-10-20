@@ -3,6 +3,11 @@ import {BarChart} from '@mui/x-charts/BarChart';
 import {axisClasses} from '@mui/x-charts';
 
 const chartSetting = {
+    yAxis: [
+        {
+          label: 'total (k)',
+        },
+      ],
     width: 500,
     height: 300,
     sx: {
@@ -13,18 +18,18 @@ const chartSetting = {
 };
 const dataset = [
     {
-        sell: 23000,
-        buy: 46000,
+        sell: 23,
+        buy: 46,
         stock: 'SAP',
     },
     {
-        sell: 18000,
-        buy: 62000,
+        sell: 18,
+        buy: 62,
         stock: 'IBM',
     }
 ];
 
-const valueFormatter = (value) => `${value}€`;
+const valueFormatter = (value) => `${value*1000}€`;
 
 export default function StockBarChart() {
     return (
