@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from '@mui/material/Grid';
-import Paper from "@mui/material/Paper";
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -17,7 +16,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
 import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
-import Copyright from '../common/Copyright'
 
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);

@@ -13,7 +13,6 @@ import { persistTransactions } from "../../storage/store";
 import { generateRandomString } from '../../utils/utils';
 import { HistoryTable } from './HistoryTable';
 import TransactionForm from './TransactionForm';
-import Copyright from '../common/Copyright'
 
 
 export default function TransactionContainer() {

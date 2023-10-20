@@ -1,19 +1,50 @@
 import * as React from 'react';
-import {PieChart} from '@mui/x-charts/PieChart';
+import { PieChart } from '@mui/x-charts/PieChart';
+import { getSectionsBoundaries } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
 
-export default function StockPieChart() {
+export default function StockPieChart({ transactions }) {
+
+    const getData = function () {
+        let series = []
+        let stocks = {}
+        transactions.map((item) => {
+            let tr = item.data()
+            if (!stocks[tr.stockName]) {
+                stocks[tr.stockName] = {
+                    "quantity": 0
+                }
+            }
+
+            if (tr["transactionType"] === 'Purchase') {
+                stocks[tr.stockName].quantity += tr.quantity
+            } else {
+                stocks[tr.stockName].quantity -= tr.quantity
+            }
+        })
+
+        let id = 0
+        for (let stock in stocks) {
+            if (stocks.hasOwnProperty(stock)) {
+                series.push({
+                    "id": id,
+                    "value": stocks[stock].quantity,
+                    "label": stock
+                })
+                id += 1
+            }
+        }
+
+        return [
+            {
+                arcLabel: (item) => `${item.label}`,
+                data: series,
+            },
+        ]
+    }
 
     return (
-        <PieChart        
-            series={[
-                {
-                    arcLabel: (item) => `${item.value}%`,
-                    data: [
-                        {id: 0, value: 50, label: 'SAP SE'},
-                        {id: 1, value: 50, label: 'IBM'},
-                    ],
-                },
-            ]}
+        <PieChart
+            series={getData()}
             width={400}
             height={200}
         />
