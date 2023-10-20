@@ -5,8 +5,23 @@ import { getSectionsBoundaries } from '@mui/x-date-pickers/internals/hooks/useFi
 export default function StockPieChart({ transactions }) {
 
     const getData = function () {
+
+        if (transactions.length === 0) {
+            return [
+                {
+                    arcLabel: (item) => `${item.label}`,
+                    data: [{
+                        "id": 0,
+                        "value": 0,
+                        "label": "N/A"
+                    }],
+                },
+            ]
+        }
+
         let series = []
         let stocks = {}
+
         transactions.map((item) => {
             let tr = item.data()
             if (!stocks[tr.stockName]) {

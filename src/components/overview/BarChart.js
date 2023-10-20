@@ -19,9 +19,20 @@ const chartSetting = {
 
 const valueFormatter = (value) => `${value}€`;
 
-export default function StockBarChart({transactions}) {   
+export default function StockBarChart({ transactions }) {
 
-    const getDataset = function() {
+    const getDataset = function () {
+
+        if (transactions.length === 0) {
+            return [
+                {
+                    "stock": "N/A",
+                    "sell": 0,
+                    "buy": 0
+                }
+            ]
+        }
+
         let dataset = []
         let datasetMap = {}
 
@@ -53,7 +64,7 @@ export default function StockBarChart({transactions}) {
 
         return dataset
     }
-      
+
 
     return (
         <BarChart
