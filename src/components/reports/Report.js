@@ -218,8 +218,8 @@ export default function Report() {
                                                 setFormat(e.target.value)
                                             }}
                                         >
-                                            <MenuItem value={10}>Simplified</MenuItem>
-                                            <MenuItem value={20}>Official</MenuItem>
+                                            <MenuItem value={10}>Preview</MenuItem>
+                                            <MenuItem value={20}>Submit</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>

@@ -9,7 +9,8 @@ export default function StockPieChart() {
                 {
                     arcLabel: (item) => `${item.value}%`,
                     data: [
-                        {id: 0, value: 100, label: 'SAP SE'},
+                        {id: 0, value: 50, label: 'SAP SE'},
+                        {id: 1, value: 50, label: 'IBM'},
                     ],
                 },
             ]}
