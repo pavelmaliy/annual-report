@@ -27,8 +27,8 @@ export default function StockBarChart({ transactions }) {
             return [
                 {
                     "stock": "N/A",
-                    "sell": 0,
-                    "buy": 0
+                    "buy": 0,
+                    "sell": 0
                 }
             ]
         }
@@ -56,8 +56,8 @@ export default function StockBarChart({ transactions }) {
             if (datasetMap.hasOwnProperty(stock)) {
                 dataset.push({
                     "stock": stock.substring(0, 3),
-                    "sell": datasetMap[stock].sells,
-                    "buy": datasetMap[stock].buys
+                    "buy": datasetMap[stock].buys,
+                    "sell": datasetMap[stock].sells,                   
                 })
             }
         }
@@ -71,8 +71,8 @@ export default function StockBarChart({ transactions }) {
             dataset={getDataset()}
             xAxis={[{ scaleType: 'band', dataKey: 'stock', barGapRatio: 0.1 }]}
             series={[
-                { dataKey: 'sell', label: 'Sell', valueFormatter },
                 { dataKey: 'buy', label: 'Buy', valueFormatter },
+                { dataKey: 'sell', label: 'Sell', valueFormatter },               
             ]}
             {...chartSetting}
         />
