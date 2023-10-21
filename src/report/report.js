@@ -154,7 +154,7 @@ async function toCSV(jsonReport) {
                         const buyPrice = buy.price * buy.quantity
                         const localBuyPrice = (buyPrice * buyExchangeRate).toFixed(4)
 
-                        const index = (sellExchangeRate / buyExchangeRate).toFixed(4)
+                        const index = (sellExchangeRate / buyExchangeRate) < 1 ? 1 : (sellExchangeRate / buyExchangeRate).toFixed(4)
                         const localAdaptedBuyPrice = (localBuyPrice * index).toFixed(4)
                         data.push([
                             stock,
