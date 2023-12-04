@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 import * as React from 'react';
 import StockBarChart from "./BarChart";
-import StockPieChart from "./PieChart";
+import Pavel from "./PavelChart";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { getUserTransactions } from "../../storage/store";
@@ -34,7 +34,7 @@ export default function Dashboard() {
                             <LoadingScreen />
                         ) : (
                                 <>
-                                    <StockPieChart transactions={transactions} />
+                                    <Pavel transactions={transactions} />
                                     <StockBarChart transactions={transactions} />
                                 </>
                             )}
