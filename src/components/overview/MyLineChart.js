@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Text,
   LineChart,
   Line,
   XAxis,
@@ -10,76 +9,11 @@ import {
   Legend
 } from "recharts";
 
-const data = [
-  {
-    name: "Jan",
-    SAP: 4000,
-    IBM: 2400
-  },
-  {
-    name: "Feb",
-    SAP: 3000,
-    IBM: 1398
-  },
-  {
-    name: "Mar",
-    SAP: 2000,
-    IBM: 9800
-  },
-  {
-    name: "Apr",
-    SAP: 2780,
-    IBM: 3908
-  },
-  {
-    name: "May",
-    SAP: 1890,
-    IBM: 4800
-  },
-  {
-    name: "Jun",
-    SAP: 2390,
-    IBM: 3800
-  },
-  {
-    name: "Jul",
-    SAP: 3490,
-    IBM: 4300
-  },
-  {
-    name: "Aug",
-    SAP: 3490,
-    IBM: 4300
-  },
-  {
-    name: "Sep",
-    SAP: 3490,
-    IBM: 4300
-  },
-  {
-    name: "Oct",
-    SAP: 3490,
-    IBM: 4300
-  },
-  {
-    name: "Nov",
-    SAP: 6100,
-    IBM: 7000
-  },
-  {
-    name: "Dec",
-    SAP: 3490,
-    IBM: 4300
-  }
-];
 
-
-export default function MyLineChart({ transactions }) {
-
+export default function MyLineChart({ transactions, year}) {
 
   const getDataset = function () {
     const monthOptionsShort = { month: 'short' };
-    const currentYear = new Date().getFullYear();
     const data = {}
     const dataSet = []
 
@@ -89,7 +23,7 @@ export default function MyLineChart({ transactions }) {
       const monthName = trDate.toLocaleString('en-US', monthOptionsShort);
       const month = trDate.getMonth();
 
-      if (transaction["transactionType"] === 'Sell' || trDate.getFullYear() != currentYear) {
+      if (transaction["transactionType"] === 'Sell' || trDate.getFullYear() != year) {
         return
       }
 
@@ -132,12 +66,19 @@ export default function MyLineChart({ transactions }) {
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" label={{ value: 'Purchases', position: 'top' }} />
+      <XAxis dataKey="name" label={{ value: 'Purchases', position: 'down' }} />
       <YAxis />
       <Tooltip />
       <Legend />
-      <Line type="monotone" dataKey="SAP" stroke="green" />
-      <Line type="monotone" dataKey="IBM" stroke="blue" />
+      {/* {["SAP", "IBM"].map((stock) => (
+            <Line
+              type="monotone"
+              dataKey={stock}
+              stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} // Random color
+            />
+          ))} */}
+       <Line type="monotone" dataKey="SAP" stroke="green" />
+       <Line type="monotone" dataKey="IBM" stroke="blue" />    
     </LineChart>
   );
 }

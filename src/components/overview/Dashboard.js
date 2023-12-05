@@ -16,6 +16,7 @@ export default function Dashboard() {
     const [user] = useAuthState(auth)
     const [transactions, setTransactions] = React.useState('');
     const [loading, setLoading] = React.useState(true);
+    const [year, setYear] = React.useState(new Date().getFullYear());
 
     useEffect(() => {
         (async () => {
@@ -35,9 +36,9 @@ export default function Dashboard() {
                             <LoadingScreen />
                         ) : (
                                 <>
-                                    <YearSelector />
-                                    <MyLineChart transactions={transactions} />
-                                    <StockBarChart transactions={transactions} />
+                                    <YearSelector onYearChangeCallback={(year) => setYear(year) }/>
+                                    <MyLineChart transactions={transactions} year={year} />
+                                    <StockBarChart transactions={transactions} year={year} />
                                 </>
                             )}
                     </Box>

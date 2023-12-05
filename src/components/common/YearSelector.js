@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, MenuItem } from '@mui/material';
 
-function YearSelector() {
+function YearSelector({onYearChangeCallback}) {
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
@@ -10,6 +10,7 @@ function YearSelector() {
 
   const handleYearChange = (event) => {
     setSelectedYear(event.target.value);
+    onYearChangeCallback(event.target.value)
     // You can perform additional actions when the year changes
   };
 
