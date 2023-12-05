@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { getUserTransactions } from "../../storage/store";
 import { auth } from "../../storage/firebase";
 import LoadingScreen from "../common/LoadingScreen";
+import YearSelector from "../common/YearSelector"
 
 export default function Dashboard() {
     const [user] = useAuthState(auth)
@@ -28,12 +29,13 @@ export default function Dashboard() {
         <React.Fragment>
             <CssBaseline />
             <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
-                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>            
                     <Box display="flex" flexDirection="row" alignItems="center">
                         {loading ? (
                             <LoadingScreen />
                         ) : (
                                 <>
+                                    <YearSelector />
                                     <MyLineChart transactions={transactions} />
                                     <StockBarChart transactions={transactions} />
                                 </>
