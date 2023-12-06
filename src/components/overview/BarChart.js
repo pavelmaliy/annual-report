@@ -11,7 +11,7 @@ export default function StockBarChart({ transactions, year }) {
         transactions.map((item) => {
             let tr = item.data()
 
-            const trDate = tr.transactionDate.toDate();
+            const trDate = tr.transactionDate.toDate(); 
             if (trDate.getFullYear() != year) {
                 return
             }
@@ -58,7 +58,7 @@ export default function StockBarChart({ transactions, year }) {
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" label={{ value: 'Total', position: 'down' }} />
+                <XAxis dataKey="name" label={{ value: 'Total', position: 'left' }} />
                 <YAxis />
                 <Tooltip />
                 <Legend />

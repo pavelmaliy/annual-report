@@ -10,8 +10,10 @@ import {
 } from "recharts";
 
 
-export default function MyLineChart({ transactions, year}) {
+export default function MyLineChart({ transactions, year }) {
 
+  const uniqueStocks = {}
+  const colors = ["green", "blue", "red", "purple", "yellow"]
   const getDataset = function () {
     const monthOptionsShort = { month: 'short' };
     const data = {}
@@ -28,6 +30,7 @@ export default function MyLineChart({ transactions, year}) {
       }
 
       const stockName = transaction.stockName.substring(0, 3)
+      uniqueStocks[stockName] = 1
       if (!data[month]) {
         let entry = {}
         entry["name"] = monthName
@@ -66,19 +69,20 @@ export default function MyLineChart({ transactions, year}) {
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" label={{ value: 'Purchases', position: 'down' }} />
+      <XAxis dataKey="name" label={{ value: 'Purchases', position: 'top' }} />
       <YAxis />
       <Tooltip />
       <Legend />
-      {/* {["SAP", "IBM"].map((stock) => (
-            <Line
-              type="monotone"
-              dataKey={stock}
-              stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} // Random color
-            />
-          ))} */}
-       <Line type="monotone" dataKey="SAP" stroke="green" />
-       <Line type="monotone" dataKey="IBM" stroke="blue" />    
+      {Object.keys(uniqueStocks).map((stock, index) => {
+        const color = index < 5 ? colors[index] : `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+        return (
+          <Line
+            type="monotone"
+            dataKey={stock}
+            stroke={color}
+          />
+        );
+      })}
     </LineChart>
   );
 }
