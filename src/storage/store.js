@@ -1,5 +1,5 @@
 import {db} from './firebase'
-import {collection, doc, getDocs, query, runTransaction, where, Timestamp} from "firebase/firestore"
+import {collection, doc, getDocs, deleteDoc, query, runTransaction, where, Timestamp} from "firebase/firestore"
 
 export async function persistTransactions(stockTransactions, user) {
     if (stockTransactions && stockTransactions.length > 0) {
@@ -25,4 +25,15 @@ export async function getUserTransactions(user) {
         console.error(e)
     }
     return []
+}
+
+export async function deleteTransaction(id) {
+    const colRef = collection(db, "transactions")
+    const docRef = doc(colRef, id) 
+    try {
+        await deleteDoc(docRef)
+    } catch(e) {
+        throw e
+    }
+	
 }

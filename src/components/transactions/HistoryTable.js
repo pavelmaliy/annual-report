@@ -14,8 +14,11 @@ import * as React from "react";
 import { useEffect } from "react";
 import ReactLoading from "react-loading";
 import currencies from "../../resources/commonCurrency.json";
-import { getUserTransactions } from "../../storage/store";
+import { getUserTransactions, deleteTransaction } from "../../storage/store";
 import { formatDateToDDMMYYYY } from "../../utils/utils";
+import IconButton from '@mui/material/IconButton';
+import { Delete } from "@mui/icons-material";
+import {generateRandomString} from "../../utils/utils"
 
 const styles = {
     tableHeaderStyle: {
@@ -52,7 +55,7 @@ export function HistoryTable({ user, forwardedRef }) {
             let docs = await getUserTransactions(user)
             let newHistory = []
             docs.map((item) => {
-                newHistory.push(item.data())
+                newHistory.push(item)
             })
             setHistory(newHistory)
             setLoading(false);
@@ -77,8 +80,8 @@ export function HistoryTable({ user, forwardedRef }) {
     };
 
     const sortedData = [...history].sort((a, b) => {
-        let firstCell = a[sortConfig.key]
-        let secondCell = b[sortConfig.key]
+        let firstCell = a.data()[sortConfig.key]
+        let secondCell = b.data()[sortConfig.key]
 
 
         if (sortConfig.direction === 'asc') {
@@ -96,6 +99,11 @@ export function HistoryTable({ user, forwardedRef }) {
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
+
+    const handleDelete= async (id) => {
+        await deleteTransaction(id)
+        setReloadHistory(!reloadHistory)
+    }
 
     return (
         <div>
@@ -169,6 +177,11 @@ export function HistoryTable({ user, forwardedRef }) {
                                     </Typography>
                                 </TableSortLabel>
                             </TableCell>
+                            <TableCell>
+                                <Typography style={{ fontWeight: 'bold' }}>
+                                    Delete
+                                    </Typography>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     {loading ? (
@@ -177,49 +190,57 @@ export function HistoryTable({ user, forwardedRef }) {
                                 <TableCell>
                                     <ReactLoading type="bubbles" color="#0000FF" />
                                 </TableCell>
-                                <TableCell/>                                    
-                                <TableCell/>                                                            
-                                <TableCell/>                                                                    
-                                <TableCell/>                                                                    
-                                <TableCell/>                                                                
+                                <TableCell />
+                                <TableCell />
+                                <TableCell />
+                                <TableCell />
+                                <TableCell />
+                                <TableCell />
                             </TableRow>
                         </TableBody>
                     ) : (
                             <TableBody>
-                                {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>
-                                            <Typography>
-                                                {formatDateToDDMMYYYY(item.transactionDate.toMillis())}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography>
-                                                {item.stockName}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography>
-                                                {item.transactionType}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography>
-                                                {item.quantity}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography>
-                                                {item.price}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography>
-                                                {currencies[item.marketCurrency].symbol}
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => {
+                                    return (
+                                        <TableRow key={item.id}>
+                                            <TableCell>
+                                                <Typography>
+                                                    {formatDateToDDMMYYYY(item.data().transactionDate.toMillis())}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography>
+                                                    {item.data().stockName}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography>
+                                                    {item.data().transactionType}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography>
+                                                    {item.data().quantity}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography>
+                                                    {item.data().price}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography>
+                                                    {currencies[item.data().marketCurrency].symbol}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(item.id)}>
+                                                    <Delete />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
 
                             </TableBody>
                         )}
