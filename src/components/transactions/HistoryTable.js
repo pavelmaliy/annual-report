@@ -18,7 +18,6 @@ import { getUserTransactions, deleteTransaction } from "../../storage/store";
 import { formatDateToDDMMYYYY } from "../../utils/utils";
 import IconButton from '@mui/material/IconButton';
 import { Delete } from "@mui/icons-material";
-import {generateRandomString} from "../../utils/utils"
 
 const styles = {
     tableHeaderStyle: {

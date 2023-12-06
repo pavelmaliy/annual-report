@@ -123,7 +123,7 @@ export default function TransactionForm({onFinish}) {
                     Add New
                 </Button>
                 <InputFileUpload handleFileUpload={handleFileUpload}/>
-                <FileDownloadButton filepath='/resources' filename='template.xlsx' />
+                <FileDownloadButton filepath='/resources' filename='sample.xlsx' />
             </Box>
             <TransactionDialog onFinish={onDialogFinish} open={open} setOpen={setOpen}/>
             <React.Fragment>
