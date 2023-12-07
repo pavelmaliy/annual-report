@@ -132,6 +132,7 @@ export default function TransactionForm({onFinish}) {
                         sx={{mt: 3, ml: 1}}
                         onClick={() => {
                             onFinish(transactionListItems)
+                            setTransactionListItems([])
                         }}
                         disabled={transactionListItems.length === 0}
                     >

@@ -17,7 +17,6 @@ import TransactionForm from './TransactionForm';
 
 export default function TransactionContainer() {
     const { model, setModel } = useContext(AppContext);
-    const [summary, setSummary] = React.useState(false);
     const [user] = useAuthState(auth)
 
     const childRef = React.useRef(null);
@@ -30,54 +29,34 @@ export default function TransactionContainer() {
                     <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '12px' }}>
                         New Transaction
                     </Typography>
-                    {summary ? (
-                        <React.Fragment>
-                            <Typography variant="h6" gutterBottom align="center">
-                                Transactions successfully saved.
-                            </Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <Button
-                                    onClick={() => {
-                                        model.transactions = []
-                                        setModel(model)
-                                        if (childRef.current) {
-                                            childRef.current.setReloadHistory(generateRandomString(8))
-                                        }
-                                        setSummary(false)
-                                    }}
-                                    sx={{ mt: 3, ml: 1 }}
-                                >
-                                    Finish
-                            </Button>
-                            </Box>
-                        </React.Fragment>
-                    ) : (
-                            <TransactionForm
-                                onFinish={async (transactions) => {
-                                    try {
-                                        if (transactions.length > 0) {
-                                            await persistTransactions(transactions, user)
-                                        }
-                                    } catch (err) {
-                                        throw err
-                                    }
-                                    model.transactions = transactions
-                                    setModel(model)
-                                    setSummary(true)
-                                }} />
-                        )}
+
+                    <TransactionForm
+                        onFinish={async (transactions) => {
+                            try {
+                                if (transactions.length > 0) {
+                                    await persistTransactions(transactions, user)
+                                }
+                            } catch (err) {
+                                throw err
+                            }
+                            model.transactions = []
+                            setModel(model)
+                            if (childRef.current) {
+                                childRef.current.setReloadHistory(generateRandomString(8))
+                            }
+                        }} />
 
                 </Paper>
             </Container>
             <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
-               {/*  <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}> */}
-                    <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '12px' }}>
-                        Transaction History
+                {/*  <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}> */}
+                <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '12px' }}>
+                    Transaction History
                     </Typography>
-                    <React.Fragment>
-                        <HistoryTable user={user} forwardedRef={childRef} />
-                    </React.Fragment>
-               {/*  </Paper> */}
+                <React.Fragment>
+                    <HistoryTable user={user} forwardedRef={childRef} />
+                </React.Fragment>
+                {/*  </Paper> */}
             </Container>
         </React.Fragment>
     )
