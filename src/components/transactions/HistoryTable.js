@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import ReactLoading from "react-loading";
 import currencies from "../../resources/commonCurrency.json";
 import { getUserTransactions, deleteTransaction } from "../../storage/store";
-import { formatDateToDDMMYYYY } from "../../utils/utils";
+import { formatDateToDDMMYYYY, generateRandomString } from "../../utils/utils";
 import IconButton from '@mui/material/IconButton';
 import { Delete } from "@mui/icons-material";
 
@@ -101,7 +101,7 @@ export function HistoryTable({ user, forwardedRef }) {
 
     const handleDelete= async (id) => {
         await deleteTransaction(id)
-        setReloadHistory(!reloadHistory)
+        setReloadHistory(generateRandomString(8))
     }
 
     return (
