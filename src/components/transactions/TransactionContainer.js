@@ -48,15 +48,13 @@ export default function TransactionContainer() {
 
                 </Paper>
             </Container>
-            <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
-                {/*  <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}> */}
+            <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>                
                 <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '12px' }}>
                     Transaction History
                     </Typography>
                 <React.Fragment>
                     <HistoryTable user={user} forwardedRef={childRef} />
-                </React.Fragment>
-                {/*  </Paper> */}
+                </React.Fragment>                
             </Container>
         </React.Fragment>
     )
