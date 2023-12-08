@@ -6,7 +6,8 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    TableSortLabel
+    TableSortLabel,
+    TextField
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -48,6 +49,8 @@ export function HistoryTable({ user, forwardedRef }) {
     const [loading, setLoading] = React.useState(true);
     const [history, setHistory] = React.useState([])
     const [reloadHistory, setReloadHistory] = React.useState('')
+    const [selectedRow, setSelectedRow] = React.useState(null);
+    const [searchQuery, setSearchQuery] = React.useState('');
 
     useEffect(() => {
         (async () => {
@@ -65,6 +68,14 @@ export function HistoryTable({ user, forwardedRef }) {
         setReloadHistory
     }));
 
+    const handleRowClick = (rowId) => {
+        // Toggle selection on row click
+        setSelectedRow((prevSelectedRow) =>
+            prevSelectedRow === rowId ? null : rowId
+        );
+    };
+
+
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0); // Reset to the first page when changing rows per page
@@ -78,7 +89,22 @@ export function HistoryTable({ user, forwardedRef }) {
         setSortConfig({ key, direction });
     };
 
-    const sortedData = [...history].sort((a, b) => {
+    const data = [...history].filter((row) => {
+
+        const { stockName, transactionDate, transactionType, quantity, price } = row.data();
+
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        const formattedDate = transactionDate.toDate().toLocaleDateString('en-GB', options);
+        // Check if either name or price includes the search query
+        return (
+            stockName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            formattedDate.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            transactionType.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            String(quantity).includes(searchQuery.toLowerCase()) || 
+            String(price).includes(searchQuery.toLowerCase())
+        );
+    }
+    ).sort((a, b) => {
         let firstCell = a.data()[sortConfig.key]
         let secondCell = b.data()[sortConfig.key]
 
@@ -89,9 +115,11 @@ export function HistoryTable({ user, forwardedRef }) {
             }
             return firstCell - secondCell;
         }
+
         if (secondCell && secondCell.localeCompare) {
             return secondCell.localeCompare(firstCell)
         }
+
         return secondCell - firstCell
     });
 
@@ -99,13 +127,20 @@ export function HistoryTable({ user, forwardedRef }) {
         setPage(newPage);
     };
 
-    const handleDelete= async (id) => {
+    const handleDelete = async (id) => {
         await deleteTransaction(id)
         setReloadHistory(generateRandomString(8))
     }
 
     return (
         <div>
+            <TextField
+                label="Search"
+                variant="outlined"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ marginBottom: '16px' }}
+            />
             <TableContainer component={Paper} style={styles.tableWrapper}>
                 <Table>
                     <TableHead style={styles.tableHeaderStyle}>
@@ -199,9 +234,13 @@ export function HistoryTable({ user, forwardedRef }) {
                         </TableBody>
                     ) : (
                             <TableBody>
-                                {sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => {
+                                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => {
                                     return (
-                                        <TableRow key={item.id}>
+                                        <TableRow
+                                            key={item.id}
+                                            onClick={() => handleRowClick(item.id)}
+                                            selected={selectedRow === item.id}
+                                        >
                                             <TableCell>
                                                 <Typography>
                                                     {formatDateToDDMMYYYY(item.data().transactionDate.toMillis())}

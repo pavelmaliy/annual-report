@@ -188,7 +188,7 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                         setMarketCurrError('')
                                         setTransaction(transaction)
                                     }}
-                                    error={marketCurrError}
+                                    error={!!marketCurrError}
                                 >
                                     {Object.keys(currencies).map((currency) => (
                                         <MenuItem key={currency} value={currency}>
