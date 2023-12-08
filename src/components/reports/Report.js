@@ -14,6 +14,7 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
+import { updateTransactions } from "../../storage/store";
 import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
 
@@ -60,6 +61,7 @@ export default function Report() {
             const buydocs = await getDocs(buyQuery);
             buydocs.docs.map((item) => {
                 let tr = { ...item.data(), "id": item.id }
+                // first transaction is the earliest because of sort
                 if (buyTransactions.length == 0) {
                     earliestTimestamp = tr.transactionDate.toDate()
                     // might be weekend so we take 2 previos days as buffer
@@ -70,6 +72,24 @@ export default function Report() {
 
             if (algorithm === 10) {
                 csv =  await generateOptimizedReport(sellTransactions, buyTransactions, earliestTimestamp)
+            }
+
+            if (format == 20) {
+                let newTransactions = []
+                const concatenatedArray = sellTransactions.concat(buyTransactions);
+                for (const element of concatenatedArray) {
+                    if ( element["quantity"] !=  element["originalQuantity"] ) {
+                        newTransactions.push(element)
+                    }
+                }
+
+                try {
+                    if (newTransactions.length > 0) {
+                        await updateTransactions(newTransactions)
+                    }
+                } catch (err) {
+                    throw err
+                }
             }
 
             downloadCSV(csv)

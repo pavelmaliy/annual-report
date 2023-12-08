@@ -1,5 +1,5 @@
 import {db} from './firebase'
-import {collection, doc, getDocs, deleteDoc, query, runTransaction, where, Timestamp} from "firebase/firestore"
+import {collection, doc, getDocs, deleteDoc, updateDoc, query, runTransaction, where, Timestamp} from "firebase/firestore"
 
 export async function persistTransactions(stockTransactions, user) {
     if (stockTransactions && stockTransactions.length > 0) {
@@ -8,6 +8,21 @@ export async function persistTransactions(stockTransactions, user) {
             await runTransaction(db, async (transaction) => {
                stockTransactions.map(item => {
                    transaction.set(doc(colRef), {...item, "originalQuantity": item.quantity, "transactionDate": Timestamp.fromMillis(item.transactionDate),"user_id": user.uid})
+               })
+            });
+        } catch (e) {
+            throw e
+        }
+    }
+}
+
+export async function updateTransactions(stockTransactions) {
+    if (stockTransactions && stockTransactions.length > 0) {
+        let colRef = collection(db, "transactions")
+        try {
+            await runTransaction(db, async (transaction) => {
+               stockTransactions.map(item => { 
+                   transaction.update(doc(colRef, item.id), item)
                })
             });
         } catch (e) {

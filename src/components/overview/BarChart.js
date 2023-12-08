@@ -24,9 +24,9 @@ export default function StockBarChart({ transactions, year }) {
             }
 
             if (tr["transactionType"] === 'Purchase') {
-                datasetMap[tr.stockName]["buys"] += tr.quantity * tr.price
+                datasetMap[tr.stockName]["buys"] += tr.originalQuantity * tr.price
             } else {
-                datasetMap[tr.stockName]["sells"] += tr.quantity * tr.price
+                datasetMap[tr.stockName]["sells"] += tr.originalQuantity * tr.price
             }
         })
 

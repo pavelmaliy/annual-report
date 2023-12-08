@@ -34,13 +34,13 @@ export default function MyLineChart({ transactions, year }) {
       if (!data[month]) {
         let entry = {}
         entry["name"] = monthName
-        entry[stockName] = transaction.quantity * transaction.price
+        entry[stockName] = transaction.originalQuantity * transaction.price
         data[month] = entry
       } else {
         if (data[month][stockName]) {
-          data[month][stockName] += transaction.quantity * transaction.price
+          data[month][stockName] += transaction.originalQuantity * transaction.price
         } else {
-          data[month][stockName] = transaction.quantity * transaction.price
+          data[month][stockName] = transaction.originalQuantity * transaction.price
         }
       }
     });

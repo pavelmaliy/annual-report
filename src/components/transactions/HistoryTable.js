@@ -91,7 +91,7 @@ export function HistoryTable({ user, forwardedRef }) {
 
     const data = [...history].filter((row) => {
 
-        const { stockName, transactionDate, transactionType, quantity, price } = row.data();
+        const { stockName, transactionDate, transactionType, originalQuantity, price } = row.data();
 
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         const formattedDate = transactionDate.toDate().toLocaleDateString('en-GB', options);
@@ -100,7 +100,7 @@ export function HistoryTable({ user, forwardedRef }) {
             stockName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             formattedDate.toLowerCase().includes(searchQuery.toLowerCase()) ||
             transactionType.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            String(quantity).includes(searchQuery.toLowerCase()) || 
+            String(originalQuantity).includes(searchQuery.toLowerCase()) || 
             String(price).includes(searchQuery.toLowerCase())
         );
     }
@@ -180,9 +180,9 @@ export function HistoryTable({ user, forwardedRef }) {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={sortConfig.key === 'quantity'}
-                                    direction={sortConfig.key === 'quantity' ? sortConfig.direction : 'asc'}
-                                    onClick={() => handleSort('quantity')}
+                                    active={sortConfig.key === 'originalQuantity'}
+                                    direction={sortConfig.key === 'originalQuantity' ? sortConfig.direction : 'asc'}
+                                    onClick={() => handleSort('originalQuantity')}
                                 >
                                     <Typography style={{ fontWeight: 'bold' }}>
                                         Quantity
@@ -258,7 +258,7 @@ export function HistoryTable({ user, forwardedRef }) {
                                             </TableCell>
                                             <TableCell>
                                                 <Typography>
-                                                    {item.data().quantity}
+                                                    {item.data().originalQuantity}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
