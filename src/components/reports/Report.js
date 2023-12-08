@@ -39,7 +39,8 @@ export default function Report() {
             where('transactionDate', '>=', startDate),
             where('transactionDate', '<=', endDate),
             where('transactionType', '==', 'Sell'),
-            where("user_id", "==", user.uid)
+            where("user_id", "==", user.uid),
+            orderBy('transactionDate', 'asc')
         );
         const buyQuery = query(collection(db, "transactions"),
             where('transactionDate', '<=', endDate),
