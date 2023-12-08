@@ -287,7 +287,7 @@ export function HistoryTable({ user, forwardedRef }) {
                     style={styles.pagination}
                     rowsPerPageOptions={rowsPerPageOptions}
                     component="div"
-                    count={history.length}
+                    count={data.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
