@@ -14,7 +14,7 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
-import { updateTransactions } from "../../storage/store";
+import { updateTransactions, saveReport } from "../../storage/store";
 import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
 
@@ -82,14 +82,23 @@ export default function Report() {
                         newTransactions.push(element)
                     }
                 }
-
+                
+                // save csv
                 try {
-                    if (newTransactions.length > 0) {
-                        await updateTransactions(newTransactions)
+                    if (csv.length > 0) {
+                        await saveReport(csv, user)
                     }
                 } catch (err) {
                     throw err
                 }
+                // update reported transactions
+                // try {
+                //     if (newTransactions.length > 0) {
+                //         await updateTransactions(newTransactions)
+                //     }
+                // } catch (err) {
+                //     throw err
+                // }
             }
 
             downloadCSV(csv)

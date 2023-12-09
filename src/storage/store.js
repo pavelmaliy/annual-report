@@ -1,5 +1,5 @@
 import {db} from './firebase'
-import {collection, doc, getDocs, deleteDoc, updateDoc, query, runTransaction, where, Timestamp} from "firebase/firestore"
+import {collection, doc, getDocs, deleteDoc, addDoc, query, runTransaction, where, Timestamp} from "firebase/firestore"
 
 export async function persistTransactions(stockTransactions, user) {
     if (stockTransactions && stockTransactions.length > 0) {
@@ -13,6 +13,15 @@ export async function persistTransactions(stockTransactions, user) {
         } catch (e) {
             throw e
         }
+    }
+}
+
+export async function saveReport(report, user) {
+    let colRef = collection(db, "reports")
+    try {
+        await addDoc(colRef, {"report": report, "user_id": user.uid})
+    } catch (e) {
+        throw e 
     }
 }
 
