@@ -13,13 +13,13 @@ export const generateOptimizedReport = async function (sells, buys, earliestTime
                 let sellTransactions = sellByStock[stock]
                 // order by price from high to low 
                 sellTransactions.sort((a, b) => b.price - a.price)
-                
+
                 for (const sellTr of sellTransactions) {
                     while (sellTr.quantity > 0) {
                         let buyId = findBestBuy(sellTr, buyByStock[stock], exchangeRate)
                         addBuyTransaction(report, stock, sellTr, buyByStock[stock][buyId], exchangeRate)
                         if (!buyId) {
-                            throw "Not enough buy transactions to cover all sells"                        
+                            throw "Not enough buy transactions to cover all sells"
                         }
                     }
                     let formattedDate = formatDateToDDMMYYYY(sellTr.transactionDate.toMillis())
@@ -101,23 +101,27 @@ function findBestBuy(sell, buys, exchangeRate) {
     let bestBuy = {}
     let sellRate = getRateByDate(formatDateToDDMMYYYY(sell.transactionDate.toMillis()), exchangeRate)
 
-    for (let buyid in buys) {
-        if (buys.hasOwnProperty(buyid)) {
-            const buyTr = buys[buyid]
-            if (buyTr.quantity === 0) {
-                continue
-            }
-            if (buyTr.transactionDate <= sell.transactionDate) {
-                let buyRate = getRateByDate(formatDateToDDMMYYYY(buyTr.transactionDate.toMillis()), exchangeRate)
-                const index = (sellRate / buyRate) < 1 ? 1 : (sellRate / buyRate)
-                let adaptiveBuyPrice = (buyTr.price * buyRate) * index
-                let newTax = (sell.price * sellRate) - adaptiveBuyPrice
-                if (newTax < tax) {
-                    tax = newTax
-                    bestBuy = buyTr
-                }
+    // need to sort buys by date desc in case of equity we prefer older binding
+    const buysArray = Object.entries(buys);
+    buysArray.sort(([, buyA], [, buyB]) => buyB.transactionDate.toDate() - buyA.transactionDate.toDate());
+    const sortedBuyKeys = buysArray.map(([key]) => key);
+
+    for (let buyid of sortedBuyKeys) {
+        const buyTr = buys[buyid]
+        if (buyTr.quantity === 0) {
+            continue
+        }
+        if (buyTr.transactionDate <= sell.transactionDate) {
+            let buyRate = getRateByDate(formatDateToDDMMYYYY(buyTr.transactionDate.toMillis()), exchangeRate)
+            const index = (sellRate / buyRate) < 1 ? 1 : (sellRate / buyRate)
+            let adaptiveBuyPrice = (buyTr.price * buyRate) * index
+            let newTax = (sell.price * sellRate) - adaptiveBuyPrice
+            if (newTax < tax) {
+                tax = newTax
+                bestBuy = buyTr
             }
         }
+
     }
     return bestBuy && bestBuy.id
 }
@@ -134,7 +138,7 @@ async function toCSV(jsonReport) {
             'Buy Price',
             'Buy Date',
             'Buy Exchange Rate',
-            'Buy Local Price',            
+            'Buy Local Price',
             'Index',
             'Buy Adapted Price',
             'Profit For Tax'
@@ -167,7 +171,7 @@ async function toCSV(jsonReport) {
                             buyPrice,
                             buy.date,
                             buyExchangeRate,
-                            localBuyPrice,                            
+                            localBuyPrice,
                             index,
                             localAdaptedBuyPrice,
                             (localSellPrice - localAdaptedBuyPrice).toFixed(4)
@@ -181,7 +185,7 @@ async function toCSV(jsonReport) {
     let csvContent = '';
 
     for (const row of data) {
-        csvContent += row.join(', ')+ '\n';
+        csvContent += row.join(', ') + '\n';
     }
 
     return csvContent
