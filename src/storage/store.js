@@ -16,10 +16,10 @@ export async function persistTransactions(stockTransactions, user) {
     }
 }
 
-export async function saveReport(report, user) {
+export async function saveReport(report, user, name) {
     let colRef = collection(db, "reports")
     try {
-        await addDoc(colRef, {"report": report, "user_id": user.uid})
+        await addDoc(colRef, {"name": name, "report": report, "user_id": user.uid})
     } catch (e) {
         throw e 
     }

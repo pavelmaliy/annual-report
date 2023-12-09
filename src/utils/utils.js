@@ -1,14 +1,17 @@
 
-export const formatDateToDDMMYYYY = function (millis) {
+export const formatDateToDDMMYYYY = function (millis, delimeter) {
     if (isNaN(millis) || !millis) {
         millis = new Date().getTime()
+    }
+    if (!delimeter) {
+        delimeter = "/"
     }
     let date = new Date(millis)
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add 1 because months are zero-based
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
 
-    return `${day}/${month}/${year}`;
+    return `${day}${delimeter}${month}${delimeter}${year}`;
 }
 
 export const parseDDMMYYYYDate = function(dateStr) {

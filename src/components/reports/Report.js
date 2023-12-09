@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -17,6 +18,8 @@ import { auth, db } from "../../storage/firebase";
 import { updateTransactions, saveReport } from "../../storage/store";
 import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
+import ExcelDownloadList from "../common/ExcelDownloadList"
+import { formatDateToDDMMYYYY, generateRandomString } from "../../utils/utils";
 
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);
@@ -24,8 +27,11 @@ export default function Report() {
     const [from, setFrom] = React.useState('')
     const [fromDateError, setFromDateError] = React.useState('')
     const [to, setTo] = React.useState('')
+    const [reportName, setReportName] = React.useState('report-' + formatDateToDDMMYYYY(new Date().getTime(), "_"))
+    const [nameError, setNameError] = React.useState('')
     const [toDateError, setToDateError] = React.useState('')
     const [user] = useAuthState(auth)
+    const childRef = React.useRef(null);
 
     const generateReport = async () => {
         let csv = ''
@@ -71,22 +77,25 @@ export default function Report() {
             })
 
             if (algorithm === 10) {
-                csv =  await generateOptimizedReport(sellTransactions, buyTransactions, earliestTimestamp)
+                csv = await generateOptimizedReport(sellTransactions, buyTransactions, earliestTimestamp)
             }
 
             if (format == 20) {
                 let newTransactions = []
                 const concatenatedArray = sellTransactions.concat(buyTransactions);
                 for (const element of concatenatedArray) {
-                    if ( element["quantity"] !=  element["originalQuantity"] ) {
+                    if (element["quantity"] != element["originalQuantity"]) {
                         newTransactions.push(element)
                     }
                 }
-                
+
                 // save csv
                 try {
                     if (csv.length > 0) {
-                        await saveReport(csv, user)
+                        await saveReport(csv, user, reportName)
+                    }
+                    if (childRef.current) {
+                        childRef.current.setReload(generateRandomString(8))
                     }
                 } catch (err) {
                     throw err
@@ -111,12 +120,17 @@ export default function Report() {
 
     function downloadCSV(csvContent) {
         const blob = new Blob([csvContent], { type: "text/csv" });
-        saveAs(blob, "annual-report.csv"); // Specify the file name
-      }
+        saveAs(blob, reportName + ".csv"); // Specify the file name
+    }
 
     const validateForm = (startDate, endDate) => {
         let validationError = false
         let now = new Date().getTime()
+
+        if (reportName.length == 0) {
+            setNameError('cannot be empty')
+            validationError = true
+        }
 
         if (startDate.toString() === 'Invalid Date') {
             setFromDateError('invalid date')
@@ -159,7 +173,7 @@ export default function Report() {
         <React.Fragment>
             <CssBaseline />
             <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
-                {/* <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}> */}
+                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                     <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '20px' }}>
                         New Report
                     </Typography>
@@ -251,6 +265,27 @@ export default function Report() {
                                         </Select>
                                     </FormControl>
                                 </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}> */}
+                                        <TextField
+                                            margin="normal"
+                                            required
+                                            fullWidth
+                                            id="name"
+                                            label="Report Name"
+                                            name="name"
+                                            defaultValue={reportName}
+                                            error={!!nameError}
+                                            helperText={nameError}                                            
+                                            onChange={(e) => {
+                                               setReportName(e.target.value)
+                                               setNameError('')
+                                            }}                                          
+                                        >
+
+                                        </TextField>
+                                    {/* </Box> */}
+                                </Grid>
                                 <Grid item xs={12}>
                                     <div style={{ textAlign: 'right' }}>
                                         <Button
@@ -265,7 +300,17 @@ export default function Report() {
                             </Grid>
                         </React.Fragment>
                     </Box>
-              {/*   </Paper> */}
+                </Paper>
+            </Container>
+            <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
+                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '12px' }}>
+                        My Reports
+                    </Typography>
+                    <React.Fragment>
+                        <ExcelDownloadList user={user} forwardedRef={childRef} />
+                    </React.Fragment>
+                </Paper>
             </Container>
         </React.Fragment>
     );
