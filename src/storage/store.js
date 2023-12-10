@@ -25,6 +25,16 @@ export async function saveReport(report, user, name) {
     }
 }
 
+export async function deleteReport(id) {
+    let colRef = collection(db, "reports")
+    const docRef = doc(colRef, id) 
+    try {
+        await deleteDoc(docRef)
+    } catch(e) {
+        throw e
+    }
+}
+
 export async function updateTransactions(stockTransactions) {
     if (stockTransactions && stockTransactions.length > 0) {
         let colRef = collection(db, "transactions")

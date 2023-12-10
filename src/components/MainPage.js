@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import TransactionContainer from './transactions/TransactionContainer'
@@ -34,19 +33,9 @@ import { getPageFromHash, setPageInHash } from "../utils/utils"
 import { Menu, MenuItem } from "@mui/material";
 import currencies from "../resources/commonCurrency.json";
 import { AppContext } from "../context/AppContext";
+import LightTooltip from "./common/LightTooltip"
 
 const drawerWidth = 240;
-
-const LightTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
-    },
-}));
 
 const openedMixin = (theme) => ({
     width: drawerWidth,

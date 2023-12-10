@@ -12,10 +12,9 @@ import {
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { useEffect } from "react";
 import ReactLoading from "react-loading";
 import currencies from "../../resources/commonCurrency.json";
-import { formatDateToDDMMYYYY, generateRandomString } from "../../utils/utils";
+import { formatDateToDDMMYYYY } from "../../utils/utils";
 import IconButton from '@mui/material/IconButton';
 import { Delete } from "@mui/icons-material";
 
@@ -29,7 +28,7 @@ const styles = {
     tableWrapper: {
         position: 'relative',
         overflowX: 'auto',
-        maxHeight: '400px', // Set the maximum height for vertical scrolling
+        maxHeight: '700px', // Set the maximum height for vertical scrolling
         overflowY: 'auto'
     },
     pagination: {
