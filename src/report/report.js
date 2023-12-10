@@ -12,7 +12,11 @@ export const generateOptimizedReport = async function (sells, buys, earliestTime
             if (sellByStock.hasOwnProperty(stock)) {
                 let sellTransactions = sellByStock[stock]
                 // order by price from high to low 
-                sellTransactions.sort((a, b) => b.price - a.price)
+                sellTransactions.sort((a, b) => {
+                    let bRate = getRateByDate(formatDateToDDMMYYYY(b.transactionDate.toMillis()), exchangeRate)
+                    let aRate = getRateByDate(formatDateToDDMMYYYY(a.transactionDate.toMillis()), exchangeRate)
+                    return (b.price * bRate) - (a.price * aRate)
+                })
 
                 for (const sellTr of sellTransactions) {
                     while (sellTr.quantity > 0) {

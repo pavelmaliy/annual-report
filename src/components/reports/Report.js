@@ -24,9 +24,9 @@ import { formatDateToDDMMYYYY, generateRandomString } from "../../utils/utils";
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);
     const [format, setFormat] = React.useState(10);
-    const [from, setFrom] = React.useState('')
+    const [from, setFrom] = React.useState(dayjs().set('year', dayjs().year()).set('month', 0).set('date', 1))
     const [fromDateError, setFromDateError] = React.useState('')
-    const [to, setTo] = React.useState('')
+    const [to, setTo] = React.useState(dayjs())
     const [reportName, setReportName] = React.useState('report-' + formatDateToDDMMYYYY(new Date().getTime(), "_"))
     const [nameError, setNameError] = React.useState('')
     const [toDateError, setToDateError] = React.useState('')
@@ -193,7 +193,7 @@ export default function Report() {
                                                     setFrom(val)
                                                     setFromDateError('')
                                                 }}
-                                                defaultValue={dayjs().set('year', dayjs().year()).set('month', 0).set('date', 1)}
+                                                defaultValue={from}
                                                 slotProps={{
                                                     textField: {
                                                         error: !!fromDateError,
@@ -218,7 +218,7 @@ export default function Report() {
                                                     setTo(val)
                                                     setToDateError('')
                                                 }}
-                                                defaultValue={dayjs()}
+                                                defaultValue={to}
                                                 slotProps={{
                                                     textField: {
                                                         error: !!toDateError,
