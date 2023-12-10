@@ -193,6 +193,7 @@ export default function Report() {
                                                     setFrom(val)
                                                     setFromDateError('')
                                                 }}
+                                                defaultValue={dayjs().set('year', dayjs().year()).set('month', 0).set('date', 1)}
                                                 slotProps={{
                                                     textField: {
                                                         error: !!fromDateError,
@@ -217,6 +218,7 @@ export default function Report() {
                                                     setTo(val)
                                                     setToDateError('')
                                                 }}
+                                                defaultValue={dayjs()}
                                                 slotProps={{
                                                     textField: {
                                                         error: !!toDateError,

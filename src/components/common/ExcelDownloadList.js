@@ -53,7 +53,7 @@ const ExcelDownloadList = ({ user, forwardedRef }) => {
             {excelFiles.map((file) => (
                 <ListItem key={file.id}>
                     <ListItemText>
-                        <Typography variant="h6">{file.name}</Typography>
+                        <Typography variant="h6">{file.name + ".csv"}</Typography>
                     </ListItemText>
                     <ListItemSecondaryAction>
                         <IconButton
