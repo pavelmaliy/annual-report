@@ -20,6 +20,7 @@ import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
 import ExcelDownloadList from "../common/ExcelDownloadList"
 import { formatDateToDDMMYYYY, generateRandomString } from "../../utils/utils";
+import ReactLoading from "react-loading";
 
 export default function Report() {
     const [algorithm, setAlgorithm] = React.useState(10);
@@ -31,23 +32,27 @@ export default function Report() {
     const [nameError, setNameError] = React.useState('')
     const [toDateError, setToDateError] = React.useState('')
     const [excelFiles, setExcelFiles] = React.useState([])
+    const [loading, setLoading] = React.useState(true);
     const [user] = useAuthState(auth)
-    
+
     React.useEffect(() => {
         const fetchData = async () => {
             const excelFiles = await getUserReports(user);
             setExcelFiles(excelFiles);
+            setLoading(false)
         };
-    
+
         fetchData();
     }, []);
 
     const deleteMyReport = async (id) => {
         try {
             await deleteReport(id)
+            setLoading(true)
             const excelFiles = await getUserReports(user);
+            setLoading(false)
             setExcelFiles(excelFiles)
-        } catch(err) {
+        } catch (err) {
             throw err
         }
     }
@@ -112,10 +117,12 @@ export default function Report() {
                 try {
                     if (csv.length > 0) {
                         await saveReport(csv, user, reportName)
+                        setLoading(true)
                         const excelFiles = await getUserReports(user);
+                        setLoading(false)
                         setExcelFiles(excelFiles)
-                    }                    
-            
+                    }
+
                 } catch (err) {
                     throw err
                 }
@@ -288,23 +295,23 @@ export default function Report() {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}> */}
-                                        <TextField
-                                            margin="normal"
-                                            required
-                                            fullWidth
-                                            id="name"
-                                            label="Report Name"
-                                            name="name"
-                                            defaultValue={reportName}
-                                            error={!!nameError}
-                                            helperText={nameError}                                            
-                                            onChange={(e) => {
-                                               setReportName(e.target.value)
-                                               setNameError('')
-                                            }}                                          
-                                        >
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="name"
+                                        label="Report Name"
+                                        name="name"
+                                        defaultValue={reportName}
+                                        error={!!nameError}
+                                        helperText={nameError}
+                                        onChange={(e) => {
+                                            setReportName(e.target.value)
+                                            setNameError('')
+                                        }}
+                                    >
 
-                                        </TextField>
+                                    </TextField>
                                     {/* </Box> */}
                                 </Grid>
                                 <Grid item xs={12}>
@@ -329,7 +336,11 @@ export default function Report() {
                         My Reports
                     </Typography>
                     <React.Fragment>
-                        <ExcelDownloadList excelFiles={[...excelFiles]} deleteReport={deleteMyReport}/>
+                        {loading ? (
+                            <ReactLoading type="bubbles" color="#0000FF" />
+                        ) : (
+                            <ExcelDownloadList excelFiles={[...excelFiles]} deleteReport={deleteMyReport} />
+                        )}
                     </React.Fragment>
                 </Paper>
             </Container>
