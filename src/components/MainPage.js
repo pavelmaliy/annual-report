@@ -280,7 +280,7 @@ export default function MainPage({ user }) {
                                 px: 2.5,
                             }}
                         >
-                            <LightTooltip title="Currency">
+                            <LightTooltip title="Local Currency">
                                 <ListItemIcon
                                     sx={{
                                         minWidth: 0,
@@ -312,7 +312,7 @@ export default function MainPage({ user }) {
                         }}
                         onClose={handleCurrMenuClose}
                     >
-                        {Object.keys(currencies).map((currency) => (
+                        {Object.keys({"ILS":{}}).map((currency) => (
                             <MenuItem key={currency} value={currency} onClick={handleCurrMenuClose}>
                                 {currency}
                             </MenuItem>

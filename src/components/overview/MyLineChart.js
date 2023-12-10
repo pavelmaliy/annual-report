@@ -78,6 +78,7 @@ export default function MyLineChart({ transactions, isPurchases }) {
         const color = index < 5 ? colors[index] : `#${Math.floor(Math.random() * 16777215).toString(16)}`;
         return (
           <Line
+            key={index}
             type="monotone"
             dataKey={stock}
             stroke={color}

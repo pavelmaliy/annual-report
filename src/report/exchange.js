@@ -2,10 +2,11 @@ import { db } from "../storage/firebase";
 import { collection, getDocs, addDoc, orderBy, query, where, limit } from "firebase/firestore";
 import { parseDDMMYYYYDate, formatDateToDDMMYYYY } from "../utils/utils"
 
-export const getExchangeRate = async function(earliestTimestamp) {
+export const getExchangeRate = async function(earliestTimestamp, currency) {
     let rates = {}
-    const exchangeQuery = query(collection(db, "eur_ils"), where('date', '>=', earliestTimestamp));
-    const latestRateQuery = query(collection(db, "eur_ils"), orderBy("date", "desc"), limit(1));
+    const lowercurr = currency.toLowerCase()
+    const exchangeQuery = query(collection(db, `${lowercurr}_ils`), where('date', '>=', earliestTimestamp));
+    const latestRateQuery = query(collection(db, `${lowercurr}_ils`), orderBy("date", "desc"), limit(1));
 
     try {
         const latestDocs = await getDocs(latestRateQuery);
@@ -13,7 +14,7 @@ export const getExchangeRate = async function(earliestTimestamp) {
         let now = new Date()
         now.setHours(0,0,0,0)
         if (lastCurrencyDate < now) {
-            await updateRates(lastCurrencyDate, now)
+            await updateRates(lastCurrencyDate, now, lowercurr)
         }
 
         const docs = await getDocs(exchangeQuery);
@@ -27,14 +28,14 @@ export const getExchangeRate = async function(earliestTimestamp) {
     return rates
 }
 
-async function updateRates(lastCurrencyDate, now) {
+async function updateRates(lastCurrencyDate, now, currency) {
     let missingDate = new Date(lastCurrencyDate)
 
     while (missingDate < now) {
         missingDate.setDate(missingDate.getDate() + 1)
         try {
-            let rate = await retrieveRateFromAPI(missingDate)
-            await addDoc(collection(db, "eur_ils"), {
+            let rate = await retrieveRateFromAPI(missingDate, currency)
+            await addDoc(collection(db, `${currency}_ils`), {
                 "date": missingDate,
                 "rate": rate.toString()
             });
@@ -44,14 +45,14 @@ async function updateRates(lastCurrencyDate, now) {
     }
 }
 
-async function retrieveRateFromAPI(date) {
+async function retrieveRateFromAPI(date, currency) {
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add 1 because months are zero-based
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
     const dateParam = `${year}-${month}-${day}`
     const accessKey = process.env.REACT_APP_exchangeKey
 
-    const url = `http://api.exchangerate.host/convert?access_key=${accessKey}&from=EUR&to=ILS&amount=1&date=${dateParam}`;
+    const url = `http://api.exchangerate.host/convert?access_key=${accessKey}&from=${currency.toUpperCase()}&to=ILS&amount=1&date=${dateParam}`;
 
     // Use the fetch() method to make a GET request to the URL
     const response = await fetch(url);

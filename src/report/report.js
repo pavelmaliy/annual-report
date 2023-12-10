@@ -3,7 +3,8 @@ import { getRateByDate, getExchangeRate } from "./exchange"
 
 export const generateOptimizedReport = async function (sells, buys, earliestTimestamp) {
     try {
-        let exchangeRate = await getExchangeRate(earliestTimestamp)
+        //let exchangeRate = await getExchangeRate(earliestTimestamp, "eur")
+        const exchangeRates = {}
         var report = {}
         const sellByStock = groupTransactionsByStock(sells, true)
         const buyByStock = groupTransactionsByStock(buys, false)
@@ -11,23 +12,28 @@ export const generateOptimizedReport = async function (sells, buys, earliestTime
         for (const stock in sellByStock) {
             if (sellByStock.hasOwnProperty(stock)) {
                 let sellTransactions = sellByStock[stock]
+                const markerCurr = (sellTransactions.length > 0) ? sellTransactions[0].marketCurrency.toLowerCase() : ''
+                if (!exchangeRates[markerCurr]) {
+                    exchangeRates[markerCurr] = await getExchangeRate(earliestTimestamp, markerCurr)
+                }
+
                 // order by price from high to low 
                 sellTransactions.sort((a, b) => {
-                    let bRate = getRateByDate(formatDateToDDMMYYYY(b.transactionDate.toMillis()), exchangeRate)
-                    let aRate = getRateByDate(formatDateToDDMMYYYY(a.transactionDate.toMillis()), exchangeRate)
+                    let bRate = getRateByDate(formatDateToDDMMYYYY(b.transactionDate.toMillis()), exchangeRates[markerCurr])
+                    let aRate = getRateByDate(formatDateToDDMMYYYY(a.transactionDate.toMillis()), exchangeRates[markerCurr])
                     return (b.price * bRate) - (a.price * aRate)
                 })
 
                 for (const sellTr of sellTransactions) {
                     while (sellTr.quantity > 0) {
-                        let buyId = findBestBuy(sellTr, buyByStock[stock], exchangeRate)
-                        addBuyTransaction(report, stock, sellTr, buyByStock[stock][buyId], exchangeRate)
+                        let buyId = findBestBuy(sellTr, buyByStock[stock], exchangeRates[markerCurr])
+                        addBuyTransaction(report, stock, sellTr, buyByStock[stock][buyId], exchangeRates[markerCurr])
                         if (!buyId) {
                             throw "Not enough buy transactions to cover all sells"
                         }
                     }
                     let formattedDate = formatDateToDDMMYYYY(sellTr.transactionDate.toMillis())
-                    let rate = getRateByDate(formattedDate, exchangeRate)
+                    let rate = getRateByDate(formattedDate, exchangeRates[markerCurr])
                     report[stock][sellTr.id] = Object.assign({
                         "date": formattedDate,
                         "exchangeRate": rate,
@@ -167,7 +173,7 @@ async function toCSV(jsonReport) {
                         const localAdaptedBuyPrice = (localBuyPrice * index).toFixed(4)
                         data.push([
                             stock,
-                            sell.marketCurrency + "/ILS",
+                            sell.marketCurrency.toUpperCase() + "/ILS",
                             sellPrice,
                             sell.date,
                             sellExchangeRate,
