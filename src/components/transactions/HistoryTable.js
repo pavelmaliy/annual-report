@@ -74,7 +74,7 @@ export function HistoryTable({history, handleDelete, loading}) {
 
     const data = [...history].filter((row) => {
 
-        const { stockName, transactionDate, transactionType, originalQuantity, price } = row.data();
+        const { stockName, transactionDate, transactionType, originalQuantity, price, marketCurrency } = row.data();
 
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         const formattedDate = transactionDate.toDate().toLocaleDateString('en-GB', options);
@@ -83,6 +83,7 @@ export function HistoryTable({history, handleDelete, loading}) {
             stockName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             formattedDate.toLowerCase().includes(searchQuery.toLowerCase()) ||
             transactionType.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            marketCurrency.toLowerCase().includes(searchQuery.toLowerCase()) ||
             String(originalQuantity).includes(searchQuery.toLowerCase()) || 
             String(price).includes(searchQuery.toLowerCase())
         );
@@ -247,7 +248,7 @@ export function HistoryTable({history, handleDelete, loading}) {
                                             </TableCell>
                                             <TableCell>
                                                 <Typography>
-                                                    {currencies[item.data().marketCurrency].symbol}
+                                                    {item.data().marketCurrency}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
