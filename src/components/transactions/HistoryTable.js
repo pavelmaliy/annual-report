@@ -28,7 +28,7 @@ const styles = {
     tableWrapper: {
         position: 'relative',
         overflowX: 'auto',
-        maxHeight: '700px', // Set the maximum height for vertical scrolling
+        maxHeight: '450px', // Set the maximum height for vertical scrolling
         overflowY: 'auto'
     },
     pagination: {

@@ -1,10 +1,11 @@
-import React, { useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
+import { List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { Delete } from "@mui/icons-material";
 import { saveAs } from "file-saver";
+import { ReactComponent as ExcelIcon } from '../../icons/excel.svg';
 
 const ExcelDownloadList = ({ excelFiles, deleteReport }) => {
 
@@ -26,6 +27,9 @@ const ExcelDownloadList = ({ excelFiles, deleteReport }) => {
         <List>
             {excelFiles.map((file) => (
                 <ListItem key={file.id}>
+                    <ListItemIcon>
+                        < ExcelIcon />
+                    </ListItemIcon>
                     <ListItemText>
                         <Typography variant="h6">{file.name + ".csv"}</Typography>
                     </ListItemText>
