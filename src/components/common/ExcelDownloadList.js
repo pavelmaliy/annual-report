@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import { Delete } from "@mui/icons-material";
 import { saveAs } from "file-saver";
 
-const ExcelDownloadList = ({excelFiles}) => {
+const ExcelDownloadList = ({ excelFiles, deleteReport }) => {
 
     useEffect(() => {
-       
+
     }, [excelFiles]);
 
     const handleDownload = (filename) => {
@@ -28,13 +30,22 @@ const ExcelDownloadList = ({excelFiles}) => {
                         <Typography variant="h6">{file.name + ".csv"}</Typography>
                     </ListItemText>
                     <ListItemSecondaryAction>
-                        <IconButton
-                            edge="end"
-                            aria-label="download"
-                            onClick={() => handleDownload(file.name)}
-                        >
-                            <CloudDownloadIcon />
-                        </IconButton>
+                        <Box display="flex">
+                            <IconButton
+                                edge="end"
+                                aria-label="download"
+                                onClick={() => handleDownload(file.name)}
+                            >
+                                <CloudDownloadIcon />
+                            </IconButton>
+                            <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={() => deleteReport(file.id)}
+                            >
+                                <Delete />
+                            </IconButton>
+                        </Box>
                     </ListItemSecondaryAction>
                 </ListItem>
             ))}

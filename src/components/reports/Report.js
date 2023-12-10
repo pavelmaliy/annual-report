@@ -15,7 +15,7 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
-import { updateTransactions, saveReport, getUserReports } from "../../storage/store";
+import { updateTransactions, saveReport, deleteReport, getUserReports } from "../../storage/store";
 import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
 import ExcelDownloadList from "../common/ExcelDownloadList"
@@ -42,6 +42,15 @@ export default function Report() {
         fetchData();
     }, []);
 
+    const deleteMyReport = async (id) => {
+        try {
+            await deleteReport(id)
+            const excelFiles = await getUserReports(user);
+            setExcelFiles(excelFiles)
+        } catch(err) {
+            throw err
+        }
+    }
 
     const generateReport = async () => {
         let csv = ''
@@ -320,7 +329,7 @@ export default function Report() {
                         My Reports
                     </Typography>
                     <React.Fragment>
-                        <ExcelDownloadList user={user} excelFiles={[...excelFiles]}/>
+                        <ExcelDownloadList excelFiles={[...excelFiles]} deleteReport={deleteMyReport}/>
                     </React.Fragment>
                 </Paper>
             </Container>
