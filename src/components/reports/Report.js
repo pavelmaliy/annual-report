@@ -15,7 +15,7 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import * as React from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../storage/firebase";
-import { updateTransactions, saveReport } from "../../storage/store";
+import { updateTransactions, saveReport, getUserReports } from "../../storage/store";
 import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
 import ExcelDownloadList from "../common/ExcelDownloadList"
@@ -30,8 +30,18 @@ export default function Report() {
     const [reportName, setReportName] = React.useState('report-' + formatDateToDDMMYYYY(new Date().getTime(), "_"))
     const [nameError, setNameError] = React.useState('')
     const [toDateError, setToDateError] = React.useState('')
+    const [excelFiles, setExcelFiles] = React.useState([])
     const [user] = useAuthState(auth)
-    const childRef = React.useRef(null);
+    
+    React.useEffect(() => {
+        const fetchData = async () => {
+            const excelFiles = await getUserReports(user);
+            setExcelFiles(excelFiles);
+        };
+    
+        fetchData();
+    }, []);
+
 
     const generateReport = async () => {
         let csv = ''
@@ -93,10 +103,10 @@ export default function Report() {
                 try {
                     if (csv.length > 0) {
                         await saveReport(csv, user, reportName)
-                    }
-                    if (childRef.current) {
-                        childRef.current.setReload(generateRandomString(8))
-                    }
+                        const excelFiles = await getUserReports(user);
+                        setExcelFiles(excelFiles)
+                    }                    
+            
                 } catch (err) {
                     throw err
                 }
@@ -310,7 +320,7 @@ export default function Report() {
                         My Reports
                     </Typography>
                     <React.Fragment>
-                        <ExcelDownloadList user={user} forwardedRef={childRef} />
+                        <ExcelDownloadList user={user} excelFiles={[...excelFiles]}/>
                     </React.Fragment>
                 </Paper>
             </Container>

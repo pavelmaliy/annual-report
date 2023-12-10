@@ -8,16 +8,35 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { AppContext } from "../../context/AppContext";
 import { auth } from "../../storage/firebase";
 import { persistTransactions } from "../../storage/store";
-import { generateRandomString } from '../../utils/utils';
 import { HistoryTable } from './HistoryTable';
 import TransactionForm from './TransactionForm';
+import { getUserTransactions, deleteTransaction } from "../../storage/store";
+import { generateRandomString } from '../../utils/utils';
 
 
 export default function TransactionContainer() {
     const { model, setModel } = useContext(AppContext);
     const [user] = useAuthState(auth)
+    const [reloadHistory, setReloadHistory] = React.useState('')
+    const [loading, setLoading] = React.useState(true);
+    const [history, setHistory] = React.useState([])
 
-    const childRef = React.useRef(null);
+    const handleDelete = async (id) => {
+        await deleteTransaction(id)
+        setReloadHistory(generateRandomString(8))
+    }
+
+    React.useEffect(() => {
+        (async () => {
+            let docs = await getUserTransactions(user)
+            let newHistory = []
+            docs.map((item) => {
+                newHistory.push(item)
+            })
+            setHistory(newHistory)
+            setLoading(false)
+        })()
+    }, [reloadHistory]);
 
     return (
         <React.Fragment>
@@ -33,15 +52,13 @@ export default function TransactionContainer() {
                             try {
                                 if (transactions.length > 0) {
                                     await persistTransactions(transactions, user)
+                                    setReloadHistory(generateRandomString(8))
                                 }
                             } catch (err) {
                                 throw err
                             }
                             model.transactions = []
-                            setModel(model)
-                            if (childRef.current) {
-                                childRef.current.setReloadHistory(generateRandomString(8))
-                            }
+                            setModel(model)                           
                         }} />
 
                 </Paper>
@@ -51,7 +68,7 @@ export default function TransactionContainer() {
                     Transaction History
                     </Typography>
                 <React.Fragment>
-                    <HistoryTable user={user} forwardedRef={childRef} />
+                    <HistoryTable history={[...history]} handleDelete={handleDelete} loading={loading} />
                 </React.Fragment>                
             </Container>
         </React.Fragment>

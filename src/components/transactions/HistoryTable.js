@@ -15,7 +15,6 @@ import * as React from "react";
 import { useEffect } from "react";
 import ReactLoading from "react-loading";
 import currencies from "../../resources/commonCurrency.json";
-import { getUserTransactions, deleteTransaction } from "../../storage/store";
 import { formatDateToDDMMYYYY, generateRandomString } from "../../utils/utils";
 import IconButton from '@mui/material/IconButton';
 import { Delete } from "@mui/icons-material";
@@ -41,32 +40,17 @@ const styles = {
     },
 };
 
-export function HistoryTable({ user, forwardedRef }) {
+export function HistoryTable({history, handleDelete, loading}) {
     const rowsPerPageOptions = [5, 10, 25];
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [sortConfig, setSortConfig] = React.useState({ key: '', direction: '' });
     const [page, setPage] = React.useState(0);
-    const [loading, setLoading] = React.useState(true);
-    const [history, setHistory] = React.useState([])
-    const [reloadHistory, setReloadHistory] = React.useState('')
     const [selectedRow, setSelectedRow] = React.useState(null);
     const [searchQuery, setSearchQuery] = React.useState('');
 
-    useEffect(() => {
-        (async () => {
-            let docs = await getUserTransactions(user)
-            let newHistory = []
-            docs.map((item) => {
-                newHistory.push(item)
-            })
-            setHistory(newHistory)
-            setLoading(false);
-        })()
-    }, [reloadHistory]);
-
-    React.useImperativeHandle(forwardedRef, () => ({
-        setReloadHistory
-    }));
+    React.useEffect(() => {
+        
+    }, [history]);
 
     const handleRowClick = (rowId) => {
         // Toggle selection on row click
@@ -127,10 +111,6 @@ export function HistoryTable({ user, forwardedRef }) {
         setPage(newPage);
     };
 
-    const handleDelete = async (id) => {
-        await deleteTransaction(id)
-        setReloadHistory(generateRandomString(8))
-    }
 
     return (
         <div>

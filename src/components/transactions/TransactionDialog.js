@@ -147,7 +147,8 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                     }}
                                     labelId="transaction-date-label"
                                     label="Transaction Date"
-                                    format="DD/MM/YYYY"                                    
+                                    format="DD/MM/YYYY"
+                                    defaultValue={dayjs()}                                    
                                     onChange={(val) => {                                                                            
                                         transaction.transactionDate = val
                                         setTransaction(transaction)

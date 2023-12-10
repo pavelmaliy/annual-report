@@ -61,3 +61,23 @@ export async function deleteTransaction(id) {
     }
 	
 }
+
+export async function getUserReports(user) {
+    let files = []
+    const q = query(collection(db, "reports"), where("user_id", "==", user.uid));
+    try {
+        const docs = await getDocs(q);
+
+        files = docs.docs.map((doc) => {
+            const { user_id, ...fileData } = doc.data();
+            return {
+                id: doc.id,
+                ...fileData,
+            };
+        });
+        
+    } catch (e) {
+        throw (e)
+    }
+    return files
+};
