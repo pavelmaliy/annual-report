@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 
-export default function MyLineChart({ transactions, year, isPurchases }) {
+export default function MyLineChart({ transactions, isPurchases }) {
 
   const uniqueStocks = {}
   const colors = ["green", "blue", "red", "purple", "yellow"]
@@ -26,7 +26,7 @@ export default function MyLineChart({ transactions, year, isPurchases }) {
       const month = trDate.getMonth();
      
       
-      if (transaction["transactionType"] === (isPurchases ? 'Sell' : 'Purchase') || trDate.getFullYear() != year) {
+      if (transaction["transactionType"] === (isPurchases ? 'Sell' : 'Purchase') ) {
         return
       }
 

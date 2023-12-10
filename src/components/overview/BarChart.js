@@ -2,7 +2,7 @@ import * as React from 'react';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
-export default function StockBarChart({ transactions, year }) {
+export default function StockBarChart({ transactions }) {
 
     const getDataset = function () {
         let dataset = []
@@ -11,10 +11,6 @@ export default function StockBarChart({ transactions, year }) {
         transactions.map((item) => {
             let tr = item.data()
 
-            const trDate = tr.transactionDate.toDate(); 
-            if (trDate.getFullYear() != year) {
-                return
-            }
 
             if (!datasetMap[tr.stockName]) {
                 datasetMap[tr.stockName] = {
