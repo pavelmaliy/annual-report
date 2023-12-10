@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 
-export default function MyLineChart({ transactions, year }) {
+export default function MyLineChart({ transactions, year, isPurchases }) {
 
   const uniqueStocks = {}
   const colors = ["green", "blue", "red", "purple", "yellow"]
@@ -24,8 +24,9 @@ export default function MyLineChart({ transactions, year }) {
       const trDate = transaction.transactionDate.toDate();
       const monthName = trDate.toLocaleString('en-US', monthOptionsShort);
       const month = trDate.getMonth();
-
-      if (transaction["transactionType"] === 'Sell' || trDate.getFullYear() != year) {
+     
+      
+      if (transaction["transactionType"] === (isPurchases ? 'Sell' : 'Purchase') || trDate.getFullYear() != year) {
         return
       }
 
@@ -69,7 +70,7 @@ export default function MyLineChart({ transactions, year }) {
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" label={{ value: 'Purchases', position: 'top' }} />
+      <XAxis dataKey="name" label={{ value: isPurchases ? 'Purchases' : 'Sells', position: 'top' }} />
       <YAxis />
       <Tooltip />
       <Legend />
