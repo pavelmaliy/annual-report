@@ -109,6 +109,7 @@ export default function MainPage({ user }) {
     const [open, setOpen] = React.useState(false);
     const [page, setPage] = React.useState(getPageFromHash())
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [logoutAnchorEl, setLogoutAnchorEl] = React.useState(null);
     const [currencyIcon, setCurrencyIcon] = React.useState(<ShekelIcon />)
 
     const navigate = useNavigate();
@@ -129,14 +130,6 @@ export default function MainPage({ user }) {
         }
         navigate("/login");
     }
-
-    const handleCurrMenuClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleCurrMenuClose = () => {
-        setAnchorEl(null);
-    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -177,9 +170,24 @@ export default function MainPage({ user }) {
                         <MenuIcon />
                     </IconButton>
                     <div style={{ flex: 1 }} />
-                    <Typography noWrap component="div">
+                    <Typography
+                        variant="h6"
+                        noWrap component="div"
+                        style={{ cursor: 'pointer' }}
+                        onClick={(event) => { setLogoutAnchorEl(event.currentTarget) }}
+                    >
                         {user}
                     </Typography>
+                    <Menu
+                        anchorEl={logoutAnchorEl}
+                        open={Boolean(logoutAnchorEl)}
+                        onClose={() => { setLogoutAnchorEl(null) }}
+                    >
+                        <MenuItem onClick={handleLogout}>
+                            <LogoutIcon style={{ marginRight: '8px' }} />
+                                Logout
+                            </MenuItem>
+                    </Menu>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
@@ -259,9 +267,9 @@ export default function MainPage({ user }) {
                         </ListItemButton>
                     </ListItem>
                 </List>
-                <Divider sx={{ borderBottomWidth: 2 }}/>
+                <Divider sx={{ borderBottomWidth: 2 }} />
                 <List>
-                    <ListItem key={'Currency'} disablePadding sx={{ display: 'block' }} onClick={handleCurrMenuClick}>
+                    <ListItem key={'Currency'} disablePadding sx={{ display: 'block' }} onClick={(event) => { setAnchorEl(event.currentTarget); }}>
                         <ListItemButton
                             sx={{
                                 minHeight: 48,
@@ -299,10 +307,10 @@ export default function MainPage({ user }) {
                                 setCurrencyIcon(<ShekelIcon />)
                             }
                         }}
-                        onClose={handleCurrMenuClose}
+                        onClose={() => { setAnchorEl(null) }}
                     >
-                        {Object.keys({"ILS":{}}).map((currency) => (
-                            <MenuItem key={currency} value={currency} onClick={handleCurrMenuClose}>
+                        {Object.keys({ "ILS": {} }).map((currency) => (
+                            <MenuItem key={currency} value={currency} onClick={() => { setAnchorEl(null) }}>
                                 {currency}
                             </MenuItem>
                         ))}
