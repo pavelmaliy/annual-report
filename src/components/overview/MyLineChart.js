@@ -13,7 +13,7 @@ import {
 export default function MyLineChart({ transactions, isPurchases }) {
 
   const uniqueStocks = {}
-  const colors = ["green", "blue", "red", "purple", "yellow"]
+  const colors = ["green", "#1976d2", "red", "purple", "yellow"]
   const getDataset = function () {
     const monthOptionsShort = { month: 'short' };
     const data = {}

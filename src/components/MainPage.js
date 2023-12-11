@@ -115,10 +115,6 @@ export default function MainPage({ user }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setPage(getPageFromHash())
-    }, []);
-
-    useEffect(() => {
         setPageInHash(page)
     }, [page]);
 
@@ -169,6 +165,16 @@ export default function MainPage({ user }) {
                     >
                         <MenuIcon />
                     </IconButton>
+                    <div style={{ flex: 1 }} />
+                    {/* Centered logo */}
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {/* Your logo component or image goes here */}
+                        <img
+                            src="icons/piggybank.png"
+                            alt="Logo"
+                            style={{ width: '50px', height: '50px' }} // Adjust the size as needed
+                        />
+                    </div>
                     <div style={{ flex: 1 }} />
                     <Typography
                         variant="h6"
