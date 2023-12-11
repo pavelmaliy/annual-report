@@ -34,6 +34,7 @@ import { Menu, MenuItem } from "@mui/material";
 import currencies from "../resources/commonCurrency.json";
 import { AppContext } from "../context/AppContext";
 import LightTooltip from "./common/LightTooltip"
+import LaptopIcon from '@mui/icons-material/Laptop';
 
 const drawerWidth = 240;
 
@@ -165,6 +166,24 @@ export default function MainPage({ user }) {
                     >
                         <MenuIcon />
                     </IconButton>
+                    <LaptopIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="#app-bar-with-responsive-menu"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            BSMART
+          </Typography>
                     <div style={{ flex: 1 }} />
                     <Typography
                         variant="h6"
@@ -306,7 +325,7 @@ export default function MainPage({ user }) {
                         onClose={() => { setAnchorEl(null) }}
                     >
                         {Object.keys({ "ILS": {} }).map((currency) => (
-                            <MenuItem key={currency} value={currency} onClick={() => { setAnchorEl(null) }}>
+                            <MenuItem itemID={currency} key={currency} value={currency} onClick={() => { setAnchorEl(null) }}>
                                 {currency}
                             </MenuItem>
                         ))}

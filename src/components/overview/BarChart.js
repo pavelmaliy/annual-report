@@ -59,7 +59,7 @@ export default function StockBarChart({ transactions }) {
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="buy" fill="#1976d2" activeBar={<Rectangle fill="pink" stroke="#1976d2" />} />
-                <Bar dataKey="sell" fill="green" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+                <Bar dataKey="sell" fill="#00C49F" activeBar={<Rectangle fill="gold" stroke="purple" />} />
             </BarChart>
         </>
     );

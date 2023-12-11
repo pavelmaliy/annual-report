@@ -127,13 +127,13 @@ export default function Report() {
                     throw err
                 }
                 // update reported transactions
-                // try {
-                //     if (newTransactions.length > 0) {
-                //         await updateTransactions(newTransactions)
-                //     }
-                // } catch (err) {
-                //     throw err
-                // }
+                try {
+                    if (newTransactions.length > 0) {
+                        await updateTransactions(newTransactions)
+                    }
+                } catch (err) {
+                    throw err
+                }
             } else {
                 downloadCSV(csv)
             }
