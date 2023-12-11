@@ -6,6 +6,7 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { Delete } from "@mui/icons-material";
 import { saveAs } from "file-saver";
 import { ReactComponent as ExcelIcon } from '../../icons/excel.svg';
+import "../../styles.css"
 
 const ExcelDownloadList = ({ excelFiles, deleteReport }) => {
 
@@ -26,7 +27,7 @@ const ExcelDownloadList = ({ excelFiles, deleteReport }) => {
     return (
         <List>
             {excelFiles.map((file) => (
-                <ListItem key={file.id}>
+                <ListItem key={file.id} className={"listItem"}>
                     <ListItemIcon>
                         < ExcelIcon />
                     </ListItemIcon>

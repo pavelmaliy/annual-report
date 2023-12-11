@@ -39,7 +39,7 @@ const styles = {
     },
 };
 
-export function HistoryTable({history, handleDelete, loading}) {
+export function HistoryTable({ history, handleDelete, loading }) {
     const rowsPerPageOptions = [5, 10, 25];
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [sortConfig, setSortConfig] = React.useState({ key: '', direction: '' });
@@ -48,7 +48,7 @@ export function HistoryTable({history, handleDelete, loading}) {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     React.useEffect(() => {
-        
+
     }, [history]);
 
     const handleRowClick = (rowId) => {
@@ -84,7 +84,7 @@ export function HistoryTable({history, handleDelete, loading}) {
             formattedDate.toLowerCase().includes(searchQuery.toLowerCase()) ||
             transactionType.toLowerCase().includes(searchQuery.toLowerCase()) ||
             marketCurrency.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            String(originalQuantity).includes(searchQuery.toLowerCase()) || 
+            String(originalQuantity).includes(searchQuery.toLowerCase()) ||
             String(price).includes(searchQuery.toLowerCase())
         );
     }
@@ -217,7 +217,9 @@ export function HistoryTable({history, handleDelete, loading}) {
                                 {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => {
                                     return (
                                         <TableRow
+                                            style={{ cursor: 'pointer' }}
                                             key={item.id}
+                                            hover
                                             onClick={() => handleRowClick(item.id)}
                                             selected={selectedRow === item.id}
                                         >

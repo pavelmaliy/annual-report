@@ -18,8 +18,8 @@ import { auth, db } from "../../storage/firebase";
 import { updateTransactions, saveReport, deleteReport, getUserReports } from "../../storage/store";
 import { generateOptimizedReport } from "../../report/report"
 import { saveAs } from "file-saver";
-import ExcelDownloadList from "../common/ExcelDownloadList"
-import { formatDateToDDMMYYYY, generateRandomString } from "../../utils/utils";
+import ExcelDownloadList from "./ExcelDownloadList"
+import { formatDateToDDMMYYYY } from "../../utils/utils";
 import ReactLoading from "react-loading";
 
 export default function Report() {

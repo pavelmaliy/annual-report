@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import { getUserTransactions } from "../../storage/store";
 import { auth } from "../../storage/firebase";
 import LoadingScreen from "../common/LoadingScreen";
-import YearSelector from "../common/YearSelector"
+import YearSelector from "./YearSelector"
 
 export default function Dashboard() {
     const [user] = useAuthState(auth)

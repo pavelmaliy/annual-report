@@ -22,8 +22,9 @@ export default function TransactionForm({onFinish}) {
     const [transactionListItems, setTransactionListItems] = React.useState(model.transactions ? model.transactions : [])
 
     const onDialogFinish = (transaction) => {
-        transactionListItems.push(transaction)
-        setTransactionListItems(transactionListItems)
+        const newItems = transactionListItems.concat(transaction)
+        setTransactionListItems(newItems)
+        model.transactions = newItems
         setOpen(false);
     }
 
@@ -31,13 +32,16 @@ export default function TransactionForm({onFinish}) {
         setOpen(true);
     };
     const handleUploadAdd = (transactions) => {
-        setTransactionListItems(transactionListItems.concat(transactions))
+        const newItems = transactionListItems.concat(transactions)
+        setTransactionListItems(newItems)
+        model.transactions = newItems
     }
 
     const handleDelete = (index) => {
         let newItems = transactionListItems.slice()
         newItems.splice(index, 1)
         setTransactionListItems(newItems)
+        model.transactions = newItems
     };
 
     const handleFileUpload = (e) => {
@@ -85,6 +89,7 @@ export default function TransactionForm({onFinish}) {
                         <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
                             <Button onClick={() => {
                                 setTransactionListItems([])
+                                model.transactions = []
                             }}>
                                 clear all
                             </Button>
@@ -132,7 +137,8 @@ export default function TransactionForm({onFinish}) {
                         sx={{mt: 3, ml: 1}}
                         onClick={() => {
                             onFinish(transactionListItems)
-                            setTransactionListItems([])                
+                            setTransactionListItems([])
+                            model.transactions = []              
                         }}
                         disabled={transactionListItems.length === 0}
                     >
