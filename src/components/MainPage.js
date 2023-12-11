@@ -182,7 +182,7 @@ export default function MainPage({ user }) {
               textDecoration: 'none',
             }}
           >
-            BSMART
+            TaxStock
           </Typography>
                     <div style={{ flex: 1 }} />
                     <Typography
