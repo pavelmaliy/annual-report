@@ -134,9 +134,9 @@ export default function Report() {
                 // } catch (err) {
                 //     throw err
                 // }
+            } else {
+                downloadCSV(csv)
             }
-
-            downloadCSV(csv)
         }
         catch (e) {
             console.error(e)
@@ -339,8 +339,8 @@ export default function Report() {
                         {loading ? (
                             <ReactLoading type="bubbles" color="#0000FF" />
                         ) : (
-                            <ExcelDownloadList excelFiles={[...excelFiles]} deleteReport={deleteMyReport} />
-                        )}
+                                <ExcelDownloadList excelFiles={[...excelFiles]} deleteReport={deleteMyReport} />
+                            )}
                     </React.Fragment>
                 </Paper>
             </Container>
