@@ -121,7 +121,7 @@ export function HistoryTable({ history, handleDelete, loading }) {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{ marginBottom: '16px' }}
             />
-            <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+            <TableContainer component={Paper} style={styles.tableWrapper}>
                 <Table size="small">
                     <TableHead style={styles.tableHeaderStyle}>
                         <TableRow>
