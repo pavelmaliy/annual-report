@@ -39,10 +39,7 @@ jobs:
           DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           ILS_RATE=$(jq -r '.conversion_rates.ILS' response.json)
           echo "{\"date\": \"${DATE}\", \"rate\": \"${ILS_RATE}\"}" > transformedData.json
-          
-          # Authenticate with Firebase
-          firebase auth:login --token "${FIREBASE_TOKEN}"
-
+                  
           # Upload the transformed data to Firebase
-          firebase database:push /eur_ils transformedData.json --project annual-report-52e9f
+          firebase database:push /eur_ils transformedData.json --project annual-report-52e9f  --token "$FIREBASE_TOKEN"
         shell: bash
