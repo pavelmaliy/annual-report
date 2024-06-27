@@ -16,7 +16,7 @@ jobs:
       - name: Fetch JSON data
         id: fetch
         run: |
-          curl -s "https://api.exchangerate-api.com/v4/latest/EUR" -o response.json
+          curl -s "https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/latest/EUR" -o response.json
           cat response.json
         shell: bash
 
