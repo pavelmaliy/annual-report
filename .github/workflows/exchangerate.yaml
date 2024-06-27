@@ -23,15 +23,26 @@ jobs:
       - name: Install jq
         run: sudo apt-get install -y jq
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  
+
+      - name: Install Firebase tools
+        run: npm install -g firebase-tools   
+
       - name: Transform and Store JSON data in Firebase
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: AIzaSyCdXQC67xCMtWV4pA6wkMrQflrRgLPG1Q0
         run: |
           # Extract the current date and ILS exchange rate
           DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           ILS_RATE=$(jq -r '.conversion_rates.ILS' response.json)
           echo "{\"date\": \"${DATE}\", \"rate\": \"${ILS_RATE}\"}" > transformedData.json
           
+          # Authenticate with Firebase
+          firebase auth:login --token "${FIREBASE_TOKEN}"
+
           # Upload the transformed data to Firebase
-          firebase database:push /exchangeRates transformedData.json --project annual-report-52e9f
+          firebase database:push /eur_ils transformedData.json --project annual-report-52e9f
         shell: bash
