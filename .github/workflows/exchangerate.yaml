@@ -32,7 +32,7 @@ jobs:
       
           curl -X POST -d '{
            "date": ${{ DATE }},
-           "age": ${{ ILS_RATE }},
+           "rate": ${{ ILS_RATE }},
           }' 'https://annual-report-52e9f.firebaseio.com/eur_ils.json?auth=AIzaSyCdXQC67xCMtWV4pA6wkMrQflrRgLPG1Q0'
                                       
         shell: bash
