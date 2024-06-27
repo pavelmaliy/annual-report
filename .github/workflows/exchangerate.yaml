@@ -27,6 +27,7 @@ jobs:
         env:
           FIREBASE_API_KEY: AIzaSyCdXQC67xCMtWV4pA6wkMrQflrRgLPG1Q0
         run: |
+
           DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           ILS_RATE=$(jq -r '.conversion_rates.ILS' response.json)
       
@@ -35,4 +36,4 @@ jobs:
            "rate": ${{ ILS_RATE }},
           }' 'https://annual-report-52e9f.firebaseio.com/eur_ils.json?auth=AIzaSyCdXQC67xCMtWV4pA6wkMrQflrRgLPG1Q0'
                                       
-        shell: bash
+      shell: bash
