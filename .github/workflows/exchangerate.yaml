@@ -16,7 +16,7 @@ jobs:
       - name: Fetch JSON data
         id: fetch
         run: |
-          curl -s "https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/latest/EUR" -o response.json
+          curl -s "https://api.exchangerate-api.com/v4/latest/EUR" -o response.json
           cat response.json
         shell: bash
 
@@ -24,16 +24,9 @@ jobs:
         run: sudo apt-get install -y jq
 
       - name: Store JSON data in Firebase
-        env:
-          FIREBASE_API_KEY: AIzaSyCdXQC67xCMtWV4pA6wkMrQflrRgLPG1Q0
         run: |
-
           DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           ILS_RATE=$(jq -r '.conversion_rates.ILS' response.json)
-      
-          curl -X POST -d '{
-           "date": ${{ DATE }},
-           "rate": ${{ ILS_RATE }},
-          }' 'https://annual-report-52e9f.firebaseio.com/eur_ils.json?auth=AIzaSyCdXQC67xCMtWV4pA6wkMrQflrRgLPG1Q0'
-                                      
-      shell: bash
+          JSON_PAYLOAD=$(jq -n --arg date "$DATE" --arg rate "$ILS_RATE" '{date: $date, rate: $rate}')
+          curl -X POST -d "$JSON_PAYLOAD" 'https://annual-report-52e9f.firebaseio.com/eur_ils.json?auth=AIzaSyCdXQC67xCMtWV4pA6wkMrQflrRgLPG1Q0'
+        shell: bash
