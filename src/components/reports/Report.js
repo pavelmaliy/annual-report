@@ -95,7 +95,7 @@ export default function Report() {
                 if (buyTransactions.length == 0) {
                     earliestTimestamp = tr.transactionDate.toDate()
                     // might be weekend so we take 2 previos days as buffer
-                    earliestTimestamp.setDate(earliestTimestamp.getDate() - 2)
+                    earliestTimestamp.setDate(earliestTimestamp.getDate() - 3)
                 }
                 buyTransactions.push(tr)
             })
