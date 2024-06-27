@@ -18,5 +18,4 @@ jobs:
           FIREBASE_TOKEN: 1//0359wk9p2597FCgYIARAAGAMSNwF-L9IrVS-rxx1DN_fIZuMTkURAF9tb7-Zs00jKGe7JfkUTQERtl5m-tWECZRkP6SgtN2JPvhc
         run: |
           DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          ILS_RATE=$(curl -s "https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/pair/EUR/ILS" | jq -r '.conversion_rate')          
-  
+          ILS_RATE=$(curl -s "https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/pair/EUR/ILS" | jq -r '.conversion_rate')
