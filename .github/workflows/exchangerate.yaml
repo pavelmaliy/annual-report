@@ -23,5 +23,5 @@ jobs:
           DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           ILS_RATE=$(curl -s "https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/latest/EUR" | jq -r '.conversion_rates.ILS')
           echo "{\"date\": \"$DATE\", \"rate\": \"$ILS_RATE\"}" > document.json
-          firebase firestore:doc /eur_ils newDocumentId set document.json --project=annual-report-52e9f --token="${FIREBASE_TOKEN}"
+          firebase firestore:collection /eur_ils add "{\"date\": \"$DATE\", \"rate\": \"$ILS_RATE\"}" --project=annual-report-52e9f --token="${FIREBASE_TOKEN}"
           
