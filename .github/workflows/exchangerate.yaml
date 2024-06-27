@@ -1,4 +1,4 @@
-name: Fetch and Store ILS Exchange Rate
+name: Add Data to Firestore
 
 on:
   schedule:
@@ -6,27 +6,24 @@ on:
   workflow_dispatch:  # Allows manual triggering of the workflow
 
 jobs:
-  fetch-and-store:
+  add-to-firestore:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Fetch JSON data
-        id: fetch
-        run: |
-          curl -s "https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/latest/EUR" -o response.json
-          cat response.json
-        shell: bash
+      - name: Install Firebase Tools
+        run: npm install -g firebase-tools
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
+      - name: Authenticate Firebase
+        env:
+          FIREBASE_TOKEN: 1//0359wk9p2597FCgYIARAAGAMSNwF-L9IrVS-rxx1DN_fIZuMTkURAF9tb7-Zs00jKGe7JfkUTQERtl5m-tWECZRkP6SgtN2JPvhc
+        run: firebase login:ci --token "${FIREBASE_TOKEN}"
 
-      - name: Store JSON data in Firebase
+      - name: Fetch JSON data and Add to Firestore
         run: |
           DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          ILS_RATE=$(jq -r '.conversion_rates.ILS' response.json)
-          JSON_PAYLOAD=$(jq -n --arg date "$DATE" --arg rate "$ILS_RATE" '{date: $date, rate: $rate}')
-          curl -X POST -d "$JSON_PAYLOAD" 'https://annual-report-52e9f.firebaseio.com/eur_ils.json?auth=AIzaSyCdXQC67xCMtWV4pA6wkMrQflrRgLPG1Q0'
-        shell: bash
+          ILS_RATE=$(curl -s "https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/latest/EUR" | jq -r '.conversion_rates.ILS')
+          firebase firestore:document:create /eur_ils --data "{\"date\": \"$DATE\", \"rate\": \"$ILS_RATE\"}" --project annual-report-52e9f
+
