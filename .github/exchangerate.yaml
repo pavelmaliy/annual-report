@@ -1,0 +1,37 @@
+name: Fetch and Store Exchange Rate
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs every day at midnight UTC
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+jobs:
+  fetch-and-store:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Fetch JSON data
+        id: fetch
+        run: |
+          curl -s "https://v6.exchangerate-api.com/v6/9d90a307165975a4b2958f79/latest/EUR" -o response.json
+          cat response.json
+        shell: bash
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Transform and Store JSON data in Firebase
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          # Extract the current date and ILS exchange rate
+          DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          ILS_RATE=$(jq -r '.conversion_rates.ILS' response.json)
+          echo "{\"date\": \"${DATE}\", \"rate\": \"${ILS_RATE}\"}" > transformedData.json
+          
+          # Upload the transformed data to Firebase
+          firebase database:push /exchangeRates transformedData.json --project annual-report-52e9f
+        shell: bash
