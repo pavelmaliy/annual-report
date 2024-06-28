@@ -19,7 +19,5 @@ jobs:
       - name: Set execute permissions
         run: chmod +x ./exchange
 
-      - name: Run executable
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase_credentials.json      
-        run: ./exchange
+      - name: Run executable     
+        run: ./exchange firebase_credentials.json
