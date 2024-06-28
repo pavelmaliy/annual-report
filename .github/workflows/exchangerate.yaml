@@ -16,6 +16,13 @@ jobs:
       - name: Set up Firebase credentials
         run: echo "${{ secrets.FIREBASE_CREDENTIALS }}" > firebase_credentials.json
 
+      - name: Verify Firebase credentials file
+        run: |
+          echo "Checking if credentials file exists..."
+          ls -l firebase_credentials.json
+          echo "Contents of the credentials file:"
+          cat firebase_credentials.json  
+
       - name: Set execute permissions
         run: chmod +x ./exchange
 
