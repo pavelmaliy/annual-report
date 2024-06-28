@@ -13,8 +13,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up Firebase credentials
+        run: echo "${{ secrets.FIREBASE_CREDENTIALS }}" > firebase_credentials.json
+
       - name: Set execute permissions
         run: chmod +x ./exchange
 
-      - name: Run executable        
+      - name: Run executable
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase_credentials.json      
         run: ./exchange
