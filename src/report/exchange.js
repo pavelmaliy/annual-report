@@ -6,17 +6,9 @@ export const getExchangeRate = async function(earliestTimestamp, currency) {
     let rates = {}
     const lowercurr = currency.toLowerCase()
     const exchangeQuery = query(collection(db, `${lowercurr}_ils`), where('date', '>=', earliestTimestamp));
-    const latestRateQuery = query(collection(db, `${lowercurr}_ils`), orderBy("date", "desc"), limit(1));
 
     try {
-        const latestDocs = await getDocs(latestRateQuery);
-        let lastCurrencyDate = latestDocs.docs[0].data().date.toDate()
-        let now = new Date()
-        now.setHours(0,0,0,0)
-        if (lastCurrencyDate < now) {
-            await updateRates(lastCurrencyDate, now, lowercurr)
-        }
-
+        
         const docs = await getDocs(exchangeQuery);
         docs.docs.map((item) => {
             rates[formatDateToDDMMYYYY(item.data().date.toMillis())] = parseFloat(item.data().rate)
