@@ -20,23 +20,6 @@ export const getExchangeRate = async function(earliestTimestamp, currency) {
     return rates
 }
 
-async function updateRates(lastCurrencyDate, now, currency) {
-    let missingDate = new Date(lastCurrencyDate)
-
-    while (missingDate < now) {
-        missingDate.setDate(missingDate.getDate() + 1)
-        try {
-            let rate = await retrieveRateFromAPI(missingDate, currency)
-            await addDoc(collection(db, `${currency}_ils`), {
-                "date": missingDate,
-                "rate": rate.toString()
-            });
-        } catch (e) {
-            console.error(e)
-        }
-    }
-}
-
 async function retrieveRateFromAPI(date, currency) {
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add 1 because months are zero-based
     const day = date.getDate().toString().padStart(2, '0');
