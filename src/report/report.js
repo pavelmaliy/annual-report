@@ -17,20 +17,54 @@ export const generateOptimizedReport = async function (sells, buys, earliestTime
                     exchangeRates[markerCurr] = await getExchangeRate(earliestTimestamp, markerCurr)
                 }
 
-                // order by price from high to low 
-                sellTransactions.sort((a, b) => {
-                    let bRate = getRateByDate(formatDateToDDMMYYYY(b.transactionDate.toMillis()), exchangeRates[markerCurr])
-                    let aRate = getRateByDate(formatDateToDDMMYYYY(a.transactionDate.toMillis()), exchangeRates[markerCurr])
-                    return (b.price * bRate) - (a.price * aRate)
+                // order by date from low to high 
+                sellTransactions.sort((t1, t2) => {
+                    return t1.transactionDate.toMillis() - t2.transactionDate.toMillis()
                 })
+
+                let buys = buyByStock[stock]
+                let sumBuys = 0
+                let sumSells = 0
+                Object.values(buys).forEach(value => {
+                    sumBuys += value.quantity
+                  });
+
+                for (const sell of sellTransactions ) {
+                    sumSells += sell.quantity
+                } 
+                
+                if (sumBuys < sumSells) {
+                    throw "Not enough buy transactions to cover all sells"
+                }
 
                 for (const sellTr of sellTransactions) {
                     while (sellTr.quantity > 0) {
                         let buyId = findBestBuy(sellTr, buyByStock[stock], exchangeRates[markerCurr])
-                        addBuyTransaction(report, stock, sellTr, buyByStock[stock][buyId], exchangeRates[markerCurr])
-                        if (!buyId) {
-                            throw "Not enough buy transactions to cover all sells"
+                        let hasEnough =  validateEarliestSellHasBuys(sellTransactions, buyByStock[stock], buyId, sellTr)
+
+                        
+                        if (!hasEnough) {
+                            for (const t of sellTransactions) {
+                                if (t.quantity > 0) {
+                                    console.log(`sell transaction ${formatDateToDDMMYYYY(t.transactionDate.toMillis())} has ${t.quantity}`)
+                                }
+                            }
+                            
+                            const buysArray = Object.entries(buyByStock[stock]);
+                            for (const [, buy] of buysArray) {
+                                if (buy.quantity > 0) {
+                                    console.log(`buy transaction ${formatDateToDDMMYYYY(buy.transactionDate.toMillis())} has ${buy.quantity}`)
+                                }
+                            }
+                            throw "Not enough buy transactions to cover all sells" 
                         }
+
+
+
+                        addBuyTransaction(report, stock, sellTr, buyByStock[stock][buyId], exchangeRates[markerCurr])
+                        //if (!buyId) {
+                        //    throw "Not enough buy transactions to cover all sells"
+                        //}
                     }
                     let formattedDate = formatDateToDDMMYYYY(sellTr.transactionDate.toMillis())
                     let rate = getRateByDate(formattedDate, exchangeRates[markerCurr])
@@ -74,7 +108,7 @@ function addBuyTransaction(report, stockName, sellTr, bestBuy, exchangeRate) {
         "date": formattedDate
     }
 
-    if (sellTr.quantity < bestBuy.quantity) {
+    if (sellTr.quantity <= bestBuy.quantity) {
         buy.quantity = sellTr.quantity
         bestBuy.quantity -= sellTr.quantity
         sellTr.quantity = 0
@@ -121,7 +155,8 @@ function findBestBuy(sell, buys, exchangeRate) {
         if (buyTr.quantity === 0) {
             continue
         }
-        if (buyTr.transactionDate <= sell.transactionDate) {
+       
+        if (buyTr.transactionDate <= sell.transactionDate) {            
             let buyRate = getRateByDate(formatDateToDDMMYYYY(buyTr.transactionDate.toMillis()), exchangeRate)
             const index = (sellRate / buyRate) < 1 ? 1 : (sellRate / buyRate)
             let adaptiveBuyPrice = (buyTr.price * buyRate) * index
@@ -131,9 +166,41 @@ function findBestBuy(sell, buys, exchangeRate) {
                 bestBuy = buyTr
             }
         }
-
     }
     return bestBuy && bestBuy.id
+}
+
+function validateEarliestSellHasBuys(sellTransactions, buysObject, buyId, sellTr) {
+    let earliestTimestamp = Number.MAX_VALUE
+    let earliestTransaction
+    for (const tr of sellTransactions) {
+        if (tr.transactionDate.toMillis() < earliestTimestamp) {
+            earliestTimestamp = tr.transactionDate.toMillis()
+            earliestTransaction = tr
+        }
+    }
+
+
+
+    const buysArray = Object.entries(buysObject);
+    let earliestBuysQuantity = 0
+    for (const [id, buy] of buysArray) {
+        if (buy.transactionDate > sellTr.transactionDate) {
+            continue
+        }
+        if (id !== buyId) {
+            earliestBuysQuantity += buy.quantity
+        } else {
+            earliestBuysQuantity += (sellTr.quantity >= buy.quantity) ? 0 : (buy.quantity - sellTr.quantity)
+        }
+    }
+
+    if (earliestBuysQuantity < earliestTransaction.quantity) {
+        console.log("boo")
+    }
+
+    return earliestBuysQuantity >= earliestTransaction.quantity
+
 }
 
 async function toCSV(jsonReport) {
@@ -141,10 +208,14 @@ async function toCSV(jsonReport) {
         [
             'Stock',
             'Currency (Market/Local)',
+            'Sell Stock Price',
+            'Sell Quantity',
             'Sell Price',
             'Sell Date',
             'Sell Exchange Rate',
-            'Sell Local Price',
+            'Sell Local Price',            
+            'Buy Stock Price',
+            'Buy Quantity',
             'Buy Price',
             'Buy Date',
             'Buy Exchange Rate',
@@ -174,10 +245,14 @@ async function toCSV(jsonReport) {
                         data.push([
                             stock,
                             sell.marketCurrency.toUpperCase() + "/ILS",
-                            sellPrice,
+                            sell.price.toFixed(4),
+                            sell.quantity,
+                            sellPrice,                            
                             sell.date,
                             sellExchangeRate,
                             localSellPrice,
+                            buy.price.toFixed(4),
+                            buy.quantity,
                             buyPrice,
                             buy.date,
                             buyExchangeRate,

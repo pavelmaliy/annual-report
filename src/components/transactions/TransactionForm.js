@@ -66,7 +66,7 @@ export default function TransactionForm({onFinish}) {
                             "transactionDate": row.getCell(1).value,
                             "transactionType": row.getCell(2).value,
                             "stockName": row.getCell(3).value,
-                            "quantity": parseInt(row.getCell(4).value),
+                            "quantity": parseFloat(row.getCell(4).value),
                             "price": parseFloat(row.getCell(5).value),
                             "marketCurrency": row.getCell(6).value
                         })

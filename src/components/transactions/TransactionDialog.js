@@ -117,7 +117,7 @@ export default function TransactionDialog({onFinish, open, setOpen}) {
                                 helperText={quantityError}
                                 onChange={(e) => {
                                     setQuantityError('')
-                                    transaction.quantity = parseInt(e.target.value);
+                                    transaction.quantity = parseFloat(e.target.value);
                                     setTransaction(transaction)
                                 }}
                             />
