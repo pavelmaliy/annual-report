@@ -20,9 +20,9 @@ export default function StockBarChart({ transactions }) {
             }
 
             if (tr["transactionType"] === 'Purchase') {
-                datasetMap[tr.stockName]["buys"] += tr.originalQuantity * tr.price
+                datasetMap[tr.stockName]["buys"] += tr.quantity
             } else {
-                datasetMap[tr.stockName]["sells"] += tr.originalQuantity * tr.price
+                datasetMap[tr.stockName]["sells"] += tr.quantity
             }
         })
 
@@ -30,8 +30,8 @@ export default function StockBarChart({ transactions }) {
             if (datasetMap.hasOwnProperty(stock)) {
                 dataset.push({
                     "name": stock.substring(0, 3),
-                    "buy": datasetMap[stock].buys,
-                    "sell": datasetMap[stock].sells,
+                    "buy": parseFloat(datasetMap[stock].buys).toFixed(2),
+                    "sell": parseFloat(datasetMap[stock].sells).toFixed(2),
                 })
             }
         }
