@@ -225,7 +225,7 @@ async function toCSV(jsonReport) {
             'Profit For Tax'
         ]
     ]
-
+    let total = 0
     for (const stock in jsonReport) {
         if (jsonReport.hasOwnProperty(stock)) {
             for (const trID in jsonReport[stock]) {
@@ -242,6 +242,8 @@ async function toCSV(jsonReport) {
 
                         const index = (sellExchangeRate / buyExchangeRate) < 1 ? 1 : (sellExchangeRate / buyExchangeRate).toFixed(4)
                         const localAdaptedBuyPrice = (localBuyPrice * index).toFixed(4)
+                        const profitForTax = (localSellPrice - localAdaptedBuyPrice).toFixed(4)
+                        total += parseFloat(profitForTax)
                         data.push([
                             stock,
                             sell.marketCurrency.toUpperCase() + "/ILS",
@@ -259,12 +261,13 @@ async function toCSV(jsonReport) {
                             localBuyPrice,
                             index,
                             localAdaptedBuyPrice,
-                            (localSellPrice - localAdaptedBuyPrice).toFixed(4)
+                            profitForTax
                         ])
                     }
                 }
             }
         }
+        data.push(['TOTAL',,,,,,,,,,,,,,,,total.toFixed(4)])
     }
 
     let csvContent = '';
