@@ -160,7 +160,7 @@ function findBestBuy(sell, buys, exchangeRate) {
             let buyRate = getRateByDate(formatDateToDDMMYYYY(buyTr.transactionDate.toMillis()), exchangeRate)
             const index = (sellRate / buyRate) < 1 ? 1 : (sellRate / buyRate)
             let adaptiveBuyPrice = (buyTr.price * buyRate) * index
-            let newTax = Math.abs((sell.price * sellRate) - adaptiveBuyPrice)
+            let newTax = (sell.price * sellRate) - adaptiveBuyPrice
             if (newTax < tax) {
                 tax = newTax
                 bestBuy = buyTr
