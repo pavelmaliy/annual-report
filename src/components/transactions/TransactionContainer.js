@@ -10,7 +10,7 @@ import { auth } from "../../storage/firebase";
 import { persistTransactions } from "../../storage/store";
 import { HistoryTable } from './HistoryTable';
 import TransactionForm from './TransactionForm';
-import { getUserTransactions, deleteTransaction } from "../../storage/store";
+import { getUserTransactions, deleteTransaction, deleteAllTransactions } from "../../storage/store";
 import { generateRandomString } from '../../utils/utils';
 
 
@@ -22,7 +22,11 @@ export default function TransactionContainer() {
     const [history, setHistory] = React.useState([])
 
     const handleDelete = async (id) => {
-        await deleteTransaction(id)
+        if (id) {
+            await deleteTransaction(id)
+        } else {
+            await deleteAllTransactions(user)
+        }
         setReloadHistory(generateRandomString(8))
     }
 

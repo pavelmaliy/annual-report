@@ -17,6 +17,8 @@ import currencies from "../../resources/commonCurrency.json";
 import { formatDateToDDMMYYYY } from "../../utils/utils";
 import IconButton from '@mui/material/IconButton';
 import { Delete } from "@mui/icons-material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 const styles = {
     tableHeaderStyle: {
@@ -114,13 +116,27 @@ export function HistoryTable({ history, handleDelete, loading }) {
 
     return (
         <div>
-            <TextField
-                label="Search"
-                variant="outlined"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ marginBottom: '16px' }}
-            />
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                mb={2}
+            >
+                <TextField
+                    label="Search"
+                    variant="outlined"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <Button                    
+                    onClick={() => {
+                        handleDelete()
+                    }}
+                >
+                    Clear All
+                </Button>
+            </Box>
+
             <TableContainer component={Paper} style={styles.tableWrapper}>
                 <Table size="small">
                     <TableHead style={styles.tableHeaderStyle}>
@@ -194,7 +210,7 @@ export function HistoryTable({ history, handleDelete, loading }) {
                             <TableCell>
                                 <Typography style={{ fontWeight: 'bold' }}>
                                     Delete
-                                    </Typography>
+                                </Typography>
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -213,57 +229,57 @@ export function HistoryTable({ history, handleDelete, loading }) {
                             </TableRow>
                         </TableBody>
                     ) : (
-                            <TableBody>
-                                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => {
-                                    return (
-                                        <TableRow
-                                            style={{ cursor: 'pointer' }}
-                                            key={item.id}
-                                            hover
-                                            onClick={() => handleRowClick(item.id)}
-                                            selected={selectedRow === item.id}
-                                        >
-                                            <TableCell>
-                                                <Typography>
-                                                    {formatDateToDDMMYYYY(item.data().transactionDate.toMillis())}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography>
-                                                    {item.data().stockName}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography>
-                                                    {item.data().transactionType}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography>
-                                                    {item.data().originalQuantity}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography>
-                                                    {item.data().price}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography>
-                                                    {item.data().marketCurrency}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(item.id)}>
-                                                    <Delete />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
+                        <TableBody>
+                            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => {
+                                return (
+                                    <TableRow
+                                        style={{ cursor: 'pointer' }}
+                                        key={item.id}
+                                        hover
+                                        onClick={() => handleRowClick(item.id)}
+                                        selected={selectedRow === item.id}
+                                    >
+                                        <TableCell>
+                                            <Typography>
+                                                {formatDateToDDMMYYYY(item.data().transactionDate.toMillis())}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.data().stockName}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.data().transactionType}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.data().originalQuantity}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.data().price}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography>
+                                                {item.data().marketCurrency}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(item.id)}>
+                                                <Delete />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
 
-                            </TableBody>
-                        )}
+                        </TableBody>
+                    )}
                 </Table>
                 <TablePagination
                     style={styles.pagination}
