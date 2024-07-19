@@ -66,8 +66,8 @@ export default function TransactionForm({onFinish}) {
                             "transactionDate": row.getCell(1).value,
                             "transactionType": row.getCell(2).value,
                             "stockName": row.getCell(3).value,
-                            "quantity": parseFloat(row.getCell(4).value).toFixed(4),
-                            "price": parseFloat(row.getCell(5).value).toFixed(4),
+                            "quantity": parseFloat(row.getCell(4).value),
+                            "price": parseFloat(row.getCell(5).value),
                             "marketCurrency": row.getCell(6).value
                         })
                     }
@@ -100,7 +100,7 @@ export default function TransactionForm({onFinish}) {
                                     <ListItemText
                                         primary={<Typography  variant="button" display="block"
                                                              gutterBottom>
-                                            {formatDateToDDMMYYYY(item.transactionDate) + " " + item.transactionType + " \"" + item.stockName + "\" " + parseFloat(item.quantity).toFixed(4) + " " + parseFloat(item.price).toFixed(4) + item.marketCurrency}
+                                            {formatDateToDDMMYYYY(item.transactionDate) + " " + item.transactionType + " \"" + item.stockName + "\" " + item.quantity + " " + item.price + item.marketCurrency}
                                         </Typography>}/>
                                     <ListItemSecondaryAction>
                                         <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(index)}>
@@ -149,4 +149,3 @@ export default function TransactionForm({onFinish}) {
         </div>
     );
 }
-
