@@ -1,5 +1,5 @@
 import { db } from './firebase'
-import { collection, doc, getDocs, deleteDoc, addDoc, query, runTransaction, where, Timestamp } from "firebase/firestore"
+import { collection, doc, getDocs, deleteDoc, addDoc, query, runTransaction, writeBatch, where, Timestamp } from "firebase/firestore"
 
 export async function persistTransactions(stockTransactions, user) {
     if (stockTransactions && stockTransactions.length > 0) {
@@ -74,11 +74,12 @@ export async function deleteTransaction(id) {
 
 export async function deleteAllTransactions(user) {
     const docs = await getUserTransactions(user);
-
+    const batch = writeBatch(db);
     try {
         docs.forEach((doc) => {
-            deleteDoc(doc.ref);
+            batch.delete(doc.ref);
         });
+        await batch.commit();
     } catch (e) {
         throw e;
     }

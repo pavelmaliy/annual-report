@@ -24,10 +24,11 @@ export default function TransactionContainer() {
     const handleDelete = async (id) => {
         if (id) {
             await deleteTransaction(id)
+            setReloadHistory(generateRandomString(8))
         } else {
             await deleteAllTransactions(user)
+            setHistory([])
         }
-        setReloadHistory(generateRandomString(8))
     }
 
     React.useEffect(() => {
